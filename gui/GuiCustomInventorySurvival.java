@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.stats.AchievementList;
@@ -130,10 +131,11 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/gui/custominventory.png");
-        int k = (this.width - 176) / 2;
-        int l = (this.height - 166) / 2;
-        this.drawBackgroundFrame((this.width - windowSize.getWidth()) / 2, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
+        this.mc.func_110434_K().func_110577_a(GuiCustomInventoryCreative.custominventory);
+        int k = (this.width - 176 + (!this.mc.thePlayer.getActivePotionEffects().isEmpty() ? 120 : 0)) / 2;
+		int l = (this.height - 166) / 2;
+		int m = (this.width - windowSize.getWidth() + (!this.mc.thePlayer.getActivePotionEffects().isEmpty() ? 120 : 0)) / 2;
+		this.drawBackgroundFrame(m, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
         GL11.glTranslatef(k, l, 0);
         this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
         this.drawPlayerBackground(playerDisplayPos.getX(), playerDisplayPos.getY());
@@ -149,7 +151,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
     
     public void drawBackgroundFrame(int posX, int posY, int sizeX, int sizeY)
     {
-    	this.mc.renderEngine.bindTexture("/gui/custominventory.png");
+    	this.mc.func_110434_K().func_110577_a(GuiCustomInventoryCreative.custominventory);
     	
     	for (int i = 0; i < sizeX - 16; i += 8)
     	{
@@ -180,7 +182,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
     
     public void drawPlayerBackground(int posX, int posY)
     {
-    	this.mc.renderEngine.bindTexture("/gui/custominventory.png");
+    	this.mc.func_110434_K().func_110577_a(GuiCustomInventoryCreative.custominventory);
     	this.drawTexturedModalRect(posX, posY, 0, 19, 54, 72);
     }
     
@@ -193,7 +195,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
     
     public void drawSlot(int posX, int posY)
     {
-    	this.mc.renderEngine.bindTexture("/gui/custominventory.png");
+    	this.mc.func_110434_K().func_110577_a(GuiCustomInventoryCreative.custominventory);
     	this.drawTexturedModalRect(posX - 1, posY - 1, 16, 0, 18, 18);
     }
 

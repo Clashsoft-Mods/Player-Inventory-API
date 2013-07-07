@@ -9,6 +9,6 @@ public class PIAPIEventHandler
 	@ForgeSubscribe
 	public void entityConstructing(EntityConstructing ec)
 	{
-		
+		ExtendedInventory.initEntityEI(ec.entity);
 	}
 }
