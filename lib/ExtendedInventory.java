@@ -36,7 +36,8 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			ItemStack is = itemStacks[slot];
 			
 			NBTTagCompound nbt = new NBTTagCompound();
-			is.writeToNBT(nbt);
+			if (is != null)
+				is.writeToNBT(nbt);
 			nbt.setInteger("Slot", slot);
 			list.appendTag(nbt);
 		}
@@ -175,7 +176,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack)
+	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
 		return true;
 	}

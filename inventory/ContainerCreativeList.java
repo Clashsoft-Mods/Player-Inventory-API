@@ -115,7 +115,7 @@ public class ContainerCreativeList extends Container
     }
 
     @Override
-	public boolean func_94531_b(Slot par1Slot)
+	public boolean canDragIntoSlot(Slot par1Slot)
     {
         return par1Slot.inventory instanceof InventoryPlayer || par1Slot.yDisplayPosition > 90 && par1Slot.xDisplayPosition <= 162;
     }

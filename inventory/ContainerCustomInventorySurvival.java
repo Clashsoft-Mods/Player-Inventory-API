@@ -187,9 +187,9 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	 * Callback for when the crafting gui is closed.
 	 */
 	@Override
-	public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer par1EntityPlayer)
 	{
-		super.onCraftGuiClosed(par1EntityPlayer);
+		super.onContainerClosed(par1EntityPlayer);
 
 		for (int i = 0; i < 4; ++i)
 		{
