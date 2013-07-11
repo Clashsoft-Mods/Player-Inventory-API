@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.lib;
+package com.chaosdev.playerinventoryapi.lib;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;

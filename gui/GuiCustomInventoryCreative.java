@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.gui;
+package com.chaosdev.playerinventoryapi.gui;
 
 import java.util.*;
 
@@ -29,9 +29,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.pocteam.playerinventoryapi.inventory.*;
-import com.pocteam.playerinventoryapi.lib.GuiHelper.GuiPos;
-import com.pocteam.playerinventoryapi.lib.GuiHelper.GuiSize;
+import com.chaosdev.playerinventoryapi.inventory.*;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
 
 public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 {

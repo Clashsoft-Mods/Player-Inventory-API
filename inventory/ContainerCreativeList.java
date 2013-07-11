@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.inventory;
+package com.chaosdev.playerinventoryapi.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.pocteam.playerinventoryapi.gui.GuiCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

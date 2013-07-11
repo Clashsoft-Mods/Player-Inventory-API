@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.gui;
+package com.chaosdev.playerinventoryapi.gui;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,12 +18,12 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.pocteam.playerinventoryapi.inventory.ContainerCreativeList;
-import com.pocteam.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import com.pocteam.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
-import com.pocteam.playerinventoryapi.inventory.IButtonHandler;
-import com.pocteam.playerinventoryapi.lib.GuiHelper.GuiPos;
-import com.pocteam.playerinventoryapi.lib.GuiHelper.GuiSize;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCreativeList;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.inventory.IButtonHandler;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
 
 public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 {

@@ -1,10 +1,8 @@
-package com.pocteam.playerinventoryapi.lib;
+package com.chaosdev.playerinventoryapi.lib;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.pocteam.paradiseofchaos.lib.POCEntityProperties;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi;
+package com.chaosdev.playerinventoryapi;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,13 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.pocteam.playerinventoryapi.gui.GuiCustomInventoryCreative;
-import com.pocteam.playerinventoryapi.gui.GuiCustomInventorySurvival;
-import com.pocteam.playerinventoryapi.inventory.*;
-import com.pocteam.playerinventoryapi.lib.ExtendedInventory;
-import com.pocteam.playerinventoryapi.lib.PIAPIEventHandler;
-import com.pocteam.playerinventoryapi.lib.PIAPITickHandler;
-import com.pocteam.playerinventoryapi.lib.Reference;
+import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.gui.GuiCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.inventory.*;
+import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
+import com.chaosdev.playerinventoryapi.lib.PIAPIEventHandler;
+import com.chaosdev.playerinventoryapi.lib.PIAPITickHandler;
+import com.chaosdev.playerinventoryapi.lib.Reference;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;

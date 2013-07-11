@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.lib;
+package com.chaosdev.playerinventoryapi.lib;
 
 import java.util.EnumSet;
 
@@ -8,10 +8,10 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.pocteam.playerinventoryapi.CommonProxy;
-import com.pocteam.playerinventoryapi.PlayerInventoryAPI;
-import com.pocteam.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import com.pocteam.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.CommonProxy;
+import com.chaosdev.playerinventoryapi.PlayerInventoryAPI;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;

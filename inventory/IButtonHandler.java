@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.inventory;
+package com.chaosdev.playerinventoryapi.inventory;
 
 import net.minecraft.client.gui.GuiButton;
 

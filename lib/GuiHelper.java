@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.lib;
+package com.chaosdev.playerinventoryapi.lib;
 
 public class GuiHelper
 {

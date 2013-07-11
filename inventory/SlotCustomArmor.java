@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.inventory;
+package com.chaosdev.playerinventoryapi.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

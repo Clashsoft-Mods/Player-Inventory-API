@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi.inventory;
+package com.chaosdev.playerinventoryapi.inventory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +10,8 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-import com.pocteam.playerinventoryapi.lib.ExtendedInventory;
-import com.pocteam.playerinventoryapi.lib.GuiHelper.GuiPos;
+import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 
 public class ContainerCustomInventoryCreative extends Container implements ICustomPlayerContainer
 {

@@ -1,4 +1,4 @@
-package com.pocteam.playerinventoryapi;
+package com.chaosdev.playerinventoryapi;
 
 
 public class ClientProxy extends CommonProxy

@@ -1,10 +1,10 @@
-package com.pocteam.playerinventoryapi.inventory;
+package com.chaosdev.playerinventoryapi.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.pocteam.playerinventoryapi.lib.ExtendedInventory;
+import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
 
 public class SlotExtendedInventory extends Slot
 {
