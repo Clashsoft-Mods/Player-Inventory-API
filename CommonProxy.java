@@ -35,4 +35,9 @@ public class CommonProxy implements IGuiHandler
 			return new GuiCustomInventorySurvival(player, (ContainerCustomInventorySurvival) getServerGuiElement(ID, player, world, x, y, z));
 		return null;
 	}
+	
+	public void registerTickHandler()
+	{
+		
+	}
 }

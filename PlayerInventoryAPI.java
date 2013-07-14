@@ -43,7 +43,7 @@ public class PlayerInventoryAPI
 	public void init(FMLInitializationEvent event)
 	{
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
-		TickRegistry.registerTickHandler(new PIAPITickHandler(), Side.CLIENT);
+		proxy.registerTickHandler();
 		MinecraftForge.EVENT_BUS.register(new PIAPIEventHandler());
 		
 		SURVIVAL_INVENTORY.addSlotHandler(new TestSlotHandler());

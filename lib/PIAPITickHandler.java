@@ -34,7 +34,7 @@ public class PIAPITickHandler implements ITickHandler
 	@Override
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.PLAYER, TickType.CLIENT);
+		return EnumSet.of(TickType.CLIENT);
 	}
 
 	@Override
@@ -42,10 +42,6 @@ public class PIAPITickHandler implements ITickHandler
 	{
 		if (type.contains(TickType.CLIENT))
 			updateInventory();
-		if (type.contains(TickType.PLAYER))
-		{
-			replacePlayerInventory((EntityPlayer) tickData[0]);
-		}
 	}
 
 	@Override
