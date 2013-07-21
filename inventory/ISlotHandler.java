@@ -7,5 +7,5 @@ import net.minecraft.inventory.Slot;
 
 public interface ISlotHandler
 {
-	public List<Slot> addSlots(EntityPlayer player);
+	public List<Slot> addSlots(EntityPlayer player, boolean creative);
 }

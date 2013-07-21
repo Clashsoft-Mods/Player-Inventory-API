@@ -41,7 +41,7 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
         List<Slot> slots = createSlots();
         for (ISlotHandler handler : this.slotsHandlers)
         {
-        	for (Slot s : handler.addSlots(par3EntityPlayer))
+        	for (Slot s : handler.addSlots(par3EntityPlayer, true))
         	{
         		s.slotNumber = slots.size();
         		slotPos2[s.slotNumber] = new GuiPos(s.xDisplayPosition, s.yDisplayPosition);

@@ -53,11 +53,9 @@ public class PlayerInventoryAPI
 	public static class TestSlotHandler implements ISlotHandler
 	{
 		@Override
-		public List<Slot> addSlots(EntityPlayer player)
+		public List<Slot> addSlots(EntityPlayer player, boolean creative)
 		{
 			List<Slot> slots = new LinkedList<Slot>();
-			slots.add(new SlotExtendedInventory(37, 27 + 18, 24, player));
-			slots.add(new SlotExtendedInventory(38, 27 + 36, 24, player));
 			return slots;
 		}
 		

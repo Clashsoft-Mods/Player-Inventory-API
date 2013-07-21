@@ -37,7 +37,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
         List<Slot> slots = createSlots();
         for (ISlotHandler handler : this.slotHandlers)
         {
-        	for (Slot s : handler.addSlots(par3EntityPlayer))
+        	for (Slot s : handler.addSlots(par3EntityPlayer, false))
         	{
         		s.slotNumber = slots.size();
         		slotPos2[s.slotNumber] = new GuiPos(s.xDisplayPosition, s.yDisplayPosition);
@@ -91,16 +91,6 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 		for (i = 0; i < 9; ++i)
 		{
 			slots.add(new Slot(this.thePlayer.inventory, i, pos[36 + i].getX(), pos[36 + i].getY()));
-		}
-
-		for (ISlotHandler handler : this.slotHandlers)
-		{
-			for (Slot s : handler.addSlots(thePlayer))
-			{
-				s.slotNumber = slots.size();
-				slots.add(s);
-				slotPos2[s.slotNumber] = new GuiPos(s.xDisplayPosition, s.yDisplayPosition);
-			}
 		}
 
 		return slots;
