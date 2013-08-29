@@ -3,22 +3,22 @@ package com.chaosdev.playerinventoryapi.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
 public class ContainerCreativeList extends Container
 {
     /** the list of items in this container */
-    public static List itemList = new ArrayList();
+    public List itemList = new ArrayList();
 
     public ContainerCreativeList(EntityPlayer par1EntityPlayer)
     {
@@ -52,7 +52,7 @@ public class ContainerCreativeList extends Container
      */
     public void scrollTo(float par1)
     {
-        int i = this.itemList.size() / 9 - 5 + 1;
+        int i = itemList.size() / 9 - 5 + 1;
         int j = (int)(par1 * i + 0.5D);
 
         if (j < 0)
@@ -66,7 +66,7 @@ public class ContainerCreativeList extends Container
             {
                 int i1 = l + (k + j) * 9;
 
-                if (i1 >= 0 && i1 < this.itemList.size())
+                if (i1 >= 0 && i1 < itemList.size())
                 {
                     GuiCustomInventoryCreative.getInventory().setInventorySlotContents(l + k * 9, (ItemStack)this.itemList.get(i1));
                 }

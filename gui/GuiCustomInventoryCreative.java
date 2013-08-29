@@ -2,14 +2,21 @@ package com.chaosdev.playerinventoryapi.gui;
 
 import java.util.*;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.chaosdev.playerinventoryapi.inventory.*;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.CreativeCrafting;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -23,15 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.EnumChatFormatting;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.chaosdev.playerinventoryapi.inventory.*;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 {
@@ -417,8 +416,8 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
 	private void updateCreativeSearch()
 	{
-		ContainerCreativeList crativeList = (ContainerCreativeList)this.inventorySlots;
-		crativeList.itemList.clear();
+		ContainerCreativeList creativeList = (ContainerCreativeList)this.inventorySlots;
+		creativeList.itemList.clear();
 		Item[] aitem = Item.itemsList;
 		int i = aitem.length;
 		int j;
@@ -429,7 +428,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
 			if (item != null && item.getCreativeTab() != null)
 			{
-				item.getSubItems(item.itemID, (CreativeTabs)null, crativeList.itemList);
+				item.getSubItems(item.itemID, (CreativeTabs)null, creativeList.itemList);
 			}
 		}
 
@@ -442,11 +441,11 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
 			if (enchantment != null && enchantment.type != null)
 			{
-				Item.enchantedBook.func_92113_a(enchantment, crativeList.itemList);
+				Item.enchantedBook.func_92113_a(enchantment, creativeList.itemList);
 			}
 		}
 
-		Iterator iterator = crativeList.itemList.iterator();
+		Iterator iterator = creativeList.itemList.iterator();
 		String s = this.searchField.getText().toLowerCase();
 
 		while (iterator.hasNext())
@@ -479,7 +478,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 		}
 
 		this.currentScroll = 0.0F;
-		crativeList.scrollTo(0.0F);
+		creativeList.scrollTo(0.0F);
 	}
 
 	/**
@@ -572,8 +571,8 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 		selectedTabIndex = par1CreativeTabs.getTabIndex();
 		ContainerCreativeList creativeList = (ContainerCreativeList)this.inventorySlots;
 		this.field_94077_p.clear();
-		ContainerCreativeList.itemList.clear();
-		par1CreativeTabs.displayAllReleventItems(ContainerCreativeList.itemList);
+		creativeList.itemList.clear();
+		par1CreativeTabs.displayAllReleventItems(creativeList.itemList);
 
 		if (par1CreativeTabs == CreativeTabs.tabInventory)
 		{
@@ -599,7 +598,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 				}
 			}
 
-			this.binSlot = new Slot(inventory, 0, this.binSlotPos.getX(), this.binSlotPos.getY());
+			this.binSlot = new Slot(inventory, 0, GuiCustomInventoryCreative.binSlotPos.getX(), GuiCustomInventoryCreative.binSlotPos.getY());
 			inventorySlots.inventorySlots.add(this.binSlot);
 		}
 		else if (i == CreativeTabs.tabInventory.getTabIndex())
@@ -711,6 +710,19 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
             ((ContainerCreativeList)this.inventorySlots).scrollTo(this.currentScroll);
         }
+        
+        if (maxPages != 0)
+        {
+        	GL11.glColor3f(1F, 1F, 1F);
+            String page = String.format("%d / %d", tabPage + 1, maxPages + 1);
+            int width = fontRenderer.getStringWidth(page);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            this.zLevel = 300.0F;
+            itemRenderer.zLevel = 300.0F;
+            fontRenderer.drawString(page, guiLeft + (xSize / 2) - (width / 2), guiTop - 44, -1);
+            this.zLevel = 0.0F;
+            itemRenderer.zLevel = 0.0F;
+        }
 
         super.drawScreen(par1, par2, par3);
         CreativeTabs[] acreativetabs = CreativeTabs.creativeTabArray;
@@ -738,18 +750,6 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         if (this.binSlot != null && selectedTabIndex == CreativeTabs.tabInventory.getTabIndex() && this.isPointInRegion(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, par1, par2))
         {
             this.drawCreativeTabHoveringText(I18n.func_135053_a("inventory.binSlot"), par1, par2);
-        }
-
-        if (maxPages != 0)
-        {
-            String page = String.format("%d / %d", tabPage + 1, maxPages + 1);
-            int width = fontRenderer.getStringWidth(page);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            this.zLevel = 300.0F;
-            itemRenderer.zLevel = 300.0F;
-            fontRenderer.drawString(page, guiLeft + (xSize / 2) - (width / 2), guiTop - 44, -1);
-            this.zLevel = 0.0F;
-            itemRenderer.zLevel = 0.0F;
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -817,7 +817,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         l = k + 112;
         this.mc.func_110434_K().func_110577_a(field_110424_t);
 
-        if (creativetabs.shouldHidePlayerInventory())
+        if (creativetabs != null && creativetabs.shouldHidePlayerInventory())
         {
             this.drawTexturedModalRect(i1, k + (int)((float)(l - k - 17) * this.currentScroll), 232 + (this.needsScrollBars() ? 0 : 12), 0, 12, 15);
         }
@@ -849,7 +849,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 		}
 		this.drawSlot(binSlotPos.getX(), binSlotPos.getY(), true);
 		GL11.glTranslatef(-var1, -var2, 0);
-		GuiCustomInventorySurvival.drawPlayerOnGui(this.mc, var1 + this.playerDisplayPos.getX() + 16, var2 + this.playerDisplayPos.getY() + 41, 20, var1 + this.playerDisplayPos.getX() + 16 - this.xSize_lo, var2 + this.playerDisplayPos.getY() + 10 - this.ySize_lo);
+		GuiCustomInventorySurvival.drawPlayerOnGui(this.mc, var1 + GuiCustomInventoryCreative.playerDisplayPos.getX() + 16, var2 + GuiCustomInventoryCreative.playerDisplayPos.getY() + 41, 20, var1 + GuiCustomInventoryCreative.playerDisplayPos.getX() + 16 - this.xSize_lo, var2 + GuiCustomInventoryCreative.playerDisplayPos.getY() + 10 - this.ySize_lo);
 		RenderHelper.enableGUIStandardItemLighting();
 	}
 
@@ -1107,8 +1107,8 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 			tabPage = Math.min(tabPage + 1, maxPages);
 		}
 
-		if (this.buttons.get(par1GuiButton) != null)
-			this.buttons.get(par1GuiButton).onButtonPressed(par1GuiButton);
+		if (GuiCustomInventoryCreative.buttons.get(par1GuiButton) != null)
+			GuiCustomInventoryCreative.buttons.get(par1GuiButton).onButtonPressed(par1GuiButton);
 	}
 
 	public int func_74230_h()

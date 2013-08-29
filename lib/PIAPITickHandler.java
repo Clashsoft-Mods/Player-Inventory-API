@@ -2,12 +2,6 @@ package com.chaosdev.playerinventoryapi.lib;
 
 import java.util.EnumSet;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
-import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.chaosdev.playerinventoryapi.CommonProxy;
 import com.chaosdev.playerinventoryapi.PlayerInventoryAPI;
 import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
@@ -16,10 +10,14 @@ import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurviva
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
+
 public class PIAPITickHandler implements ITickHandler
 {
-	private final boolean invKeyPressed = false;
-
 	public PIAPITickHandler()
 	{
 		

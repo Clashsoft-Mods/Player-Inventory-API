@@ -4,6 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.chaosdev.playerinventoryapi.inventory.ContainerCreativeList;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.inventory.IButtonHandler;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
@@ -14,16 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.chaosdev.playerinventoryapi.inventory.ContainerCreativeList;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
-import com.chaosdev.playerinventoryapi.inventory.IButtonHandler;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
 
 public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 {

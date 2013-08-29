@@ -2,7 +2,6 @@ package com.chaosdev.playerinventoryapi.lib;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

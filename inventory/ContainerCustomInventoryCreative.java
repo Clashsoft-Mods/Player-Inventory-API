@@ -3,15 +3,15 @@ package com.chaosdev.playerinventoryapi.inventory;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-
-import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 
 public class ContainerCustomInventoryCreative extends Container implements ICustomPlayerContainer
 {
@@ -25,7 +25,7 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 
 	public static GuiPos[] slotPos = getDefaultSlotPositions();
     public static GuiPos[] slotPos2 = slotPos;
-	public static List<ISlotHandler> slotsHandlers = new LinkedList<ISlotHandler>();
+	public static List<ISlotHandler> slotHandlers = new LinkedList<ISlotHandler>();
 	
 	public ExtendedInventory ei;
 
@@ -39,7 +39,7 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 
 		slotPos = slotPos2;
         List<Slot> slots = createSlots();
-        for (ISlotHandler handler : this.slotsHandlers)
+        for (ISlotHandler handler : slotHandlers)
         {
         	for (Slot s : handler.addSlots(par3EntityPlayer, true))
         	{
@@ -152,7 +152,7 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 
 	public static void addSlotHandler(ISlotHandler slothandler)
 	{
-		slotsHandlers.add(slothandler);
+		slotHandlers.add(slothandler);
 	}
 	
 	public static void resetSlots()
@@ -194,7 +194,7 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 			}
 		}
 
-		this.ei.setEntityEI(par1EntityPlayer, ei);
+		ExtendedInventory.setEntityEI(par1EntityPlayer, ei);
 		this.craftResult.setInventorySlotContents(0, (ItemStack)null);
 	}
 

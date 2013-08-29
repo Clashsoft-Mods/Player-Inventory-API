@@ -3,15 +3,14 @@ package com.chaosdev.playerinventoryapi.inventory;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-
-import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 
 public class ContainerCustomInventorySurvival extends Container implements ICustomPlayerContainer
 {
@@ -35,7 +34,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 
 		slotPos = slotPos2;
         List<Slot> slots = createSlots();
-        for (ISlotHandler handler : this.slotHandlers)
+        for (ISlotHandler handler : slotHandlers)
         {
         	for (Slot s : handler.addSlots(par3EntityPlayer, false))
         	{

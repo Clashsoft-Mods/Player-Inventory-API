@@ -1,8 +1,5 @@
 package com.chaosdev.playerinventoryapi;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
 import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
 import com.chaosdev.playerinventoryapi.gui.GuiCustomInventorySurvival;
 import com.chaosdev.playerinventoryapi.inventory.ContainerCreativeList;
@@ -10,6 +7,9 @@ import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreativ
 import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 
 import cpw.mods.fml.common.network.IGuiHandler;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class CommonProxy implements IGuiHandler
 {
