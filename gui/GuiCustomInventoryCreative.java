@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL12;
 import com.chaosdev.playerinventoryapi.inventory.*;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
+import com.chaosdev.playerinventoryapi.lib.objects.InventoryObject;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -80,6 +81,8 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	private static GuiPos binSlotPos = new GuiPos(173, 112);
 
 	private static Map<GuiButton, IButtonHandler> buttons = new HashMap<GuiButton, IButtonHandler>();
+	
+	private static List<InventoryObject> objects = new ArrayList<InventoryObject>();
 
 	public GuiCustomInventoryCreative(EntityPlayer par1EntityPlayer, ContainerCreativeList par2ContainerCreativeList, ContainerCustomInventoryCreative par3ContainerCustomInventoryCreative)
 	{
@@ -127,6 +130,11 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
 		buttons.put(button, handler);
+	}
+	
+	public static void addObject(InventoryObject object)
+	{
+		objects.add(object);
 	}
 
 	/**
@@ -723,6 +731,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
             this.zLevel = 0.0F;
             itemRenderer.zLevel = 0.0F;
         }
+        
 
         super.drawScreen(par1, par2, par3);
         CreativeTabs[] acreativetabs = CreativeTabs.creativeTabArray;
@@ -754,6 +763,15 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
+	}
+
+	public void drawInventoryObjects()
+	{
+		for (InventoryObject object : objects)
+		{
+			if (object != null)
+				object.render(this.width, this.height);
+		}
 	}
 
 	/**
@@ -831,6 +849,8 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         }
 
         this.renderCreativeTab(creativetabs);
+        
+        this.drawInventoryObjects();
 	}
 
 	private void renderInventoryTab()

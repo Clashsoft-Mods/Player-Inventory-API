@@ -1,30 +1,27 @@
 package com.chaosdev.playerinventoryapi;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
 import com.chaosdev.playerinventoryapi.gui.GuiCustomInventorySurvival;
-import com.chaosdev.playerinventoryapi.inventory.*;
-import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.inventory.IButtonHandler;
+import com.chaosdev.playerinventoryapi.inventory.ISlotHandler;
 import com.chaosdev.playerinventoryapi.lib.PIAPIEventHandler;
-import com.chaosdev.playerinventoryapi.lib.PIAPITickHandler;
 import com.chaosdev.playerinventoryapi.lib.Reference;
+import com.chaosdev.playerinventoryapi.lib.objects.Image;
+import com.chaosdev.playerinventoryapi.lib.objects.InventoryObject;
+import com.chaosdev.playerinventoryapi.lib.objects.Label;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 @NetworkMod(channels = { Reference.CHANNEL_NAME }, serverSideRequired = false, clientSideRequired = true)
@@ -39,26 +36,15 @@ public class PlayerInventoryAPI
 	public static boolean ENABLE_CUSTOM_CREATIVE_INVENTORY = true;
 	public static boolean ENABLE_CUSTOM_SURVIVAL_INVENTORY = true;
 	
-	@Init
+	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		proxy.registerTickHandler();
 		MinecraftForge.EVENT_BUS.register(new PIAPIEventHandler());
 		
-		SURVIVAL_INVENTORY.addSlotHandler(new TestSlotHandler());
-		CREATIVE_INVENTORY.addSlotHandler(new TestSlotHandler());
-	}
-	
-	public static class TestSlotHandler implements ISlotHandler
-	{
-		@Override
-		public List<Slot> addSlots(EntityPlayer player, boolean creative)
-		{
-			List<Slot> slots = new LinkedList<Slot>();
-			return slots;
-		}
-		
+		CREATIVE_INVENTORY.addObject(new Label("HELLO", 0, 0));
+		SURVIVAL_INVENTORY.setCraftingArrowRotation(90);
 	}
 	
 	public static class CREATIVE_INVENTORY
@@ -92,6 +78,12 @@ public class PlayerInventoryAPI
 		{
 			GuiCustomInventoryCreative.addButton(handler, button);
 		}
+		
+		public static InventoryObject addObject(InventoryObject object)
+		{
+			GuiCustomInventoryCreative.addObject(object);
+			return object;
+		}
 	}
 	
 	public static class SURVIVAL_INVENTORY
@@ -111,10 +103,14 @@ public class PlayerInventoryAPI
 			GuiCustomInventorySurvival.setPlayerDisplayPos(x, y);
 		}
 		
-		public static void setCraftingArrowPositionAndRotation(int x, int y, float r)
+		public static void setCraftingArrowPosition(int x, int y)
 		{
 			GuiCustomInventorySurvival.setCraftArrowPos(x, y);
-			GuiCustomInventorySurvival.setCraftArrowRot(r);
+		}
+		
+		public static void setCraftingArrowRotation(float rotation)
+		{
+			GuiCustomInventorySurvival.setCraftArrowRot(rotation);
 		}
 		
 		public static void setWindowSize(int width, int height)
@@ -125,6 +121,12 @@ public class PlayerInventoryAPI
 		public static void addButton(IButtonHandler handler, GuiButton button)
 		{
 			GuiCustomInventorySurvival.addButton(handler, button);
+		}
+		
+		public static InventoryObject addObject(InventoryObject object)
+		{
+			GuiCustomInventorySurvival.addObject(object);
+			return object;
 		}
 	}
 }
