@@ -28,7 +28,7 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
 public class GuiCustomInventorySurvival extends InventoryEffectRenderer
-{	
+{
 	/**
 	 * x size of the inventory window in pixels. Defined as float, passed as int
 	 */

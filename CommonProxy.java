@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 
 public class CommonProxy implements IGuiHandler
 {
-	public static int CUSTOM_INVENTORY_SURVIVAL_ID = 30;
-	public static int CUSTOM_INVENTORY_CREATIVE_ID = 31;
-
+	public static int	CUSTOM_INVENTORY_SURVIVAL_ID	= 30;
+	public static int	CUSTOM_INVENTORY_CREATIVE_ID	= 31;
+	
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
@@ -25,7 +25,7 @@ public class CommonProxy implements IGuiHandler
 			return new ContainerCustomInventorySurvival(player.inventory, false, player);
 		return null;
 	}
-
+	
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{

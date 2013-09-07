@@ -14,10 +14,10 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 {
-	public Entity entity;
+	public Entity						entity;
 	
-	public ItemStack[] itemStacks = new ItemStack[128];
-	public static Map<Integer, String> entityKey = new HashMap<Integer, String>();
+	public ItemStack[]					itemStacks	= new ItemStack[128];
+	public static Map<Integer, String>	entityKey	= new HashMap<Integer, String>();
 	
 	public ExtendedInventory(Entity entity)
 	{
@@ -40,7 +40,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		}
 		compound.setTag("ItemStacks", list);
 	}
-
+	
 	@Override
 	public void loadNBTData(NBTTagCompound compound)
 	{
@@ -59,7 +59,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			}
 		}
 	}
-
+	
 	@Override
 	public void init(Entity entity, World world)
 	{
@@ -77,7 +77,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			return new ExtendedInventory(entity);
 		}
 	}
-
+	
 	public static void setEntityEI(Entity entity, ExtendedInventory ei)
 	{
 		entityKey.put(entity.entityId, entity.registerExtendedProperties("ExtendedInventory", ei));
@@ -101,50 +101,50 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	{
 		return itemStacks[slot];
 	}
-
+	
 	@Override
 	public int getSizeInventory()
 	{
 		return itemStacks.length;
 	}
-
+	
 	@Override
 	public ItemStack decrStackSize(int i, int j)
 	{
 		itemStacks[i].stackSize -= j;
 		return itemStacks[i];
 	}
-
+	
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i)
 	{
 		return getStackInSlot(i);
 	}
-
+	
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack)
 	{
 		setStackInSlot(i, itemstack);
 	}
-
+	
 	@Override
 	public String getInvName()
 	{
 		return "";
 	}
-
+	
 	@Override
 	public boolean isInvNameLocalized()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public int getInventoryStackLimit()
 	{
 		return 64;
 	}
-
+	
 	@Override
 	public void onInventoryChanged()
 	{
@@ -155,23 +155,23 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	{
 		
 	}
-
+	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer)
 	{
 		return true;
 	}
-
+	
 	@Override
 	public void openChest()
 	{
 	}
-
+	
 	@Override
 	public void closeChest()
 	{
 	}
-
+	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{

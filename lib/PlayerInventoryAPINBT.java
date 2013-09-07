@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PlayerInventoryAPINBT
 {
-	public static String NBT_LOCATION;
+	public static String	NBT_LOCATION;
 	
 	public static void write(NBTTagCompound nbt) throws IOException
 	{

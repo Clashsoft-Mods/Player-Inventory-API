@@ -11,11 +11,11 @@ public class PIAPIEventHandler
 	{
 		if (ec.entity instanceof EntityPlayer)
 		{
-			replaceInventory(((EntityPlayer)ec.entity));
+			replaceInventory(((EntityPlayer) ec.entity));
 		}
 		ExtendedInventory.initEntityEI(ec.entity);
 	}
-
+	
 	private void replaceInventory(EntityPlayer entityPlayer)
 	{
 		System.out.println("Replacing Player Inventory");

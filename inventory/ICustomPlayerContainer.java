@@ -8,5 +8,6 @@ import net.minecraft.inventory.Slot;
 public interface ICustomPlayerContainer
 {
 	public EntityPlayer getPlayer();
+	
 	public List<Slot> createSlots();
 }

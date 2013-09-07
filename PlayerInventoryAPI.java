@@ -24,15 +24,15 @@ import net.minecraftforge.common.MinecraftForge;
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 @NetworkMod(channels = { Reference.CHANNEL_NAME }, serverSideRequired = false, clientSideRequired = true)
 public class PlayerInventoryAPI
-{	
+{
 	@Instance(Reference.MOD_ID)
-	public static PlayerInventoryAPI instance;
+	public static PlayerInventoryAPI	instance;
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_LOCATION, serverSide = Reference.COMMON_PROXY_LOCATION)
-	public static CommonProxy proxy = new CommonProxy();
+	public static CommonProxy			proxy								= new CommonProxy();
 	
-	public static boolean ENABLE_CUSTOM_CREATIVE_INVENTORY = true;
-	public static boolean ENABLE_CUSTOM_SURVIVAL_INVENTORY = true;
+	public static boolean				ENABLE_CUSTOM_CREATIVE_INVENTORY	= true;
+	public static boolean				ENABLE_CUSTOM_SURVIVAL_INVENTORY	= true;
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
