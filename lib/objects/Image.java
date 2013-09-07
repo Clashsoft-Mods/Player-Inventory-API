@@ -28,7 +28,7 @@ public class Image extends RotatableObject
 	@Override
 	public void renderRotated(int width, int height)
 	{
-		Minecraft.getMinecraft().renderEngine.func_110577_a(image);
+		Minecraft.getMinecraft().renderEngine.bindTexture(image);
 		new GuiScreen().drawTexturedModalRect(0, 0, u, v, this.width, this.width);
 	}
 

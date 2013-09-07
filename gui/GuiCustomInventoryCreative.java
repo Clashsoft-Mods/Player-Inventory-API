@@ -499,7 +499,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
         if (creativetabs != null && creativetabs.drawInForegroundOfTab())
         {
-            this.fontRenderer.drawString(I18n.func_135053_a(creativetabs.getTranslatedTabLabel()), 8, 6, 4210752);
+            this.fontRenderer.drawString(I18n.getString(creativetabs.getTranslatedTabLabel()), 8, 6, 4210752);
         }
 	}
 
@@ -758,7 +758,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
         if (this.binSlot != null && selectedTabIndex == CreativeTabs.tabInventory.getTabIndex() && this.isPointInRegion(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, par1, par2))
         {
-            this.drawCreativeTabHoveringText(I18n.func_135053_a("inventory.binSlot"), par1, par2);
+            this.drawCreativeTabHoveringText(I18n.getString("inventory.binSlot"), par1, par2);
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -797,7 +797,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         for (l = start; l < k; ++l)
         {
             CreativeTabs creativetabs1 = acreativetabs[l];
-            this.mc.func_110434_K().func_110577_a(field_110424_t);
+            this.mc.renderEngine.bindTexture(field_110424_t);
 
             if (creativetabs1 != null && creativetabs1.getTabIndex() != selectedTabIndex)
             {
@@ -809,12 +809,12 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         {
             if (creativetabs != CreativeTabs.tabAllSearch)
             {
-                this.mc.func_110434_K().func_110577_a(field_110424_t);
+                this.mc.renderEngine.bindTexture(field_110424_t);
                 renderCreativeTab(CreativeTabs.tabAllSearch);
             }
             if (creativetabs != CreativeTabs.tabInventory)
             {
-                this.mc.func_110434_K().func_110577_a(field_110424_t);
+                this.mc.renderEngine.bindTexture(field_110424_t);
                 renderCreativeTab(CreativeTabs.tabInventory);
             }
         }
@@ -825,7 +825,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         }
         else
         {
-        	this.mc.func_110434_K().func_110577_a(new ResourceLocation("textures/gui/container/creative_inventory/tab_" + creativetabs.getBackgroundImageName()));
+        	this.mc.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/creative_inventory/tab_" + creativetabs.getBackgroundImageName()));
         	this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         }
         this.searchField.drawTextBox();
@@ -833,7 +833,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
         int i1 = this.guiLeft + 175;
         k = this.guiTop + 18;
         l = k + 112;
-        this.mc.func_110434_K().func_110577_a(field_110424_t);
+        this.mc.renderEngine.bindTexture(field_110424_t);
 
         if (creativetabs != null && creativetabs.shouldHidePlayerInventory())
         {
@@ -875,7 +875,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
 	public void drawBackgroundFrame(int posX, int posY, int sizeX, int sizeY)
 	{
-		this.mc.func_110434_K().func_110577_a(custominventory);
+		this.mc.renderEngine.bindTexture(custominventory);
 
 		for (int i = 0; i < sizeX - 16; i += 8)
 		{
@@ -906,13 +906,13 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
 	public void drawPlayerBackground(int posX, int posY)
 	{
-		this.mc.func_110434_K().func_110577_a(custominventory);
+		this.mc.renderEngine.bindTexture(custominventory);
 		this.drawTexturedModalRect(posX, posY, 54, 18, 34, 45);
 	}
 
 	public void drawSlot(int posX, int posY, boolean isBinSlot)
 	{
-		this.mc.func_110434_K().func_110577_a(custominventory);
+		this.mc.renderEngine.bindTexture(custominventory);
 		if (!isBinSlot)
 			this.drawTexturedModalRect(posX - 1, posY - 1, 16, 0, 18, 18);
 		else
@@ -989,7 +989,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
         if (this.isPointInRegion(l + 3, i1 + 3, 23, 27, par2, par3))
         {
-            this.drawCreativeTabHoveringText(I18n.func_135053_a(par1CreativeTabs.getTranslatedTabLabel()), par2, par3);
+            this.drawCreativeTabHoveringText(I18n.getString(par1CreativeTabs.getTranslatedTabLabel()), par2, par3);
             return true;
         }
         else
@@ -1030,7 +1030,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 
             if (creativetabs != null)
             {
-                list.add(1, "" + EnumChatFormatting.BOLD + EnumChatFormatting.BLUE + I18n.func_135053_a(creativetabs.getTranslatedTabLabel()));
+                list.add(1, "" + EnumChatFormatting.BOLD + EnumChatFormatting.BLUE + I18n.getString(creativetabs.getTranslatedTabLabel()));
             }
 
             for (int i1 = 0; i1 < list.size(); ++i1)

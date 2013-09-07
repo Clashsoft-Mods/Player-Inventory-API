@@ -8,9 +8,7 @@ import com.chaosdev.playerinventoryapi.inventory.IButtonHandler;
 import com.chaosdev.playerinventoryapi.inventory.ISlotHandler;
 import com.chaosdev.playerinventoryapi.lib.PIAPIEventHandler;
 import com.chaosdev.playerinventoryapi.lib.Reference;
-import com.chaosdev.playerinventoryapi.lib.objects.Image;
 import com.chaosdev.playerinventoryapi.lib.objects.InventoryObject;
-import com.chaosdev.playerinventoryapi.lib.objects.Label;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -42,9 +40,6 @@ public class PlayerInventoryAPI
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		proxy.registerTickHandler();
 		MinecraftForge.EVENT_BUS.register(new PIAPIEventHandler());
-		
-		CREATIVE_INVENTORY.addObject(new Label("HELLO", 0, 0));
-		SURVIVAL_INVENTORY.setCraftingArrowRotation(90);
 	}
 	
 	public static class CREATIVE_INVENTORY
