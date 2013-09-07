@@ -22,26 +22,26 @@ public class PIAPITickHandler implements ITickHandler
 	{
 		
 	}
-	
+
 	public static KeyBinding getInventoryKeyBinding()
 	{
 		KeyBinding kb = Minecraft.getMinecraft().gameSettings.keyBindInventory;
 		return kb;
 	}
-	
+
 	@Override
 	public EnumSet<TickType> ticks()
 	{
 		return EnumSet.of(TickType.CLIENT);
 	}
-	
+
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
 		if (type.contains(TickType.CLIENT))
 			updateInventory();
 	}
-	
+
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
@@ -79,7 +79,7 @@ public class PIAPITickHandler implements ITickHandler
 			player.openGui(PlayerInventoryAPI.instance, CommonProxy.CUSTOM_INVENTORY_CREATIVE_ID, player.worldObj, 0, 0, 0);
 		}
 	}
-	
+
 	@Override
 	public String getLabel()
 	{

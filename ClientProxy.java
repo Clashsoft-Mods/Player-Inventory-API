@@ -8,7 +8,6 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy
 {
-	@Override
 	public void registerTickHandler()
 	{
 		TickRegistry.registerTickHandler(new PIAPITickHandler(), Side.CLIENT);
