@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.lib.objects;
+package com.chaosdev.playerinventoryapi.api.inventorycomponents;
 
 import org.lwjgl.opengl.GL11;
 
@@ -7,7 +7,7 @@ public abstract class RotatableObject implements InventoryObject
 	public float rotation;
 	
 	@Override
-	public void render(int width, int height)
+	public final void render(int width, int height)
 	{
 		GL11.glPushMatrix();
 		

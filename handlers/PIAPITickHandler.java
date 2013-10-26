@@ -1,11 +1,10 @@
-package com.chaosdev.playerinventoryapi.lib;
+package com.chaosdev.playerinventoryapi.handlers;
 
 import java.util.EnumSet;
 
-import com.chaosdev.playerinventoryapi.CommonProxy;
 import com.chaosdev.playerinventoryapi.PlayerInventoryAPI;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.common.CommonProxy;
+import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -18,21 +17,15 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class PIAPITickHandler implements ITickHandler
 {
-	public PIAPITickHandler()
-	{
-		
-	}
-	
 	public static KeyBinding getInventoryKeyBinding()
 	{
-		KeyBinding kb = Minecraft.getMinecraft().gameSettings.keyBindInventory;
-		return kb;
+		return Minecraft.getMinecraft().gameSettings.keyBindInventory;
 	}
 	
 	@Override
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.CLIENT);
+		return EnumSet.of(TickType.CLIENT, TickType.PLAYER);
 	}
 	
 	@Override
@@ -40,6 +33,11 @@ public class PIAPITickHandler implements ITickHandler
 	{
 		if (type.contains(TickType.CLIENT))
 			updateInventory();
+		if (type.contains(TickType.PLAYER))
+		{
+			EntityPlayer player = (EntityPlayer) tickData[0];
+			ExtendedInventory.getExtendedInventory(player).onUpdate();
+		}
 	}
 	
 	@Override
@@ -47,37 +45,15 @@ public class PIAPITickHandler implements ITickHandler
 	{
 		if (type.contains(TickType.CLIENT))
 			updateInventory();
-		if (type.contains(TickType.PLAYER))
-		{
-			replacePlayerInventory((EntityPlayer) tickData[0]);
-		}
-	}
-	
-	public void replacePlayerInventory(EntityPlayer ep)
-	{
-		
 	}
 	
 	public void updateInventory()
 	{
-		ContainerCustomInventoryCreative.resetSlots();
-		ContainerCustomInventorySurvival.resetSlots();
-		
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (Minecraft.getMinecraft().currentScreen instanceof GuiInventory && PlayerInventoryAPI.ENABLE_CUSTOM_SURVIVAL_INVENTORY)
-		{
-			player.closeScreen();
-			player.openContainer = null;
-			player.inventoryContainer = null;
+		if (Minecraft.getMinecraft().currentScreen instanceof GuiInventory && PlayerInventoryAPI.enableCustomSurvivalInventory)
 			player.openGui(PlayerInventoryAPI.instance, CommonProxy.CUSTOM_INVENTORY_SURVIVAL_ID, player.worldObj, 0, 0, 0);
-		}
-		else if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && PlayerInventoryAPI.ENABLE_CUSTOM_CREATIVE_INVENTORY)
-		{
-			player.closeScreen();
-			player.openContainer = null;
-			player.inventoryContainer = null;
+		else if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && PlayerInventoryAPI.enableCustomCreativeInventory)
 			player.openGui(PlayerInventoryAPI.instance, CommonProxy.CUSTOM_INVENTORY_CREATIVE_ID, player.worldObj, 0, 0, 0);
-		}
 	}
 	
 	@Override

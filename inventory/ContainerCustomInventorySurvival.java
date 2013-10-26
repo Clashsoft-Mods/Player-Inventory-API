@@ -1,8 +1,10 @@
 package com.chaosdev.playerinventoryapi.inventory;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.chaosdev.playerinventoryapi.api.ICustomPlayerContainer;
+import com.chaosdev.playerinventoryapi.api.ISlotHandler;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,44 +16,37 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerCustomInventorySurvival extends Container implements ICustomPlayerContainer
 {
-	/** The crafting matrix inventory. */
-	public InventoryCrafting			craftMatrix		= new InventoryCrafting(this, 2, 2);
-	public IInventory					craftResult		= new InventoryCraftResult();
+	public InventoryCrafting			craftMatrix				= new InventoryCrafting(this, 2, 2);
+	public IInventory					craftResult				= new InventoryCraftResult();
 	
-	/** Determines if inventory manipulation should be handled. */
-	public boolean						isLocalWorld	= false;
+	public boolean						isLocalWorld			= false;
 	protected final EntityPlayer		thePlayer;
 	
-	public static GuiPos[]				slotPos			= getDefaultSlotPositions();
-	public static GuiPos[]				slotPos2		= slotPos;
-	public static List<ISlotHandler>	slotHandlers	= new LinkedList<ISlotHandler>();
+	public static final GuiPos[]		defaultSlotPositions	= getDefaultSlotPositions();
+	public static GuiPos[]				slotPositions			= defaultSlotPositions.clone();
+	public static List<ISlotHandler>	slotHandlers			= new ArrayList<ISlotHandler>();
 	
 	public ContainerCustomInventorySurvival(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
 	{
 		this.isLocalWorld = par2;
 		this.thePlayer = par3EntityPlayer;
-		par3EntityPlayer.inventoryContainer = this;
 		
-		slotPos = slotPos2;
+		this.thePlayer.inventoryContainer = this;
+		this.thePlayer.openContainer = this;
+		
 		List<Slot> slots = createSlots();
+		int defaultSlots = slots.size();
+		
 		for (ISlotHandler handler : slotHandlers)
-		{
-			for (Slot s : handler.addSlots(par3EntityPlayer, false))
-			{
-				s.slotNumber = slots.size();
-				slotPos2[s.slotNumber] = new GuiPos(s.xDisplayPosition, s.yDisplayPosition);
-				slots.add(s);
-			}
-		}
+			handler.addSlots(slots, thePlayer, false);
+		
 		for (int i = 0; i < slots.size(); i++)
 		{
-			Slot s = slots.get(i);
-			s.xDisplayPosition = slotPos2[i].getX();
-			s.yDisplayPosition = slotPos2[i].getY();
-			addSlotToContainer(s);
+			Slot slot = slots.get(i);
+			addSlotToContainer(slot);
+			if (i >= defaultSlots)
+				slotPositions[slot.slotNumber] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
 		}
-		
-		System.out.println(this.inventorySlots.size() + " Slots registered for Survival Inventory.");
 		
 		this.onCraftMatrixChanged(this.craftMatrix);
 	}
@@ -59,8 +54,8 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	@Override
 	public List<Slot> createSlots()
 	{
-		List<Slot> slots = new LinkedList<Slot>();
-		GuiPos[] pos = slotPos2;
+		List<Slot> slots = new ArrayList<Slot>(slotPositions.length);
+		GuiPos[] pos = slotPositions;
 		slots.add(new SlotCrafting(this.thePlayer, this.craftMatrix, this.craftResult, 0, pos[0].getX(), pos[0].getY()));
 		
 		int i;
@@ -76,7 +71,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 		
 		for (i = 0; i < 4; ++i)
 		{
-			slots.add(new SlotCustomArmor(this, this.thePlayer.inventory, this.thePlayer.inventory.getSizeInventory() - 1 - i, pos[8 - i].getX(), pos[8 - i].getY(), i));
+			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, this.thePlayer.inventory.getSizeInventory() - 1 - i, pos[8 - i].getX(), pos[8 - i].getY(), i));
 		}
 		
 		for (i = 0; i < 3; ++i)
@@ -138,16 +133,13 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	
 	public static void resetSlots()
 	{
-		slotPos = getDefaultSlotPositions();
-		slotPos2 = slotPos;
+		slotPositions = defaultSlotPositions.clone();
 	}
 	
 	public static void setSlotPos(int slotid, int x, int y)
 	{
-		if (slotid < slotPos2.length)
-		{
-			slotPos2[slotid] = new GuiPos(x, y);
-		}
+		if (slotid < slotPositions.length)
+			slotPositions[slotid] = new GuiPos(x, y);
 		else
 			throw new IllegalArgumentException("Tried to set the slot position of a slot that does not exist - Add that slot first.");
 	}

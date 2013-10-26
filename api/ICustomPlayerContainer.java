@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.inventory;
+package com.chaosdev.playerinventoryapi.api;
 
 import java.util.List;
 

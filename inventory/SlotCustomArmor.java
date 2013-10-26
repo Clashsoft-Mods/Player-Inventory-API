@@ -3,6 +3,7 @@ package com.chaosdev.playerinventoryapi.inventory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -12,23 +13,21 @@ import net.minecraft.util.Icon;
 
 public class SlotCustomArmor extends Slot
 {
-	/**
-	 * The armor type that can be placed on that slot, it uses the same values
-	 * of armorType field on ItemArmor.
-	 */
-	final int						armorType;
+	public int			armorType;
+	public EntityPlayer	player;
 	
-	/**
-	 * The parent class of this clot, ContainerPlayer, SlotArmor is a Anon inner
-	 * class.
-	 */
-	final ICustomPlayerContainer	parent;
+	public Icon			backgroundIcon;
 	
-	public SlotCustomArmor(ICustomPlayerContainer par1IPlayerContainer, IInventory par2IInventory, int par3, int par4, int par5, int par6)
+	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType)
 	{
-		super(par2IInventory, par3, par4, par5);
-		this.parent = par1IPlayerContainer;
-		this.armorType = par6;
+		this(player, inventory, slotIndex, x, y, armorType, ItemArmor.func_94602_b(armorType));
+	}
+	
+	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType, Icon backgroundIcon)
+	{
+		super(inventory, slotIndex, x, y);
+		this.armorType = armorType;
+		this.backgroundIcon = backgroundIcon;
 	}
 	
 	/**
@@ -49,7 +48,7 @@ public class SlotCustomArmor extends Slot
 	public boolean isItemValid(ItemStack par1ItemStack)
 	{
 		Item item = (par1ItemStack == null ? null : par1ItemStack.getItem());
-		return item != null && item.isValidArmor(par1ItemStack, armorType, parent.getPlayer());
+		return item != null && item.isValidArmor(par1ItemStack, armorType, player);
 	}
 	
 	@Override
@@ -59,6 +58,6 @@ public class SlotCustomArmor extends Slot
 	 */
 	public Icon getBackgroundIconIndex()
 	{
-		return ItemArmor.func_94602_b(this.armorType);
+		return backgroundIcon;
 	}
 }

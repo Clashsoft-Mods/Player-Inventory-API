@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.gui;
+package com.chaosdev.playerinventoryapi.client.gui;
 
 import java.util.*;
 
@@ -7,10 +7,11 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.chaosdev.playerinventoryapi.api.IButtonHandler;
+import com.chaosdev.playerinventoryapi.api.inventorycomponents.InventoryObject;
 import com.chaosdev.playerinventoryapi.inventory.*;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
-import com.chaosdev.playerinventoryapi.lib.objects.InventoryObject;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -37,7 +38,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 {
 	public static ResourceLocation					custominventory		= new ResourceLocation("gui/custominventory.png");
 	
-	private static InventoryBasic					inventory			= new InventoryBasic("tmp", true, 45);
+	private static InventoryBasic					inventory			= new InventoryBasic("tmp", true, 128);
 	
 	/** Currently selected creative inventory tab index. */
 	private static int								selectedTabIndex	= CreativeTabs.tabBlock.getTabIndex();
@@ -72,7 +73,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	
 	private final EntityPlayer						player;
 	
-	private final ContainerCustomInventoryCreative	creativecontainer;
+	private final ContainerCustomInventoryCreative	inventoryCreativeContainer;
 	
 	// PLAYER INVENTORY API
 	private static GuiSize							windowSize			= new GuiSize(195, 136);
@@ -86,24 +87,20 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	
 	private static List<InventoryObject>			objects				= new ArrayList<InventoryObject>();
 	
-	public GuiCustomInventoryCreative(EntityPlayer par1EntityPlayer, ContainerCreativeList par2ContainerCreativeList, ContainerCustomInventoryCreative par3ContainerCustomInventoryCreative)
+	public GuiCustomInventoryCreative(EntityPlayer player, ContainerCreativeList creativelist, ContainerCustomInventoryCreative inventoryCreativeContainer)
 	{
-		super(par2ContainerCreativeList);
-		par1EntityPlayer.openContainer = this.inventorySlots;
-		this.creativecontainer = par3ContainerCustomInventoryCreative;
+		super(creativelist);
+		
+		this.inventoryCreativeContainer = inventoryCreativeContainer;
+		
 		this.allowUserInput = true;
-		this.player = par1EntityPlayer;
-		par1EntityPlayer.addStat(AchievementList.openInventory, 1);
+		this.player = player;
+		this.player.addStat(AchievementList.openInventory, 1);
+		
 		this.ySize = 136;
 		this.xSize = 195;
 		
-		List<Slot> slots = par3ContainerCustomInventoryCreative.inventorySlots;
-		slotPos = new GuiPos[slots.size()];
-		for (int i = 0; i < slots.size(); i++)
-		{
-			if (slots.get(i) != null)
-				slotPos[i] = new GuiPos(slots.get(i).xDisplayPosition, slots.get(i).yDisplayPosition);
-		}
+		this.slotPos = ContainerCustomInventoryCreative.slotPositions;
 	}
 	
 	public static void resetGui()
@@ -270,18 +267,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 						return;
 					}
 					
-					if (itemstack != null && itemstack2 != null && itemstack.isItemEqual(itemstack2) && ItemStack.areItemStackTagsEqual(itemstack, itemstack2)) // Forge:
-																																								// Bugfix,
-																																								// Compare
-																																								// NBT
-																																								// data,
-																																								// allow
-																																								// for
-																																								// deletion
-																																								// of
-																																								// enchanted
-																																								// books,
-																																								// MC-12770
+					if (itemstack != null && itemstack2 != null && itemstack.isItemEqual(itemstack2) && ItemStack.areItemStackTagsEqual(itemstack, itemstack2))
 					{
 						if (par3 == 0)
 						{
@@ -603,7 +589,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 		
 		if (par1CreativeTabs == CreativeTabs.tabInventory)
 		{
-			Container container = this.creativecontainer;
+			Container container = this.inventoryCreativeContainer;
 			
 			if (this.backupContainerSlots == null)
 			{
@@ -617,10 +603,6 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 				if (container.inventorySlots.get(j) != null)
 				{
 					SlotCustomCreativeInventory slotcreativeinventory = new SlotCustomCreativeInventory(this, (Slot) container.inventorySlots.get(j), j);
-					if (slotPos[j] != null)
-						slotcreativeinventory.xDisplayPosition = slotPos[j].getX();
-					if (slotPos[j] != null)
-						slotcreativeinventory.yDisplayPosition = slotPos[j].getY();
 					inventorySlots.inventorySlots.add(slotcreativeinventory);
 				}
 			}
