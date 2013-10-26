@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.api.inventorycomponents;
+package com.chaosdev.playerinventoryapi.lib.objects;
 
 import net.minecraft.client.Minecraft;
 

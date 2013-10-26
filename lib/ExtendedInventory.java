@@ -1,36 +1,25 @@
 package com.chaosdev.playerinventoryapi.lib;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
-
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 {
-	public static final String	IDENTIFIER	= "ExtendedInventory";
-	public static final String	CHANNEL		= "ExtInvChannel";
+	public Entity						entity;
 	
-	public EntityPlayer			entity;
+	public ItemStack[]					itemStacks	= new ItemStack[128];
+	public static Map<Integer, String>	entityKey	= new HashMap<Integer, String>();
 	
-	public ItemStack[]			itemStacks	= new ItemStack[128];
-	
-	public ExtendedInventory(EntityPlayer entity)
+	public ExtendedInventory(Entity entity)
 	{
 		this.entity = entity;
 	}
@@ -74,107 +63,37 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	@Override
 	public void init(Entity entity, World world)
 	{
+		this.entity = entity;
 	}
 	
-	public void onUpdate()
+	public static ExtendedInventory initEntityEI(Entity entity)
 	{
-		for (ItemStack stack : itemStacks)
-		{
-			if (stack != null && stack.getItem() != null)
-			{
-				stack.getItem().onUpdate(stack, entity.worldObj, entity, entity.inventory.currentItem, false);
-				stack.getItem().onArmorTickUpdate(entity.worldObj, entity, stack);
-			}
-		}
-	}
-	
-	public static ExtendedInventory getExtendedInventory(EntityPlayer player)
-	{
-		ExtendedInventory props = getExtendedInventory_(player);
-		return props == null ? setExtendedInventory(player, new ExtendedInventory(player)) : props;
-	}
-	
-	protected static ExtendedInventory getExtendedInventory_(EntityPlayer player)
-	{
-		return (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
-	}
-	
-	public static ExtendedInventory setByPacket(EntityPlayer player, Packet250CustomPayload packet)
-	{
-		ExtendedInventory ei = getExtendedInventory(player);
-		ei.readFromPacket(packet);
-		return ei;
-	}
-	
-	public static ExtendedInventory setExtendedInventory(EntityPlayer player, ExtendedInventory properties)
-	{
-		ExtendedInventory props = (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
-		if (props == null)
-		{
-			props = new ExtendedInventory(player);
-			player.registerExtendedProperties(IDENTIFIER, props);
-		}
+		ExtendedInventory m = (ExtendedInventory) entity.getExtendedProperties("ExtendedInventory");
+		if (m != null)
+			return m;
 		else
-			copy(properties, props);
-		return props;
-	}
-	
-	public static void copy(ExtendedInventory source, ExtendedInventory dest)
-	{
-		dest.itemStacks = source.itemStacks;
-		dest.entity = source.entity;
-	}
-	
-	public void sync(EntityPlayer player)
-	{
-		for (int i = 0; i < itemStacks.length; i++)
-			sync(player, i);
-	}
-	
-	public void sync(EntityPlayer player, int slot)
-	{
-		Packet250CustomPayload packet = createPacket(slot);
-		
-		if (player instanceof EntityPlayerMP) // Server
-			PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
-		else if (player instanceof EntityClientPlayerMP) // Client
-			((EntityClientPlayerMP) player).sendQueue.addToSendQueue(packet);
-	}
-	
-	protected Packet250CustomPayload createPacket(int slot)
-	{
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(128);
-		DataOutputStream dos = new DataOutputStream(bos);
-		
-		try
 		{
-			dos.writeInt(slot);
-			Packet.writeItemStack(getStackInSlot(slot), dos);
+			setEntityEI(entity, new ExtendedInventory(entity));
+			return new ExtendedInventory(entity);
 		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			return null;
-		}
-		
-		Packet250CustomPayload packet = new Packet250CustomPayload(CHANNEL, bos.toByteArray());
-		
-		return packet;
 	}
 	
-	public ExtendedInventory readFromPacket(Packet250CustomPayload packet)
+	public static void setEntityEI(Entity entity, ExtendedInventory ei)
 	{
-		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
-		try
-		{
-			int slot = dis.readInt();
-			itemStacks[slot] = Packet.readItemStack(dis);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		return this;
+		entityKey.put(entity.entityId, entity.registerExtendedProperties("ExtendedInventory", ei));
+	}
+	
+	public static ExtendedInventory getEntityEI(Entity entity)
+	{
+		ExtendedInventory m = (ExtendedInventory) entity.getExtendedProperties(entityKey.get(entity.entityId));
+		if (m == null)
+			m = (ExtendedInventory) entity.getExtendedProperties("ExtendedInventory");
+		return m == null ? initEntityEI(entity) : m;
+	}
+	
+	public void setStackInSlot(int slotid, ItemStack itemStack)
+	{
+		itemStacks[slotid] = itemStack;
 	}
 	
 	@Override
@@ -190,58 +109,34 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int slotID, int amount)
+	public ItemStack decrStackSize(int i, int j)
 	{
-		if (this.itemStacks[slotID] != null)
-		{
-			ItemStack itemstack;
-			
-			if (this.itemStacks[slotID].stackSize <= amount)
-			{
-				itemstack = this.itemStacks[slotID];
-				this.setInventorySlotContents(slotID, null);
-				return itemstack;
-			}
-			else
-			{
-				itemstack = this.itemStacks[slotID].splitStack(amount);
-				
-				if (this.itemStacks[slotID].stackSize == 0)
-					this.setInventorySlotContents(slotID, null);
-				
-				this.onInventoryChanged();
-				return itemstack;
-			}
-		}
-		else
-			return null;
+		itemStacks[i].stackSize -= j;
+		return itemStacks[i];
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slotID)
+	public ItemStack getStackInSlotOnClosing(int i)
 	{
-		return getStackInSlot(slotID);
+		return getStackInSlot(i);
 	}
 	
 	@Override
-	public void setInventorySlotContents(int slotID, ItemStack itemstack)
+	public void setInventorySlotContents(int i, ItemStack itemstack)
 	{
-		if (itemstack != null && itemstack.stackSize <= 0)
-			itemstack = null;
-		this.itemStacks[slotID] = itemstack;
-		sync(entity, slotID);
+		setStackInSlot(i, itemstack);
 	}
 	
 	@Override
 	public String getInvName()
 	{
-		return IDENTIFIER;
+		return "";
 	}
 	
 	@Override
 	public boolean isInvNameLocalized()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -253,6 +148,12 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	@Override
 	public void onInventoryChanged()
 	{
+		
+	}
+	
+	public void onPlayerInventoryChanged(EntityPlayer player)
+	{
+		
 	}
 	
 	@Override
@@ -272,7 +173,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int slotID, ItemStack itemstack)
+	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
 		return true;
 	}

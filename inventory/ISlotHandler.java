@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.api;
+package com.chaosdev.playerinventoryapi.inventory;
 
 import java.util.List;
 
@@ -7,5 +7,5 @@ import net.minecraft.inventory.Slot;
 
 public interface ISlotHandler
 {
-	public void addSlots(List<Slot> list, EntityPlayer player, boolean creative);
+	public List<Slot> addSlots(EntityPlayer player, boolean creative);
 }

@@ -1,6 +1,6 @@
 package com.chaosdev.playerinventoryapi.inventory;
 
-import com.chaosdev.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
+import com.chaosdev.playerinventoryapi.gui.GuiCustomInventoryCreative;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,7 +20,7 @@ public class SlotCustomCreativeInventory extends Slot
 	
 	public SlotCustomCreativeInventory(GuiCustomInventoryCreative par1GuiContainerCreative, Slot par2Slot, int par3)
 	{
-		super(par2Slot.inventory, par3, par2Slot.xDisplayPosition, par2Slot.yDisplayPosition);
+		super(par2Slot.inventory, par3, 0, 0);
 		this.theCreativeInventory = par1GuiContainerCreative;
 		this.theSlot = par2Slot;
 	}

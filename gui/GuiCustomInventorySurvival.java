@@ -1,21 +1,20 @@
-package com.chaosdev.playerinventoryapi.client.gui;
+package com.chaosdev.playerinventoryapi.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.chaosdev.playerinventoryapi.api.IButtonHandler;
-import com.chaosdev.playerinventoryapi.api.inventorycomponents.InventoryObject;
 import com.chaosdev.playerinventoryapi.inventory.ContainerCreativeList;
 import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
 import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import com.chaosdev.playerinventoryapi.inventory.IButtonHandler;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
 import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
+import com.chaosdev.playerinventoryapi.lib.objects.InventoryObject;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -24,6 +23,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
@@ -46,9 +46,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	private static GuiPos							playerDisplayPos		= new GuiPos(25, 7);
 	private static GuiPos							craftingArrowPos		= new GuiPos(125, 37);
 	private static float							craftingArrowRotation	= 0F;
-	private static boolean							drawCraftingLabel		= true;
-	
-	private final GuiPos[]							slotPositions;
+	private final GuiPos[]							slotPos;
 	
 	private static Map<GuiButton, IButtonHandler>	buttons					= new HashMap<GuiButton, IButtonHandler>();
 	
@@ -56,13 +54,18 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	
 	public GuiCustomInventorySurvival(EntityPlayer par1EntityPlayer, ContainerCustomInventorySurvival par2ContainerCustomInventorySurvival)
 	{
-		super(par2ContainerCustomInventorySurvival);
-		
+		super(par1EntityPlayer.inventoryContainer);
 		this.allowUserInput = true;
 		player = par1EntityPlayer;
 		par1EntityPlayer.addStat(AchievementList.openInventory, 1);
 		
-		this.slotPositions = ContainerCustomInventorySurvival.slotPositions;
+		List<Slot> slots = par2ContainerCustomInventorySurvival.inventorySlots;
+		slotPos = new GuiPos[slots.size()];
+		for (int i = 0; i < slots.size(); i++)
+		{
+			if (slots.get(i) != null)
+				slotPos[i] = new GuiPos(slots.get(i).xDisplayPosition, slots.get(i).yDisplayPosition);
+		}
 	}
 	
 	public static void setWindowSize(int width, int height)
@@ -136,12 +139,9 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		if (drawCraftingLabel)
-		{
-			int x = this.slotPositions[1].getX();
-			int y = this.slotPositions[1].getY();
-			this.fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), x - 1, y - 10, 4210752);
-		}
+		int x = this.slotPos[1].getX();
+		int y = this.slotPos[1].getY();
+		this.fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), x - 1, y - 10, 4210752);
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		GL11.glTranslatef(k, l, 0);
 		this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
 		this.drawPlayerBackground(playerDisplayPos.getX(), playerDisplayPos.getY());
-		for (GuiPos pos : slotPositions)
+		for (GuiPos pos : slotPos)
 		{
 			if (pos != null)
 				this.drawSlot(pos.getX(), pos.getY());
@@ -239,39 +239,30 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		this.drawTexturedModalRect(posX - 1, posY - 1, 16, 0, 18, 18);
 	}
 	
-	public static void drawPlayerOnGui(Minecraft mc, int par1, int par2, int par3, float par4, float par5)
+	public static void drawPlayerOnGui(Minecraft par0Minecraft, int par1, int par2, int par3, float par4, float par5)
 	{
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(par1, par2, 50.0F);
-		GL11.glScalef(-par3, par3, par3);
+		GL11.glScalef((-par3), par3, par3);
 		GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-		float f2 = mc.thePlayer.renderYawOffset;
-		float f3 = mc.thePlayer.rotationYaw;
-		float f4 = mc.thePlayer.rotationPitch;
+		float f2 = par0Minecraft.thePlayer.renderYawOffset;
+		float f3 = par0Minecraft.thePlayer.rotationYaw;
+		float f4 = par0Minecraft.thePlayer.rotationPitch;
 		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-((float) Math.atan(par5 / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
-		
-		mc.thePlayer.renderYawOffset = (float) Math.atan(par4 / 40.0F) * 20.0F;
-		mc.thePlayer.rotationYaw = (float) Math.atan(par4 / 40.0F) * 40.0F;
-		mc.thePlayer.rotationPitch = -((float) Math.atan(par5 / 40.0F)) * 20.0F;
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-		{
-			mc.thePlayer.renderYawOffset += 180;
-			mc.thePlayer.rotationYaw += 180;
-			mc.thePlayer.rotationPitch = (-mc.thePlayer.rotationPitch);
-		}
-		
-		mc.thePlayer.rotationYawHead = mc.thePlayer.rotationYaw;
-		GL11.glTranslatef(0.0F, mc.thePlayer.yOffset, 0.0F);
+		par0Minecraft.thePlayer.renderYawOffset = (float) Math.atan(par4 / 40.0F) * 20.0F;
+		par0Minecraft.thePlayer.rotationYaw = (float) Math.atan(par4 / 40.0F) * 40.0F;
+		par0Minecraft.thePlayer.rotationPitch = -((float) Math.atan(par5 / 40.0F)) * 20.0F;
+		par0Minecraft.thePlayer.rotationYawHead = par0Minecraft.thePlayer.rotationYaw;
+		GL11.glTranslatef(0.0F, par0Minecraft.thePlayer.yOffset, 0.0F);
 		RenderManager.instance.playerViewY = 180.0F;
-		RenderManager.instance.renderEntityWithPosYaw(mc.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-		mc.thePlayer.renderYawOffset = f2;
-		mc.thePlayer.rotationYaw = f3;
-		mc.thePlayer.rotationPitch = f4;
+		RenderManager.instance.renderEntityWithPosYaw(par0Minecraft.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+		par0Minecraft.thePlayer.renderYawOffset = f2;
+		par0Minecraft.thePlayer.rotationYaw = f3;
+		par0Minecraft.thePlayer.rotationPitch = f4;
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
