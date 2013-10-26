@@ -27,7 +27,6 @@ public class CommonProxy implements IGuiHandler
 			ContainerCustomInventoryCreative container = new ContainerCustomInventoryCreative(player.inventory, false, player);
 			player.inventoryContainer = container;
 			return container;
-			
 		}
 		else if (ID == CUSTOM_INVENTORY_SURVIVAL_ID)
 		{

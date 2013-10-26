@@ -138,7 +138,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		if (player instanceof EntityPlayerMP) // Server
 			PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
 		else if (player instanceof EntityClientPlayerMP) // Client
-			((EntityClientPlayerMP)player).sendQueue.addToSendQueue(packet);
+			((EntityClientPlayerMP) player).sendQueue.addToSendQueue(packet);
 	}
 	
 	protected Packet250CustomPayload createPacket(int slot)
@@ -193,28 +193,28 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	public ItemStack decrStackSize(int slotID, int amount)
 	{
 		if (this.itemStacks[slotID] != null)
-        {
-            ItemStack itemstack;
-
-            if (this.itemStacks[slotID].stackSize <= amount)
-            {
-                itemstack = this.itemStacks[slotID];
-                this.setInventorySlotContents(slotID, null);
-                return itemstack;
-            }
-            else
-            {
-                itemstack = this.itemStacks[slotID].splitStack(amount);
-
-                if (this.itemStacks[slotID].stackSize == 0)
-                    this.setInventorySlotContents(slotID, null);
-
-                this.onInventoryChanged();
-                return itemstack;
-            }
-        }
-        else
-            return null;
+		{
+			ItemStack itemstack;
+			
+			if (this.itemStacks[slotID].stackSize <= amount)
+			{
+				itemstack = this.itemStacks[slotID];
+				this.setInventorySlotContents(slotID, null);
+				return itemstack;
+			}
+			else
+			{
+				itemstack = this.itemStacks[slotID].splitStack(amount);
+				
+				if (this.itemStacks[slotID].stackSize == 0)
+					this.setInventorySlotContents(slotID, null);
+				
+				this.onInventoryChanged();
+				return itemstack;
+			}
+		}
+		else
+			return null;
 	}
 	
 	@Override

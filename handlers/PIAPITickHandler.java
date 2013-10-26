@@ -48,7 +48,7 @@ public class PIAPITickHandler implements ITickHandler
 	}
 	
 	public void updateInventory()
-	{	
+	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (Minecraft.getMinecraft().currentScreen instanceof GuiInventory && PlayerInventoryAPI.enableCustomSurvivalInventory)
 			player.openGui(PlayerInventoryAPI.instance, CommonProxy.CUSTOM_INVENTORY_SURVIVAL_ID, player.worldObj, 0, 0, 0);

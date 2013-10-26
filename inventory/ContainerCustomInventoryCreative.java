@@ -16,16 +16,14 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerCustomInventoryCreative extends Container implements ICustomPlayerContainer
 {
-	/** The crafting matrix inventory. */
 	public InventoryCrafting			craftMatrix				= new InventoryCrafting(this, 2, 2);
 	public IInventory					craftResult				= new InventoryCraftResult();
 	
-	/** Determines if inventory manipulation should be handled. */
 	public boolean						isLocalWorld			= false;
-	protected final EntityPlayer		thePlayer;
+	public final EntityPlayer			thePlayer;
 	
 	public static final GuiPos[]		defaultSlotPositions	= getDefaultSlotPositions();
-	public static GuiPos[]				slotPositions			= defaultSlotPositions;
+	public static GuiPos[]				slotPositions			= defaultSlotPositions.clone();
 	public static List<ISlotHandler>	slotHandlers			= new ArrayList<ISlotHandler>();
 	
 	public ContainerCustomInventoryCreative(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
@@ -33,7 +31,11 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 		this.isLocalWorld = par2;
 		this.thePlayer = par3EntityPlayer;
 		
+		this.thePlayer.inventoryContainer = this;
+		this.thePlayer.openContainer = this;
+		
 		List<Slot> slots = createSlots();
+		int defaultSlots = slots.size();
 		
 		for (ISlotHandler handler : slotHandlers)
 			handler.addSlots(slots, thePlayer, false);
@@ -42,7 +44,9 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 		{
 			Slot slot = slots.get(i);
 			addSlotToContainer(slot);
-			slotPositions[i] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
+			
+			if (i >= defaultSlots)
+				slotPositions[slot.slotNumber] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
 		}
 		
 		this.onCraftMatrixChanged(this.craftMatrix);
@@ -62,27 +66,29 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 		{
 			for (j = 0; j < 2; ++j)
 			{
-				slots.add(new Slot(this.craftMatrix, j + i * 2, pos[1 + j + i * 2].getX(), pos[1 + j + i * 2].getY()));
+				int index = j + i * 2;
+				slots.add(new Slot(this.craftMatrix, index, pos[1 + index].getX(), pos[1 + index].getY()));
 			}
 		}
 		
 		for (i = 0; i < 4; ++i)
 		{
-			if (this.thePlayer != null)
-				slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, this.thePlayer.inventory.getSizeInventory() - 1 - i, pos[8 - i].getX(), pos[8 - i].getY(), i));
+			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, this.thePlayer.inventory.getSizeInventory() - 1 - i, pos[8 - i].getX(), pos[8 - i].getY(), i));
 		}
 		
 		for (i = 0; i < 3; ++i)
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				slots.add(new Slot(this.thePlayer.inventory, j + (i + 1) * 9, pos[j + (i + 1) * 9].getX(), pos[j + (i + 1) * 9].getY()));
+				int index = j + (i + 1) * 9;
+				slots.add(new Slot(this.thePlayer.inventory, index, pos[index].getX(), pos[index].getY()));
 			}
 		}
 		
 		for (i = 0; i < 9; ++i)
 		{
-			slots.add(new Slot(this.thePlayer.inventory, i, pos[36 + i].getX(), pos[36 + i].getY()));
+			int index = i + 36;
+			slots.add(new Slot(this.thePlayer.inventory, i, pos[index].getX(), pos[index].getY()));
 		}
 		
 		return slots;

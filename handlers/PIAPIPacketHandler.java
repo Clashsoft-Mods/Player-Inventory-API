@@ -19,7 +19,7 @@ public class PIAPIPacketHandler implements IPacketHandler
 	
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
-	{	
+	{
 		if (ExtendedInventory.CHANNEL.equals(packet.channel))
 			ExtendedInventory.setByPacket((EntityPlayer) player, packet);
 	}

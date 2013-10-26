@@ -268,18 +268,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 						return;
 					}
 					
-					if (itemstack != null && itemstack2 != null && itemstack.isItemEqual(itemstack2) && ItemStack.areItemStackTagsEqual(itemstack, itemstack2)) // Forge:
-																																								// Bugfix,
-																																								// Compare
-																																								// NBT
-																																								// data,
-																																								// allow
-																																								// for
-																																								// deletion
-																																								// of
-																																								// enchanted
-																																								// books,
-																																								// MC-12770
+					if (itemstack != null && itemstack2 != null && itemstack.isItemEqual(itemstack2) && ItemStack.areItemStackTagsEqual(itemstack, itemstack2))
 					{
 						if (par3 == 0)
 						{

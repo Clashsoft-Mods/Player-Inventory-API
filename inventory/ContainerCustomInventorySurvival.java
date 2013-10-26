@@ -16,16 +16,14 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerCustomInventorySurvival extends Container implements ICustomPlayerContainer
 {
-	/** The crafting matrix inventory. */
 	public InventoryCrafting			craftMatrix				= new InventoryCrafting(this, 2, 2);
 	public IInventory					craftResult				= new InventoryCraftResult();
 	
-	/** Determines if inventory manipulation should be handled. */
 	public boolean						isLocalWorld			= false;
 	protected final EntityPlayer		thePlayer;
 	
 	public static final GuiPos[]		defaultSlotPositions	= getDefaultSlotPositions();
-	public static GuiPos[]				slotPositions			= defaultSlotPositions;
+	public static GuiPos[]				slotPositions			= defaultSlotPositions.clone();
 	public static List<ISlotHandler>	slotHandlers			= new ArrayList<ISlotHandler>();
 	
 	public ContainerCustomInventorySurvival(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
@@ -33,7 +31,11 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 		this.isLocalWorld = par2;
 		this.thePlayer = par3EntityPlayer;
 		
+		this.thePlayer.inventoryContainer = this;
+		this.thePlayer.openContainer = this;
+		
 		List<Slot> slots = createSlots();
+		int defaultSlots = slots.size();
 		
 		for (ISlotHandler handler : slotHandlers)
 			handler.addSlots(slots, thePlayer, false);
@@ -42,12 +44,11 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 		{
 			Slot slot = slots.get(i);
 			addSlotToContainer(slot);
-			slotPositions[i] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
+			if (i >= defaultSlots)
+				slotPositions[slot.slotNumber] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
 		}
 		
 		this.onCraftMatrixChanged(this.craftMatrix);
-		
-		this.detectAndSendChanges();
 	}
 	
 	@Override
@@ -132,7 +133,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	
 	public static void resetSlots()
 	{
-		slotPositions = defaultSlotPositions;
+		slotPositions = defaultSlotPositions.clone();
 	}
 	
 	public static void setSlotPos(int slotid, int x, int y)
