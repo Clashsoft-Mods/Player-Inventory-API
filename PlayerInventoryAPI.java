@@ -1,10 +1,11 @@
 package com.chaosdev.playerinventoryapi;
 
+import clashsoft.clashsoftapi.util.CSUpdate;
+
 import com.chaosdev.playerinventoryapi.common.CommonProxy;
 import com.chaosdev.playerinventoryapi.handlers.PIAPIEventHandler;
 import com.chaosdev.playerinventoryapi.handlers.PIAPIPacketHandler;
 import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
-import com.chaosdev.playerinventoryapi.lib.PIAPIConstants;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -16,16 +17,17 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import static com.chaosdev.playerinventoryapi.lib.PIAPIConstants.*;
-
-@Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION)
-@NetworkMod(channels = { CHANNEL_NAME, ExtendedInventory.CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PIAPIPacketHandler.class)
+@Mod(modid = "PlayerInventoryAPI", name = "Player Inventory API", version = PlayerInventoryAPI.VERSION)
+@NetworkMod(channels = { "PIAPI", ExtendedInventory.CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PIAPIPacketHandler.class)
 public class PlayerInventoryAPI
 {
-	@Instance(PIAPIConstants.MOD_ID)
+	public static final int REVISION = 0;
+	public static final String VERSION = CSUpdate.CURRENT_VERSION + "-" + REVISION;
+	
+	@Instance("PlayerInventoryAPI")
 	public static PlayerInventoryAPI	instance;
 	
-	@SidedProxy(clientSide = CLIENT_PROXY_LOCATION, serverSide = COMMON_PROXY_LOCATION)
+	@SidedProxy(clientSide = "com.chaosdev.playerinventoryapi.client.ClientProxy", serverSide = "com.chaosdev.playerinventoryapi.common.CommonProxy")
 	public static CommonProxy			proxy;
 	
 	public static PIAPIPacketHandler	packetHandler;
