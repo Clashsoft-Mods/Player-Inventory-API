@@ -111,7 +111,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 		// 5 - 8 = Armor
 		for (i = 0; i < 4; ++i)
 		{
-			pos[8 - i] = new GuiPos(8, 8 + (4 - i) * 18 - 18);
+			pos[8 - i] = new GuiPos(8, 26 + i * 18 - 18);
 		}
 		
 		// 9 - 35 = Inventory
@@ -133,7 +133,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	
 	public static void resetSlots()
 	{
-		slotPositions = defaultSlotPositions.clone();
+		slotPositions = getDefaultSlotPositions();
 	}
 	
 	public static void setSlotPos(int slotid, int x, int y)
