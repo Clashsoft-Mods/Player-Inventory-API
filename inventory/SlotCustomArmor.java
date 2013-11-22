@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.inventory;
+package clashsoft.playerinventoryapi.inventory;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

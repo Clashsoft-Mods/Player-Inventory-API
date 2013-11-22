@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.lib;
+package clashsoft.playerinventoryapi.lib;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -88,25 +88,25 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		}
 	}
 	
-	public static ExtendedInventory getExtendedInventory(EntityPlayer player)
+	public static ExtendedInventory get(EntityPlayer player)
 	{
-		ExtendedInventory props = getExtendedInventory_(player);
-		return props == null ? setExtendedInventory(player, new ExtendedInventory(player)) : props;
+		ExtendedInventory props = getUnsafe(player);
+		return props == null ? set(player, new ExtendedInventory(player)) : props;
 	}
 	
-	protected static ExtendedInventory getExtendedInventory_(EntityPlayer player)
+	protected static ExtendedInventory getUnsafe(EntityPlayer player)
 	{
 		return (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
 	}
 	
 	public static ExtendedInventory setByPacket(EntityPlayer player, Packet250CustomPayload packet)
 	{
-		ExtendedInventory ei = getExtendedInventory(player);
+		ExtendedInventory ei = get(player);
 		ei.readFromPacket(packet);
 		return ei;
 	}
 	
-	public static ExtendedInventory setExtendedInventory(EntityPlayer player, ExtendedInventory properties)
+	public static ExtendedInventory set(EntityPlayer player, ExtendedInventory properties)
 	{
 		ExtendedInventory props = (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
 		if (props == null)

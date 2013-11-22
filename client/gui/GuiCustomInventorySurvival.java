@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.client.gui;
+package clashsoft.playerinventoryapi.client.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,13 +9,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.chaosdev.playerinventoryapi.api.IButtonHandler;
-import com.chaosdev.playerinventoryapi.api.inventorycomponents.InventoryObject;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCreativeList;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiSize;
+import clashsoft.playerinventoryapi.api.IButtonHandler;
+import clashsoft.playerinventoryapi.api.inventorycomponents.InventoryObject;
+import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
+import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
+import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
+import clashsoft.playerinventoryapi.lib.GuiHelper.GuiSize;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -24,6 +24,10 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
@@ -288,5 +292,39 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	protected void actionPerformed(GuiButton par1GuiButton)
 	{
 		GuiCustomInventorySurvival.buttons.get(par1GuiButton).onButtonPressed(par1GuiButton);
+	}
+	
+	@Override
+	protected void handleMouseClick(Slot par1Slot, int par2, int par3, int par4)
+	{
+		boolean flag = par4 == 1;
+		par4 = par2 == -999 && par4 == 0 ? 4 : par4;
+		ItemStack itemstack;
+		InventoryPlayer inventoryplayer;
+		
+		int l;
+		ItemStack itemstack1;
+		
+		if (par4 == 4 && par1Slot != null && par1Slot.getHasStack())
+		{
+			itemstack1 = par1Slot.decrStackSize(par3 == 0 ? 1 : par1Slot.getStack().getMaxStackSize());
+			this.mc.thePlayer.dropPlayerItem(itemstack1);
+			this.mc.playerController.func_78752_a(itemstack1);
+			this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
+		}
+		else if (par4 == 4 && this.mc.thePlayer.inventory.getItemStack() != null)
+		{
+			this.mc.thePlayer.dropPlayerItem(this.mc.thePlayer.inventory.getItemStack());
+			this.mc.playerController.func_78752_a(this.mc.thePlayer.inventory.getItemStack());
+			this.mc.thePlayer.inventory.setItemStack((ItemStack) null);
+			this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
+		}
+		else
+		{
+			Container container = this.mc.thePlayer.inventoryContainer;
+			container.slotClick(par1Slot == null ? par2 : par1Slot.slotNumber, par3, par4, this.mc.thePlayer);
+			container.detectAndSendChanges();
+		}
+		
 	}
 }

@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.api;
+package clashsoft.playerinventoryapi.api;
 
 import net.minecraft.client.gui.GuiButton;
 

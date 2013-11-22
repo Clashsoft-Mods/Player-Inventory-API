@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.lib;
+package clashsoft.playerinventoryapi.lib;
 
 public class GuiHelper
 {

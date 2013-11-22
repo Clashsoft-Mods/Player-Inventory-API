@@ -1,10 +1,9 @@
-package com.chaosdev.playerinventoryapi.inventory;
+package clashsoft.playerinventoryapi.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chaosdev.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
-
+import clashsoft.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

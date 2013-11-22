@@ -1,7 +1,6 @@
-package com.chaosdev.playerinventoryapi.handlers;
+package clashsoft.playerinventoryapi.handlers;
 
-import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
-
+import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.Player;

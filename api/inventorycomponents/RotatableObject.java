@@ -1,4 +1,4 @@
-package com.chaosdev.playerinventoryapi.api.inventorycomponents;
+package clashsoft.playerinventoryapi.api.inventorycomponents;
 
 import org.lwjgl.opengl.GL11;
 

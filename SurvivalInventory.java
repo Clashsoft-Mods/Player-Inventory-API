@@ -1,10 +1,10 @@
-package com.chaosdev.playerinventoryapi;
+package clashsoft.playerinventoryapi;
 
-import com.chaosdev.playerinventoryapi.api.IButtonHandler;
-import com.chaosdev.playerinventoryapi.api.ISlotHandler;
-import com.chaosdev.playerinventoryapi.api.inventorycomponents.InventoryObject;
-import com.chaosdev.playerinventoryapi.client.gui.GuiCustomInventorySurvival;
-import com.chaosdev.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import clashsoft.playerinventoryapi.api.IButtonHandler;
+import clashsoft.playerinventoryapi.api.ISlotHandler;
+import clashsoft.playerinventoryapi.api.inventorycomponents.InventoryObject;
+import clashsoft.playerinventoryapi.client.gui.GuiCustomInventorySurvival;
+import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 
 import net.minecraft.client.gui.GuiButton;
 

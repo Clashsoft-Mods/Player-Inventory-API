@@ -1,11 +1,10 @@
-package com.chaosdev.playerinventoryapi.handlers;
+package clashsoft.playerinventoryapi.handlers;
 
 import java.util.EnumSet;
 
-import com.chaosdev.playerinventoryapi.PlayerInventoryAPI;
-import com.chaosdev.playerinventoryapi.common.CommonProxy;
-import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
-
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
+import clashsoft.playerinventoryapi.common.PICommonProxy;
+import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -36,7 +35,7 @@ public class PIAPITickHandler implements ITickHandler
 		if (type.contains(TickType.PLAYER))
 		{
 			EntityPlayer player = (EntityPlayer) tickData[0];
-			ExtendedInventory.getExtendedInventory(player).onUpdate();
+			ExtendedInventory.get(player).onUpdate();
 		}
 	}
 	
@@ -51,9 +50,9 @@ public class PIAPITickHandler implements ITickHandler
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (Minecraft.getMinecraft().currentScreen instanceof GuiInventory && PlayerInventoryAPI.enableCustomSurvivalInventory)
-			player.openGui(PlayerInventoryAPI.instance, CommonProxy.CUSTOM_INVENTORY_SURVIVAL_ID, player.worldObj, 0, 0, 0);
+			player.openGui(PlayerInventoryAPI.instance, PICommonProxy.CUSTOM_INVENTORY_SURVIVAL_ID, player.worldObj, 0, 0, 0);
 		else if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative && PlayerInventoryAPI.enableCustomCreativeInventory)
-			player.openGui(PlayerInventoryAPI.instance, CommonProxy.CUSTOM_INVENTORY_CREATIVE_ID, player.worldObj, 0, 0, 0);
+			player.openGui(PlayerInventoryAPI.instance, PICommonProxy.CUSTOM_INVENTORY_CREATIVE_ID, player.worldObj, 0, 0, 0);
 	}
 	
 	@Override

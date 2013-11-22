@@ -1,9 +1,9 @@
-package com.chaosdev.playerinventoryapi.handlers;
+package clashsoft.playerinventoryapi.handlers;
 
-import clashsoft.clashsoftapi.util.CSUpdate;
-
-import com.chaosdev.playerinventoryapi.lib.ExtendedInventory;
-
+import clashsoft.cslib.minecraft.update.CSUpdate;
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
+import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -20,7 +20,7 @@ public class PIAPIEventHandler
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.entity instanceof EntityPlayer)
 		{
 			ExtendedInventory props = new ExtendedInventory((EntityPlayer) event.entity);
-			ExtendedInventory.setExtendedInventory((EntityPlayer) event.entity, props);
+			ExtendedInventory.set((EntityPlayer) event.entity, props);
 		}
 	}
 	
@@ -33,9 +33,11 @@ public class PIAPIEventHandler
 			
 			CSUpdate.doClashsoftUpdateCheck(player, "Player Inventory API", "piapi", "");
 			
+			PlayerInventoryAPI.proxy.replacePlayerInventoryContainer(player, new ContainerCustomInventorySurvival(player.inventory, !event.world.isRemote, player));
+			
 			if (!event.world.isRemote)
 			{
-				ExtendedInventory ei = ExtendedInventory.getExtendedInventory(player);
+				ExtendedInventory ei = ExtendedInventory.get(player);
 				ei.sync(player);
 			}
 		}

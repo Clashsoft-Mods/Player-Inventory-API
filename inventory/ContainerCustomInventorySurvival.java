@@ -1,11 +1,11 @@
-package com.chaosdev.playerinventoryapi.inventory;
+package clashsoft.playerinventoryapi.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chaosdev.playerinventoryapi.api.ICustomPlayerContainer;
-import com.chaosdev.playerinventoryapi.api.ISlotHandler;
-import com.chaosdev.playerinventoryapi.lib.GuiHelper.GuiPos;
+import clashsoft.playerinventoryapi.api.ICustomPlayerContainer;
+import clashsoft.playerinventoryapi.api.ISlotHandler;
+import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -22,17 +22,13 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	public boolean						isLocalWorld			= false;
 	protected final EntityPlayer		thePlayer;
 	
-	public static final GuiPos[]		defaultSlotPositions	= getDefaultSlotPositions();
-	public static GuiPos[]				slotPositions			= defaultSlotPositions.clone();
+	public static GuiPos[]				slotPositions			= getDefaultSlotPositions();
 	public static List<ISlotHandler>	slotHandlers			= new ArrayList<ISlotHandler>();
 	
 	public ContainerCustomInventorySurvival(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
 	{
 		this.isLocalWorld = par2;
 		this.thePlayer = par3EntityPlayer;
-		
-		this.thePlayer.inventoryContainer = this;
-		this.thePlayer.openContainer = this;
 		
 		List<Slot> slots = createSlots();
 		int defaultSlots = slots.size();

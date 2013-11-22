@@ -1,6 +1,6 @@
-package com.chaosdev.playerinventoryapi.lib;
+package clashsoft.playerinventoryapi.lib;
 
-import clashsoft.clashsoftapi.util.CSUpdate;
+import clashsoft.cslib.minecraft.update.CSUpdate;
 
 public class PIAPIConstants
 {
