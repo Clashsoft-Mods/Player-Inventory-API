@@ -1,4 +1,4 @@
-package clashsoft.playerinventoryapi.api.inventorycomponents;
+package clashsoft.playerinventoryapi.api.invobject;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

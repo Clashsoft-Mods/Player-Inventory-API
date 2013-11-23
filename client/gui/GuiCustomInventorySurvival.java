@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import clashsoft.playerinventoryapi.api.IButtonHandler;
-import clashsoft.playerinventoryapi.api.inventorycomponents.InventoryObject;
+import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;

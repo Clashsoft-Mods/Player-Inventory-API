@@ -21,6 +21,14 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+/**
+ * Extended Inventory class.
+ * 
+ * Stores extra slot data of a custom player inventory
+ * 
+ * @author Clashsoft
+ *
+ */
 public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 {
 	public static final String	IDENTIFIER	= "ExtendedInventory";
@@ -76,6 +84,9 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	{
 	}
 	
+	/**
+	 * Called each tick to update items
+	 */
 	public void onUpdate()
 	{
 		for (ItemStack stack : itemStacks)
@@ -88,17 +99,39 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		}
 	}
 	
+	/**
+	 * Returns the Extended Inventory for a player. Use this when constructing slots or when reading slot data.
+	 * <p>
+	 * If the player does not have a registered Extended Inventory, one will be created.
+	 * 
+	 * @param player
+	 * @return the extended inventory
+	 */
 	public static ExtendedInventory get(EntityPlayer player)
 	{
 		ExtendedInventory props = getUnsafe(player);
 		return props == null ? set(player, new ExtendedInventory(player)) : props;
 	}
 	
+	/**
+	 * Directly gets the Extended Inventory from get player extended inventory map.
+	 * <p>
+	 * May be null because it needs to be created and applied at least once. Always use {@link ExtendedInventory#get(EntityPlayer)}
+	 * 
+	 * @param player
+	 * @return the extended inventory
+	 */
 	protected static ExtendedInventory getUnsafe(EntityPlayer player)
 	{
 		return (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
 	}
 	
+	/**
+	 * Sets the Extended Inventory for a player and reads the packet data. Only used by PIAPI Packet Handler.
+	 * @param player
+	 * @param packet
+	 * @return
+	 */
 	public static ExtendedInventory setByPacket(EntityPlayer player, Packet250CustomPayload packet)
 	{
 		ExtendedInventory ei = get(player);
@@ -106,6 +139,12 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		return ei;
 	}
 	
+	/**
+	 * Sets the Extended Inventory for a player.
+	 * @param player
+	 * @param properties
+	 * @return
+	 */
 	public static ExtendedInventory set(EntityPlayer player, ExtendedInventory properties)
 	{
 		ExtendedInventory props = (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
@@ -119,18 +158,32 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		return props;
 	}
 	
+	/**
+	 * Copies {@code source} data to {@code dest}.
+	 * @param source
+	 * @param dest
+	 */
 	public static void copy(ExtendedInventory source, ExtendedInventory dest)
 	{
 		dest.itemStacks = source.itemStacks;
 		dest.entity = source.entity;
 	}
 	
+	/**
+	 * Syncs all slots with the player
+	 * @param player
+	 */
 	public void sync(EntityPlayer player)
 	{
 		for (int i = 0; i < itemStacks.length; i++)
 			sync(player, i);
 	}
 	
+	/**
+	 * Syncs slot # {@code slot} with the player
+	 * @param player
+	 * @param slot
+	 */
 	public void sync(EntityPlayer player, int slot)
 	{
 		Packet250CustomPayload packet = createPacket(slot);
@@ -141,6 +194,11 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			((EntityClientPlayerMP) player).sendQueue.addToSendQueue(packet);
 	}
 	
+	/**
+	 * Creates a packet containing data.
+	 * @param slot
+	 * @return the packet
+	 */
 	protected Packet250CustomPayload createPacket(int slot)
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(128);
@@ -162,6 +220,11 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		return packet;
 	}
 	
+	/**
+	 * Copies data from the packet.
+	 * @param packet the data packet
+	 * @return this
+	 */
 	public ExtendedInventory readFromPacket(Packet250CustomPayload packet)
 	{
 		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));

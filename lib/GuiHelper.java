@@ -1,5 +1,10 @@
 package clashsoft.playerinventoryapi.lib;
 
+/**
+ * Helper class for 2-dimensional sizes.
+ * @author Clashsoft
+ *
+ */
 public class GuiHelper
 {
 	public static class GuiPos

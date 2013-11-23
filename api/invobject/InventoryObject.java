@@ -1,4 +1,4 @@
-package clashsoft.playerinventoryapi.api.inventorycomponents;
+package clashsoft.playerinventoryapi.api.invobject;
 
 public interface InventoryObject
 {

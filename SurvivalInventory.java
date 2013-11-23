@@ -2,14 +2,27 @@ package clashsoft.playerinventoryapi;
 
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
-import clashsoft.playerinventoryapi.api.inventorycomponents.InventoryObject;
+import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.client.gui.GuiCustomInventorySurvival;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 
 import net.minecraft.client.gui.GuiButton;
 
+/**
+ * Survival Inventory editing class.
+ * Contains delegate methods for {@link GuiCustomInventorySurvival} and {@link ContainerCustomInventorySurvival}
+ * 
+ * @author Clashsoft
+ *
+ */
 public class SurvivalInventory
 {
+	/**
+	 * Moves the survival inventory crafting grid to the upper right corner to free some space
+	 * 
+	 * @see SurvivalInventory#setCraftingArrowPosition(int, int)
+	 * @see SurvivalInventory#setSlotPosition(int, int, int)
+	 */
 	public static void compactCraftingGrid()
 	{
 		setCraftingArrowPosition(142, 45);
@@ -22,41 +35,91 @@ public class SurvivalInventory
 		setSlotPosition(4, 134 + 18, 26);
 	}
 	
+	/**
+	 * Adds a slot handler to the survival inventory
+	 * 
+	 * @see ISlotHandler
+	 * 
+	 * @param slothandler the slot handler
+	 */
 	public static void addSlotHandler(ISlotHandler slothandler)
 	{
 		ContainerCustomInventorySurvival.addSlotHandler(slothandler);
 	}
 	
+	/**
+	 * Sets the position of a slot in the survival inventory
+	 * 
+	 * @param slotid the id of the slot
+	 * @param x
+	 * @param y
+	 */
 	public static void setSlotPosition(int slotid, int x, int y)
 	{
 		ContainerCustomInventorySurvival.setSlotPos(slotid, x, y);
 	}
 	
+	/**
+	 * Sets the player preview display position in the survival inventory
+	 * @param x
+	 * @param y
+	 */
 	public static void setPlayerDisplayPosition(int x, int y)
 	{
 		GuiCustomInventorySurvival.setPlayerDisplayPos(x, y);
 	}
 	
+	/**
+	 * Sets the position of the survival inventory crafting arrow
+	 * @param x
+	 * @param y
+	 */
 	public static void setCraftingArrowPosition(int x, int y)
 	{
 		GuiCustomInventorySurvival.setCraftArrowPos(x, y);
 	}
 	
+	/**
+	 * Sets the rotation of the survival inventory crafting arrow
+	 * 
+	 * @param rotation the rotation in degrees
+	 */
 	public static void setCraftingArrowRotation(float rotation)
 	{
 		GuiCustomInventorySurvival.setCraftArrowRot(rotation);
 	}
 	
+	/**
+	 * Sets the window size of the survival inventory
+	 * @param width
+	 * @param height
+	 */
 	public static void setWindowSize(int width, int height)
 	{
 		GuiCustomInventorySurvival.setWindowSize(width, height);
 	}
 	
+	/**
+	 * Adds a button to the creative inventory
+	 * 
+	 * @see IButtonHandler
+	 * 
+	 * @param handler the button click handler
+	 * @param button the button
+	 */
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
 		GuiCustomInventorySurvival.addButton(handler, button);
 	}
 	
+	/**
+	 * Adds an inventory object to the creative inventory
+	 * 
+	 * @see InventoryObject
+	 * 
+	 * @param object the inventory object
+	 * @return
+	 */
 	public static InventoryObject addObject(InventoryObject object)
 	{
 		GuiCustomInventorySurvival.addObject(object);
