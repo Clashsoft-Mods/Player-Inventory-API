@@ -3,10 +3,12 @@ package clashsoft.playerinventoryapi.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+import clashsoft.cslib.util.CSReflection;
 import clashsoft.playerinventoryapi.api.ICustomPlayerContainer;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -16,17 +18,31 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerCustomInventoryCreative extends Container implements ICustomPlayerContainer
 {
-	public InventoryCrafting			craftMatrix				= new InventoryCrafting(this, 2, 2);
-	public IInventory					craftResult				= new InventoryCraftResult();
+	public InventoryCrafting			craftMatrix		= new InventoryCrafting(this, 2, 2);
+	public IInventory					craftResult		= new InventoryCraftResult();
 	
-	public boolean						isLocalWorld			= false;
+	public boolean						isLocalWorld	= false;
 	public final EntityPlayer			thePlayer;
 	
-	public static GuiPos[]				slotPositions			= getDefaultSlotPositions();
-	public static List<ISlotHandler>	slotHandlers			= new ArrayList<ISlotHandler>();
+	public static GuiPos[]				slotPositions	= getDefaultSlotPositions();
+	public static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
 	
 	public ContainerCustomInventoryCreative(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
 	{
+		this.inventorySlots = new ArrayList()
+		{
+			private static final long	serialVersionUID	= 5436247638996771146L;
+			
+			@Override
+			public int size()
+			{
+				String clazz = CSReflection.getCallerClassName();
+				if (clazz == Minecraft.class.getName())
+					return 45;
+				return super.size();
+			}
+		};
+		
 		this.isLocalWorld = par2;
 		this.thePlayer = par3EntityPlayer;
 		
