@@ -1,10 +1,8 @@
 package clashsoft.playerinventoryapi.common;
 
-import java.util.List;
-
 import clashsoft.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
 import clashsoft.playerinventoryapi.client.gui.GuiCustomInventorySurvival;
-import clashsoft.playerinventoryapi.handlers.PIAPITickHandler;
+import clashsoft.playerinventoryapi.handlers.PITickHandler;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
@@ -14,7 +12,6 @@ import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class PICommonProxy implements IGuiHandler
@@ -62,17 +59,11 @@ public class PICommonProxy implements IGuiHandler
 	
 	public void replacePlayerInventoryContainer(EntityPlayer player, Container container)
 	{
-		List<ItemStack> stacks = container.inventoryItemStacks = player.inventoryContainer.inventoryItemStacks;
-		
-		// Ensure the stacks size
-		while (stacks.size() < container.inventorySlots.size())
-			stacks.add(null);
-		
 		player.inventoryContainer = player.openContainer = container;
 	}
 	
 	public void registerTickHandler()
 	{
-		TickRegistry.registerTickHandler(new PIAPITickHandler(), Side.SERVER);
+		TickRegistry.registerTickHandler(new PITickHandler(), Side.SERVER);
 	}
 }

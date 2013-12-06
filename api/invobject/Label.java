@@ -2,7 +2,7 @@ package clashsoft.playerinventoryapi.api.invobject;
 
 import net.minecraft.client.Minecraft;
 
-public class Label extends RotatableObject
+public class Label implements InventoryObject
 {
 	public String text;
 	public int x;
@@ -23,32 +23,8 @@ public class Label extends RotatableObject
 	}
 
 	@Override
-	public void renderRotated(int width, int height)
+	public void render(int width, int height)
 	{
 		Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color);
-	}
-
-	@Override
-	public int getX()
-	{
-		return this.x;
-	}
-
-	@Override
-	public int getY()
-	{
-		return this.y;
-	}
-
-	@Override
-	public int getWidth()
-	{
-		return Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
-	}
-
-	@Override
-	public int getHeigth()
-	{
-		return Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
 	}
 }

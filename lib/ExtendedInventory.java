@@ -190,7 +190,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		
 		if (player instanceof EntityPlayerMP) // Server
 			PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
-		else if (player instanceof EntityClientPlayerMP) // Client
+		else if (player instanceof EntityClientPlayerMP && player.capabilities.isCreativeMode) // Client
 			((EntityClientPlayerMP) player).sendQueue.addToSendQueue(packet);
 	}
 	

@@ -3,6 +3,7 @@ package clashsoft.playerinventoryapi.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+import clashsoft.cslib.reflect.CSReflection;
 import clashsoft.playerinventoryapi.api.ICustomPlayerContainer;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
@@ -25,10 +26,27 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	public static GuiPos[]				slotPositions			= getDefaultSlotPositions();
 	public static List<ISlotHandler>	slotHandlers			= new ArrayList<ISlotHandler>();
 	
-	public ContainerCustomInventorySurvival(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
+	public ContainerCustomInventorySurvival(InventoryPlayer inventory, boolean localWorld, EntityPlayer player)
 	{
-		this.isLocalWorld = par2;
-		this.thePlayer = par3EntityPlayer;
+		this.isLocalWorld = localWorld;
+		this.thePlayer = player;
+		
+		this.inventorySlots = new ArrayList()
+		{
+			private static final long	serialVersionUID	= 5436247638996771146L;
+			
+			@Override
+			public int size()
+			{
+				if (ContainerCustomInventorySurvival.this.isLocalWorld)
+				{
+					String clazz = CSReflection.getCallerClassName();
+					if (clazz.equals(ContainerCustomInventoryCreative.getMinecraftClassName()))
+						return 50;
+				}
+				return super.size();
+			}
+		};
 		
 		List<Slot> slots = createSlots();
 		int defaultSlots = slots.size();

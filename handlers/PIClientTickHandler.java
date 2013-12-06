@@ -4,27 +4,20 @@ import java.util.EnumSet;
 
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.common.PICommonProxy;
-import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class PIAPITickHandler implements ITickHandler
-{
-	public static KeyBinding getInventoryKeyBinding()
-	{
-		return Minecraft.getMinecraft().gameSettings.keyBindInventory;
-	}
-	
+public class PIClientTickHandler implements ITickHandler
+{	
 	@Override
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.CLIENT, TickType.PLAYER);
+		return EnumSet.of(TickType.CLIENT);
 	}
 	
 	@Override
@@ -32,11 +25,6 @@ public class PIAPITickHandler implements ITickHandler
 	{
 		if (type.contains(TickType.CLIENT))
 			updateInventory();
-		if (type.contains(TickType.PLAYER))
-		{
-			EntityPlayer player = (EntityPlayer) tickData[0];
-			ExtendedInventory.get(player).onUpdate();
-		}
 	}
 	
 	@Override
@@ -58,6 +46,6 @@ public class PIAPITickHandler implements ITickHandler
 	@Override
 	public String getLabel()
 	{
-		return "Player Inventory API";
+		return "PIAPI Client";
 	}
 }

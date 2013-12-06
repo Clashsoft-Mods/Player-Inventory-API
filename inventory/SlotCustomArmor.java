@@ -20,7 +20,16 @@ public class SlotCustomArmor extends Slot
 	
 	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType)
 	{
-		this(player, inventory, slotIndex, x, y, armorType, ItemArmor.func_94602_b(armorType));
+		super(inventory, slotIndex, x, y);
+		this.armorType = armorType;
+		
+		try
+		{
+			this.backgroundIcon = ItemArmor.func_94602_b(armorType);
+		}
+		catch (NoSuchMethodError ex)
+		{
+		}
 	}
 	
 	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType, Icon backgroundIcon)
@@ -47,6 +56,6 @@ public class SlotCustomArmor extends Slot
 	@SideOnly(Side.CLIENT)
 	public Icon getBackgroundIconIndex()
 	{
-		return backgroundIcon;
+		return this.backgroundIcon;
 	}
 }

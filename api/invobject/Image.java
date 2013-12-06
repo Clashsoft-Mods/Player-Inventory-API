@@ -1,20 +1,26 @@
 package clashsoft.playerinventoryapi.api.invobject;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
-public class Image extends RotatableObject
+public class Image implements InventoryObject
 {
-	public ResourceLocation image;
-	public int x, y, u, v, width, heigth;
+	@SideOnly(Side.CLIENT)
+	protected static GuiScreen gui = new GuiScreen();
 	
-	public Image(ResourceLocation resource, int x, int y, int width, int heigth)
+	public ResourceLocation image;
+	public int x, y, u, v, width, height;
+	
+	public Image(ResourceLocation resource, int x, int y, int width, int height)
 	{
-		this(resource, x, y, 0, 0, width, heigth);
+		this(resource, x, y, 0, 0, width, height);
 	}
 	
-	public Image(ResourceLocation resource, int x, int y, int u, int v, int width, int heigth)
+	public Image(ResourceLocation resource, int x, int y, int u, int v, int width, int height)
 	{
 		this.image = resource;
 		this.x = x;
@@ -22,37 +28,13 @@ public class Image extends RotatableObject
 		this.u = u;
 		this.v = v;
 		this.width = width;
-		this.heigth = heigth;
+		this.height = height;
 	}
 
 	@Override
-	public void renderRotated(int width, int height)
+	public void render(int width, int height)
 	{
 		Minecraft.getMinecraft().renderEngine.bindTexture(image);
-		new GuiScreen().drawTexturedModalRect(0, 0, u, v, this.width, this.width);
+		gui.drawTexturedModalRect(0, 0, u, v, this.width, this.height);
 	}
-
-	@Override
-	public int getX()
-	{
-		return x;
-	}
-
-	@Override
-	public int getY()
-	{
-		return y;
-	}
-
-	@Override
-	public int getWidth()
-	{
-		return width;
-	}
-
-	@Override
-	public int getHeigth()
-	{
-		return heigth;
-	}	
 }

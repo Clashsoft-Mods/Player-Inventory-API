@@ -12,7 +12,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
-public class PIAPIEventHandler
+public class PIEventHandler
 {
 	@ForgeSubscribe
 	public void entityConstructing(EntityConstructing event)

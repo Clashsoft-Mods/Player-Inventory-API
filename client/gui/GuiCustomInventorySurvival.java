@@ -11,11 +11,13 @@ import org.lwjgl.opengl.GL12;
 
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
+import clashsoft.playerinventoryapi.common.PacketSurvivalInventorySlotClick;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiSize;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -24,10 +26,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
@@ -264,9 +263,9 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 		{
-			mc.thePlayer.renderYawOffset += 180;
-			mc.thePlayer.rotationYaw += 180;
-			mc.thePlayer.rotationPitch = (-mc.thePlayer.rotationPitch);
+			mc.thePlayer.rotationYaw = (mc.thePlayer.rotationYaw + 180) % 360;
+			mc.thePlayer.renderYawOffset = (mc.thePlayer.renderYawOffset + 180) % 360;
+			mc.thePlayer.rotationPitch = -mc.thePlayer.rotationPitch;
 		}
 		
 		mc.thePlayer.rotationYawHead = mc.thePlayer.rotationYaw;
@@ -289,42 +288,17 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	 * ActionListener.actionPerformed(ActionEvent e).
 	 */
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton)
+	protected void actionPerformed(GuiButton button)
 	{
-		GuiCustomInventorySurvival.buttons.get(par1GuiButton).onButtonPressed(par1GuiButton);
+		buttons.get(button).onButtonPressed(button);
 	}
 	
 	@Override
-	protected void handleMouseClick(Slot par1Slot, int par2, int par3, int par4)
+	protected void handleMouseClick(Slot slot, int slotID, int var1, int var2)
 	{
-		boolean flag = par4 == 1;
-		par4 = par2 == -999 && par4 == 0 ? 4 : par4;
-		ItemStack itemstack;
-		InventoryPlayer inventoryplayer;
-		
-		int l;
-		ItemStack itemstack1;
-		
-		if (par4 == 4 && par1Slot != null && par1Slot.getHasStack())
-		{
-			itemstack1 = par1Slot.decrStackSize(par3 == 0 ? 1 : par1Slot.getStack().getMaxStackSize());
-			this.mc.thePlayer.dropPlayerItem(itemstack1);
-			this.mc.playerController.func_78752_a(itemstack1);
-			this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
-		}
-		else if (par4 == 4 && this.mc.thePlayer.inventory.getItemStack() != null)
-		{
-			this.mc.thePlayer.dropPlayerItem(this.mc.thePlayer.inventory.getItemStack());
-			this.mc.playerController.func_78752_a(this.mc.thePlayer.inventory.getItemStack());
-			this.mc.thePlayer.inventory.setItemStack((ItemStack) null);
-			this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
-		}
-		else
-		{
-			Container container = this.mc.thePlayer.inventoryContainer;
-			container.slotClick(par1Slot == null ? par2 : par1Slot.slotNumber, par3, par4, this.mc.thePlayer);
-			container.detectAndSendChanges();
-		}
-		
+		if (slot != null)
+			slotID = slot.slotNumber;
+		this.inventorySlots.slotClick(slotID, var1, var2, this.player);
+		PacketDispatcher.sendPacketToServer(new PacketSurvivalInventorySlotClick(slotID, var1, var2));
 	}
 }

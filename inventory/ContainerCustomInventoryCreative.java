@@ -3,7 +3,7 @@ package clashsoft.playerinventoryapi.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import clashsoft.cslib.util.CSReflection;
+import clashsoft.cslib.reflect.CSReflection;
 import clashsoft.playerinventoryapi.api.ICustomPlayerContainer;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
@@ -27,8 +27,11 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 	public static GuiPos[]				slotPositions	= getDefaultSlotPositions();
 	public static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
 	
-	public ContainerCustomInventoryCreative(InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
+	public ContainerCustomInventoryCreative(InventoryPlayer inventory, boolean localWorld, EntityPlayer player)
 	{
+		this.isLocalWorld = localWorld;
+		this.thePlayer = player;
+		
 		this.inventorySlots = new ArrayList()
 		{
 			private static final long	serialVersionUID	= 5436247638996771146L;
@@ -36,15 +39,15 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 			@Override
 			public int size()
 			{
-				String clazz = CSReflection.getCallerClassName();
-				if (clazz == Minecraft.class.getName())
-					return 45;
+				if (ContainerCustomInventoryCreative.this.isLocalWorld)
+				{
+					String clazz = CSReflection.getCallerClassName();
+					if (clazz.equals(getMinecraftClassName()))
+						return 45;
+				}
 				return super.size();
 			}
 		};
-		
-		this.isLocalWorld = par2;
-		this.thePlayer = par3EntityPlayer;
 		
 		List<Slot> slots = createSlots();
 		int defaultSlots = slots.size();
@@ -62,6 +65,18 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 		}
 		
 		this.onCraftMatrixChanged(this.craftMatrix);
+	}
+	
+	protected static String getMinecraftClassName()
+	{
+		try
+		{
+			return Minecraft.class.getName();
+		}
+		catch (NoClassDefFoundError error)
+		{
+			return "";
+		}
 	}
 	
 	@Override
