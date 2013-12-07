@@ -17,27 +17,26 @@ public class SlotCustomCreativeInventory extends Slot
 	
 	final GuiCustomInventoryCreative	theCreativeInventory;
 	
-	public SlotCustomCreativeInventory(GuiCustomInventoryCreative par1GuiContainerCreative, Slot par2Slot, int par3)
+	public SlotCustomCreativeInventory(GuiCustomInventoryCreative creativeInventory, Slot slot, int slotIndex)
 	{
-		super(par2Slot.inventory, par3, par2Slot.xDisplayPosition, par2Slot.yDisplayPosition);
-		this.theCreativeInventory = par1GuiContainerCreative;
-		this.theSlot = par2Slot;
+		super(slot.inventory, slotIndex, slot.xDisplayPosition, slot.yDisplayPosition);
+		this.theCreativeInventory = creativeInventory;
+		this.theSlot = slot;
 	}
 	
 	@Override
-	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+	public void onPickupFromSlot(EntityPlayer player, ItemStack stack)
 	{
-		this.theSlot.onPickupFromSlot(par1EntityPlayer, par2ItemStack);
+		this.theSlot.onPickupFromSlot(player, stack);
 	}
 	
 	/**
-	 * Check if the stack is a valid item for this slot. Always true beside for
-	 * the armor slots.
+	 * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
 	 */
 	@Override
-	public boolean isItemValid(ItemStack par1ItemStack)
+	public boolean isItemValid(ItemStack stack)
 	{
-		return this.theSlot.isItemValid(par1ItemStack);
+		return this.theSlot.isItemValid(stack);
 	}
 	
 	/**
@@ -62,9 +61,9 @@ public class SlotCustomCreativeInventory extends Slot
 	 * Helper method to put a stack in the slot.
 	 */
 	@Override
-	public void putStack(ItemStack par1ItemStack)
+	public void putStack(ItemStack stack)
 	{
-		this.theSlot.putStack(par1ItemStack);
+		this.theSlot.putStack(stack);
 	}
 	
 	/**
@@ -77,8 +76,7 @@ public class SlotCustomCreativeInventory extends Slot
 	}
 	
 	/**
-	 * Returns the maximum stack size for a given slot (usually the same as
-	 * getInventoryStackLimit(), but 1 in the case of armor slots)
+	 * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1 in the case of armor slots)
 	 */
 	@Override
 	public int getSlotStackLimit()
@@ -87,8 +85,7 @@ public class SlotCustomCreativeInventory extends Slot
 	}
 	
 	/**
-	 * Returns the icon index on items.png that is used as background image of
-	 * the slot.
+	 * Returns the icon index on items.png that is used as background image of the slot.
 	 */
 	@Override
 	public Icon getBackgroundIconIndex()
@@ -97,26 +94,25 @@ public class SlotCustomCreativeInventory extends Slot
 	}
 	
 	/**
-	 * Decrease the size of the stack in slot (first int arg) by the amount of
-	 * the second int arg. Returns the new stack.
+	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new stack.
 	 */
 	@Override
-	public ItemStack decrStackSize(int par1)
+	public ItemStack decrStackSize(int amount)
 	{
-		return this.theSlot.decrStackSize(par1);
+		return this.theSlot.decrStackSize(amount);
 	}
 	
 	/**
 	 * returns true if this slot is in par2 of par1
 	 */
 	@Override
-	public boolean isSlotInInventory(IInventory par1IInventory, int par2)
+	public boolean isSlotInInventory(IInventory inventory, int slotID)
 	{
-		return this.theSlot.isSlotInInventory(par1IInventory, par2);
+		return this.theSlot.isSlotInInventory(inventory, slotID);
 	}
 	
-	public static Slot func_75240_a(SlotCustomCreativeInventory par0SlotCreativeInventory)
+	public Slot getSlot()
 	{
-		return par0SlotCreativeInventory.theSlot;
+		return this.theSlot;
 	}
 }

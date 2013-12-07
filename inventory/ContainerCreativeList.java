@@ -19,9 +19,9 @@ public class ContainerCreativeList extends Container
 	/** the list of items in this container */
 	public List	itemList	= new ArrayList();
 	
-	public ContainerCreativeList(EntityPlayer par1EntityPlayer)
+	public ContainerCreativeList(EntityPlayer player)
 	{
-		InventoryPlayer inventoryplayer = par1EntityPlayer.inventory;
+		InventoryPlayer inventoryplayer = player.inventory;
 		int i;
 		
 		for (i = 0; i < 5; ++i)
@@ -49,10 +49,10 @@ public class ContainerCreativeList extends Container
 	/**
 	 * Updates the gui slots ItemStack's based on scroll position.
 	 */
-	public void scrollTo(float par1)
+	public void scrollTo(float pos)
 	{
-		int i = itemList.size() / 9 - 5 + 1;
-		int j = (int) (par1 * i + 0.5D);
+		int i = this.itemList.size() / 9 - 5 + 1;
+		int j = (int) (pos * i + 0.5D);
 		
 		if (j < 0)
 		{
@@ -65,14 +65,10 @@ public class ContainerCreativeList extends Container
 			{
 				int i1 = l + (k + j) * 9;
 				
-				if (i1 >= 0 && i1 < itemList.size())
-				{
+				if (i1 >= 0 && i1 < this.itemList.size())
 					GuiCustomInventoryCreative.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) this.itemList.get(i1));
-				}
 				else
-				{
 					GuiCustomInventoryCreative.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) null);
-				}
 			}
 		}
 	}
@@ -86,20 +82,19 @@ public class ContainerCreativeList extends Container
 	}
 	
 	@Override
-	protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer)
+	protected void retrySlotClick(int slotID, int var1, boolean flag, EntityPlayer player)
 	{
 	}
 	
 	/**
-	 * Called when a player shift-clicks on a slot. You must override this or
-	 * you will crash when someone does that.
+	 * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
-		if (par2 >= this.inventorySlots.size() - 9 && par2 < this.inventorySlots.size())
+		if (slotID >= this.inventorySlots.size() - 9 && slotID < this.inventorySlots.size())
 		{
-			Slot slot = (Slot) this.inventorySlots.get(par2);
+			Slot slot = (Slot) this.inventorySlots.get(slotID);
 			
 			if (slot != null && slot.getHasStack())
 			{
@@ -111,14 +106,14 @@ public class ContainerCreativeList extends Container
 	}
 	
 	@Override
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+	public boolean func_94530_a(ItemStack stack, Slot slot)
 	{
-		return par2Slot.yDisplayPosition > 90;
+		return slot.yDisplayPosition > 90;
 	}
 	
 	@Override
-	public boolean canDragIntoSlot(Slot par1Slot)
+	public boolean canDragIntoSlot(Slot slot)
 	{
-		return par1Slot.inventory instanceof InventoryPlayer || par1Slot.yDisplayPosition > 90 && par1Slot.xDisplayPosition <= 162;
+		return slot.inventory instanceof InventoryPlayer || slot.yDisplayPosition > 90 && slot.xDisplayPosition <= 162;
 	}
 }

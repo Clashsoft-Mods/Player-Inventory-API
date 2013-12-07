@@ -32,16 +32,8 @@ import net.minecraft.util.StatCollector;
 
 public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 {
-	/**
-	 * x size of the inventory window in pixels. Defined as float, passed as int
-	 */
-	private float									xSize_lo;
-	
-	/**
-	 * y size of the inventory window in pixels. Defined as float, passed as
-	 * int.
-	 */
-	private float									ySize_lo;
+	private float									mouseX;	
+	private float									mouseY;
 	
 	private final EntityPlayer						player;
 	
@@ -105,9 +97,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	public void updateScreen()
 	{
 		if (this.mc.playerController.isInCreativeMode())
-		{
 			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(player), new ContainerCustomInventoryCreative(player.inventory, false, player)));
-		}
 	}
 	
 	/**
@@ -123,13 +113,9 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		}
 		
 		if (this.mc.playerController.isInCreativeMode())
-		{
 			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(player), new ContainerCustomInventoryCreative(player.inventory, false, player)));
-		}
 		else
-		{
 			super.initGui();
-		}
 	}
 	
 	/**
@@ -151,11 +137,11 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	 * Draws the screen and all the components in it.
 	 */
 	@Override
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int mouseX, int mouseY, float fpt)
 	{
-		super.drawScreen(par1, par2, par3);
-		this.xSize_lo = par1;
-		this.ySize_lo = par2;
+		super.drawScreen(mouseX, mouseY, fpt);
+		this.mouseX = mouseX;
+		this.mouseY = mouseY;
 	}
 	
 	/**
@@ -163,7 +149,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	 * items)
 	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+	protected void drawGuiContainerBackgroundLayer(float fpt, int mouseX, int mouseY)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
@@ -186,7 +172,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		}
 		GL11.glTranslatef(-k, -l, 0);
 		
-		drawPlayerOnGui(this.mc, k + GuiCustomInventorySurvival.playerDisplayPos.getX() + 26, l + GuiCustomInventorySurvival.playerDisplayPos.getY() + 65, 30, k + GuiCustomInventorySurvival.playerDisplayPos.getX() + 26 - this.xSize_lo, l + GuiCustomInventorySurvival.playerDisplayPos.getY() + 65 - 50 - this.ySize_lo);
+		drawPlayerOnGui(this.mc, k + GuiCustomInventorySurvival.playerDisplayPos.getX() + 26, l + GuiCustomInventorySurvival.playerDisplayPos.getY() + 65, 30, k + GuiCustomInventorySurvival.playerDisplayPos.getX() + 26 - this.mouseX, l + GuiCustomInventorySurvival.playerDisplayPos.getY() + 65 - 50 - this.mouseY);
 	}
 	
 	public void drawBackgroundFrame(int posX, int posY, int sizeX, int sizeY)

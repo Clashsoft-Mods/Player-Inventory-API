@@ -49,16 +49,16 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 			}
 		};
 		
-		List<Slot> slots = createSlots();
+		List<Slot> slots = this.createSlots();
 		int defaultSlots = slots.size();
 		
 		for (ISlotHandler handler : slotHandlers)
-			handler.addSlots(slots, thePlayer, true);
+			handler.addSlots(slots, this.thePlayer, true);
 		
 		for (int i = 0; i < slots.size(); i++)
 		{
 			Slot slot = slots.get(i);
-			addSlotToContainer(slot);
+			this.addSlotToContainer(slot);
 			
 			if (i >= defaultSlots)
 				slotPositions[slot.slotNumber] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
@@ -162,10 +162,10 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 		return pos;
 	}
 	
-	public static void setSlotPos(int slotid, int x, int y)
+	public static void setSlotPos(int slotID, int x, int y)
 	{
-		if (slotid < slotPositions.length)
-			slotPositions[slotid] = new GuiPos(x, y);
+		if (slotID < slotPositions.length)
+			slotPositions[slotID] = new GuiPos(x, y);
 		else
 			throw new IllegalArgumentException("Tried to set the slot position of a slot that does not exist - Add that slot first.");
 	}
@@ -183,14 +183,14 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 	@Override
 	public EntityPlayer getPlayer()
 	{
-		return thePlayer;
+		return this.thePlayer;
 	}
 	
 	/**
 	 * Callback for when the crafting matrix is changed.
 	 */
 	@Override
-	public void onCraftMatrixChanged(IInventory par1IInventory)
+	public void onCraftMatrixChanged(IInventory inventory)
 	{
 		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.worldObj));
 	}
@@ -199,9 +199,9 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 	 * Callback for when the crafting gui is closed.
 	 */
 	@Override
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer player)
 	{
-		super.onContainerClosed(par1EntityPlayer);
+		super.onContainerClosed(player);
 		
 		for (int i = 0; i < 4; ++i)
 		{
@@ -209,34 +209,61 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 			
 			if (itemstack != null)
 			{
-				par1EntityPlayer.dropPlayerItem(itemstack);
+				player.dropPlayerItem(itemstack);
 			}
 		}
 		this.craftResult.setInventorySlotContents(0, (ItemStack) null);
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer player)
 	{
 		return true;
 	}
 	
 	/**
-	 * Called when a player shift-clicks on a slot. You must override this or
-	 * you will crash when someone does that.
+	 * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot) this.inventorySlots.get(par2);
+		Slot slot = (Slot) this.inventorySlots.get(slotID);
 		
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			
-			if (par2 == 0)
+			int armorSlotID = -1;
+			
+			if (itemstack.getItem() instanceof ItemArmor)
+			{
+				ItemArmor itemArmor = (ItemArmor) itemstack.getItem();
+				int armorType = itemArmor.armorType;
+				
+				if (armorType < 4)
+				{
+					Slot armorSlot = (Slot) this.inventorySlots.get(5 + armorType);
+					if (!armorSlot.getHasStack())
+						armorSlotID = 5 + armorType;
+				}
+				else
+				{
+					for (int i = 45; i < this.inventorySlots.size(); i++)
+					{
+						Slot armorSlot = (Slot) this.inventorySlots.get(i);
+						
+						if (!armorSlot.getHasStack() && armorSlot.isItemValid(itemstack1))
+						{
+							armorSlotID = i;
+							break;
+						}
+					}
+				}
+			}
+			
+			if (slotID == 0) // Crafting output
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 45, true))
 				{
@@ -245,37 +272,42 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 				
 				slot.onSlotChange(itemstack1, itemstack);
 			}
-			else if (par2 >= 1 && par2 < 5)
+			else if (slotID >= 1 && slotID < 5) // Crafting grid
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 45, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 5 && par2 < 9)
+			else if (slotID >= 5 && slotID < 9) // Armor slots
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 45, false))
 				{
 					return null;
 				}
 			}
-			else if (itemstack.getItem() instanceof ItemArmor && !((Slot) this.inventorySlots.get(5 + ((ItemArmor) itemstack.getItem()).armorType)).getHasStack())
+			else if (slotID >= 45)
 			{
-				int j = 5 + ((ItemArmor) itemstack.getItem()).armorType;
-				
-				if (!this.mergeItemStack(itemstack1, j, j + 1, false))
+				if (!this.mergeItemStack(itemstack1, 9, 45, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 9 && par2 < 36)
+			else if (itemstack.getItem() instanceof ItemArmor && armorSlotID != -1) // Armor items
+			{
+				if (!this.mergeItemStack(itemstack1, armorSlotID, armorSlotID + 1, false))
+				{
+					return null;
+				}
+			}
+			else if (slotID >= 9 && slotID < 36) // Normal inventory
 			{
 				if (!this.mergeItemStack(itemstack1, 36, 45, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 36 && par2 < 45)
+			else if (slotID >= 36 && slotID < 45) // Hotbar
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 36, false))
 				{
@@ -301,15 +333,15 @@ public class ContainerCustomInventoryCreative extends Container implements ICust
 				return null;
 			}
 			
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(player, itemstack1);
 		}
 		
 		return itemstack;
 	}
 	
 	@Override
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+	public boolean func_94530_a(ItemStack stack, Slot slot)
 	{
-		return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+		return slot.inventory != this.craftResult && super.func_94530_a(stack, slot);
 	}
 }

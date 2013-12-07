@@ -9,7 +9,7 @@ import cpw.mods.fml.common.TickType;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PITickHandler implements ITickHandler
-{	
+{
 	@Override
 	public EnumSet<TickType> ticks()
 	{

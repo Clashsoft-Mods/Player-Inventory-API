@@ -11,11 +11,9 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.gui.GuiButton;
 
 /**
- * Creative Inventory editing class.
- * Contains delegate methods for {@link GuiCustomInventoryCreative} and {@link ContainerCustomInventoryCreative}
+ * Creative Inventory editing class. Contains delegate methods for {@link GuiCustomInventoryCreative} and {@link ContainerCustomInventoryCreative}
  * 
  * @author Clashsoft
- *
  */
 public class CreativeInventory
 {
@@ -23,17 +21,19 @@ public class CreativeInventory
 	 * Adds a slot handler to the creative inventory
 	 * 
 	 * @see ISlotHandler
-	 * 
-	 * @param slothandler the slot handler
+	 * @param slothandler
+	 *            the slot handler
 	 */
 	public static void addSlotHandler(ISlotHandler slothandler)
 	{
 		ContainerCustomInventoryCreative.addSlotHandler(slothandler);
 	}
 	
-	/** Sets the position of a slot in the creative inventory
+	/**
+	 * Sets the position of a slot in the creative inventory
 	 * 
-	 * @param slotid the id of the slot
+	 * @param slotid
+	 *            the id of the slot
 	 * @param x
 	 * @param y
 	 */
@@ -44,56 +44,61 @@ public class CreativeInventory
 	
 	/**
 	 * Sets the position of the bin/delete items slot in the creative inventory
+	 * 
 	 * @param x
 	 * @param y
 	 */
 	public static void setBinSlotPosition(int x, int y)
 	{
 		if (checkSide())
-		GuiCustomInventoryCreative.setBinSlotPos(x, y);
+			GuiCustomInventoryCreative.setBinSlotPos(x, y);
 	}
 	
 	/**
 	 * Sets the player preview display position in the creative inventory
+	 * 
 	 * @param x
 	 * @param y
 	 */
 	public static void setPlayerDisplayPosition(int x, int y)
 	{
 		if (checkSide())
-		GuiCustomInventoryCreative.setPlayerDisplayPos(x, y);
+			GuiCustomInventoryCreative.setPlayerDisplayPos(x, y);
 	}
 	
-	/** Sets the window width of the creative inventory
+	/**
+	 * Sets the window width of the creative inventory
 	 * 
-	 * @param width the width
+	 * @param width
+	 *            the width
 	 */
 	public static void setWindowSize(int width)
 	{
 		if (checkSide())
-		GuiCustomInventoryCreative.setWindowWidth(width);
+			GuiCustomInventoryCreative.setWindowWidth(width);
 	}
 	
 	/**
 	 * Adds a button to the creative inventory
 	 * 
 	 * @see IButtonHandler
-	 * 
-	 * @param handler the button click handler
-	 * @param button the button
+	 * @param handler
+	 *            the button click handler
+	 * @param button
+	 *            the button
 	 */
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
 		if (checkSide())
-		GuiCustomInventoryCreative.addButton(handler, button);
+			GuiCustomInventoryCreative.addButton(handler, button);
 	}
 	
 	/**
 	 * Adds an inventory object to the creative inventory
 	 * 
 	 * @see InventoryObject
-	 * 
-	 * @param object the inventory object
+	 * @param object
+	 *            the inventory object
 	 * @return
 	 */
 	public static InventoryObject addObject(InventoryObject object)

@@ -13,7 +13,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PIClientTickHandler implements ITickHandler
-{	
+{
 	@Override
 	public EnumSet<TickType> ticks()
 	{
@@ -24,14 +24,14 @@ public class PIClientTickHandler implements ITickHandler
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
 		if (type.contains(TickType.CLIENT))
-			updateInventory();
+			this.updateInventory();
 	}
 	
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
 		if (type.contains(TickType.CLIENT))
-			updateInventory();
+			this.updateInventory();
 	}
 	
 	public void updateInventory()

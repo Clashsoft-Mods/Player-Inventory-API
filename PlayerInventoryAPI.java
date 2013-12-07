@@ -26,9 +26,9 @@ public class PlayerInventoryAPI
 	public static PlayerInventoryAPI	instance;
 	
 	@SidedProxy(clientSide = "clashsoft.playerinventoryapi.client.PIClientProxy", serverSide = "clashsoft.playerinventoryapi.common.PICommonProxy")
-	public static PICommonProxy		proxy;
+	public static PICommonProxy			proxy;
 	
-	public static PIPacketHandler	packetHandler;
+	public static PIPacketHandler		packetHandler;
 	
 	public static boolean				enableCustomSurvivalInventory	= true;
 	public static boolean				enableCustomCreativeInventory	= true;
@@ -36,8 +36,7 @@ public class PlayerInventoryAPI
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		NetworkRegistry nr = NetworkRegistry.instance();
-		nr.registerGuiHandler(instance, proxy);
+		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		packetHandler = new PIPacketHandler();
 		packetHandler.registerChannels();
 		

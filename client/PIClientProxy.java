@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PIClientProxy extends PICommonProxy
 {
+	@Override
 	public void registerTickHandler()
 	{
 		super.registerTickHandler();

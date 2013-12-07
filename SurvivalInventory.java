@@ -11,17 +11,14 @@ import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 import net.minecraft.client.gui.GuiButton;
 
 /**
- * Survival Inventory editing class. Contains delegate methods for
- * {@link GuiCustomInventorySurvival} and
- * {@link ContainerCustomInventorySurvival}
+ * Survival Inventory editing class. Contains delegate methods for {@link GuiCustomInventorySurvival} and {@link ContainerCustomInventorySurvival}
  * 
  * @author Clashsoft
  */
 public class SurvivalInventory
 {
 	/**
-	 * Moves the survival inventory crafting grid to the upper right corner to
-	 * free some space
+	 * Moves the survival inventory crafting grid to the upper right corner to free some space
 	 * 
 	 * @see SurvivalInventory#setCraftingArrowPosition(int, int)
 	 * @see SurvivalInventory#setSlotPosition(int, int, int)

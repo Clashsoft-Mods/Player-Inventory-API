@@ -2,7 +2,7 @@ package clashsoft.playerinventoryapi.lib;
 
 import clashsoft.cslib.minecraft.update.CSUpdate;
 
-public class PIAPIConstants
+public class PIConstants
 {
 	public static final String	MOD_ID					= "PlayerInventoryAPI";
 	public static final String	MOD_NAME				= "Player Inventory API";

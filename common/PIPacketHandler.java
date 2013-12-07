@@ -35,7 +35,7 @@ public class PIPacketHandler implements IPacketHandler
 				int var1 = dis.readInt();
 				int var2 = dis.readInt();
 				
-				EntityPlayer entityplayer = (EntityPlayer)player;
+				EntityPlayer entityplayer = (EntityPlayer) player;
 				entityplayer.inventoryContainer.slotClick(slotID, var1, var2, entityplayer);
 			}
 			catch (Exception ex)

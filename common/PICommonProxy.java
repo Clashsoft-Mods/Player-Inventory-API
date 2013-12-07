@@ -25,13 +25,13 @@ public class PICommonProxy implements IGuiHandler
 		if (ID == CUSTOM_INVENTORY_CREATIVE_ID)
 		{
 			ContainerCustomInventoryCreative container = new ContainerCustomInventoryCreative(player.inventory, false, player);
-			replacePlayerInventoryContainer(player, container);
+			this.replacePlayerInventoryContainer(player, container);
 			return container;
 		}
 		else if (ID == CUSTOM_INVENTORY_SURVIVAL_ID)
 		{
 			ContainerCustomInventorySurvival container = new ContainerCustomInventorySurvival(player.inventory, false, player);
-			replacePlayerInventoryContainer(player, container);
+			this.replacePlayerInventoryContainer(player, container);
 			return container;
 		}
 		return null;
@@ -43,14 +43,14 @@ public class PICommonProxy implements IGuiHandler
 		if (ID == CUSTOM_INVENTORY_CREATIVE_ID)
 		{
 			ContainerCustomInventoryCreative container = new ContainerCustomInventoryCreative(player.inventory, true, player);
-			replacePlayerInventoryContainer(player, container);
+			this.replacePlayerInventoryContainer(player, container);
 			return new GuiCustomInventoryCreative(player, new ContainerCreativeList(player), container);
 			
 		}
 		else if (ID == CUSTOM_INVENTORY_SURVIVAL_ID)
 		{
 			ContainerCustomInventorySurvival container = new ContainerCustomInventorySurvival(player.inventory, true, player);
-			replacePlayerInventoryContainer(player, container);
+			this.replacePlayerInventoryContainer(player, container);
 			return new GuiCustomInventorySurvival(player, container);
 			
 		}

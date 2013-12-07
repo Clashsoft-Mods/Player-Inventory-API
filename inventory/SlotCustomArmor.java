@@ -46,10 +46,10 @@ public class SlotCustomArmor extends Slot
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack par1ItemStack)
+	public boolean isItemValid(ItemStack stack)
 	{
-		Item item = (par1ItemStack == null ? null : par1ItemStack.getItem());
-		return item != null && item.isValidArmor(par1ItemStack, armorType, player);
+		Item item = (stack == null ? null : stack.getItem());
+		return item != null && item.isValidArmor(stack, this.armorType, this.player);
 	}
 	
 	@Override

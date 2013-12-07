@@ -2,8 +2,8 @@ package clashsoft.playerinventoryapi.lib;
 
 /**
  * Helper class for 2-dimensional sizes.
+ * 
  * @author Clashsoft
- *
  */
 public class GuiHelper
 {
@@ -20,12 +20,12 @@ public class GuiHelper
 		
 		public int getX()
 		{
-			return x;
+			return this.x;
 		}
 		
 		public int getY()
 		{
-			return y;
+			return this.y;
 		}
 		
 		@Override
@@ -60,12 +60,12 @@ public class GuiHelper
 		
 		public int getWidth()
 		{
-			return width;
+			return this.width;
 		}
 		
 		public int getHeight()
 		{
-			return height;
+			return this.height;
 		}
 		
 		@Override
