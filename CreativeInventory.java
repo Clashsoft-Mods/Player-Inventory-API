@@ -5,8 +5,6 @@ import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
 import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.client.gui.GuiButton;
 
@@ -15,7 +13,7 @@ import net.minecraft.client.gui.GuiButton;
  * 
  * @author Clashsoft
  */
-public class CreativeInventory
+public class CreativeInventory extends Inventory
 {
 	/**
 	 * Adds a slot handler to the creative inventory
@@ -50,7 +48,7 @@ public class CreativeInventory
 	 */
 	public static void setBinSlotPosition(int x, int y)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventoryCreative.setBinSlotPos(x, y);
 	}
 	
@@ -62,7 +60,7 @@ public class CreativeInventory
 	 */
 	public static void setPlayerDisplayPosition(int x, int y)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventoryCreative.setPlayerDisplayPos(x, y);
 	}
 	
@@ -74,7 +72,7 @@ public class CreativeInventory
 	 */
 	public static void setWindowSize(int width)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventoryCreative.setWindowWidth(width);
 	}
 	
@@ -89,7 +87,7 @@ public class CreativeInventory
 	 */
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventoryCreative.addButton(handler, button);
 	}
 	
@@ -103,13 +101,8 @@ public class CreativeInventory
 	 */
 	public static InventoryObject addObject(InventoryObject object)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventoryCreative.addObject(object);
 		return object;
-	}
-	
-	public static boolean checkSide()
-	{
-		return FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT;
 	}
 }

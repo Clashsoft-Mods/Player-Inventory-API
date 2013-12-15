@@ -389,7 +389,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	 * KeyListener.keyTyped(KeyEvent e).
 	 */
 	@Override
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char c, int key)
 	{
 		if (selectedTabIndex != CreativeTabs.tabAllSearch.getTabIndex())
 		{
@@ -399,7 +399,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 			}
 			else
 			{
-				super.keyTyped(par1, par2);
+				super.keyTyped(c, key);
 			}
 		}
 		else
@@ -410,15 +410,15 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 				this.searchField.setText("");
 			}
 			
-			if (!this.checkHotbarKeys(par2))
+			if (!this.checkHotbarKeys(key))
 			{
-				if (this.searchField.textboxKeyTyped(par1, par2))
+				if (this.searchField.textboxKeyTyped(c, key))
 				{
 					this.updateCreativeSearch();
 				}
 				else
 				{
-					super.keyTyped(par1, par2);
+					super.keyTyped(c, key);
 				}
 			}
 		}
@@ -496,7 +496,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	 * the items)
 	 */
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
 		CreativeTabs creativetabs = CreativeTabs.creativeTabArray[selectedTabIndex];
 		
@@ -539,9 +539,9 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	 * mouseUp
 	 */
 	@Override
-	protected void mouseMovedOrUp(int x, int y, int which)
+	protected void mouseMovedOrUp(int x, int y, int button)
 	{
-		if (which == 0)
+		if (button == 0)
 		{
 			int l = x - this.guiLeft;
 			int i1 = y - this.guiTop;
@@ -560,7 +560,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 			}
 		}
 		
-		super.mouseMovedOrUp(x, y, which);
+		super.mouseMovedOrUp(x, y, button);
 	}
 	
 	/**
@@ -680,7 +680,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	 * Draws the screen and all the components in it.
 	 */
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float fpt)
+	public void drawScreen(int mouseX, int mouseY, float partialTickTime)
 	{
 		boolean flag = Mouse.isButtonDown(0);
 		int k = this.guiLeft;
@@ -732,7 +732,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 			itemRenderer.zLevel = 0.0F;
 		}
 		
-		super.drawScreen(mouseX, mouseY, fpt);
+		super.drawScreen(mouseX, mouseY, partialTickTime);
 		CreativeTabs[] acreativetabs = CreativeTabs.creativeTabArray;
 		int start = tabPage * 10;
 		int i2 = Math.min(acreativetabs.length, ((tabPage + 1) * 10) + 2);
@@ -779,7 +779,7 @@ public class GuiCustomInventoryCreative extends InventoryEffectRenderer
 	 * items)
 	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float fpt, int mouseX, int mouseY)
+	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int mouseX, int mouseY)
 	{
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;

@@ -32,7 +32,7 @@ import net.minecraft.util.StatCollector;
 
 public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 {
-	private float									mouseX;	
+	private float									mouseX;
 	private float									mouseY;
 	
 	private final EntityPlayer						player;
@@ -49,13 +49,13 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	
 	private static List<InventoryObject>			objects					= new ArrayList<InventoryObject>();
 	
-	public GuiCustomInventorySurvival(EntityPlayer par1EntityPlayer, ContainerCustomInventorySurvival par2ContainerCustomInventorySurvival)
+	public GuiCustomInventorySurvival(EntityPlayer player, ContainerCustomInventorySurvival container)
 	{
-		super(par2ContainerCustomInventorySurvival);
+		super(container);
 		
 		this.allowUserInput = true;
-		player = par1EntityPlayer;
-		par1EntityPlayer.addStat(AchievementList.openInventory, 1);
+		this.player = player;
+		this.player.addStat(AchievementList.openInventory, 1);
 		
 		this.slotPositions = ContainerCustomInventorySurvival.slotPositions;
 	}
@@ -119,11 +119,10 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	}
 	
 	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of
-	 * the items)
+	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
 	 */
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
 		if (drawCraftingLabel)
 		{
@@ -145,8 +144,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	}
 	
 	/**
-	 * Draw the background layer for the GuiContainer (everything behind the
-	 * items)
+	 * Draw the background layer for the GuiContainer (everything behind the items)
 	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float fpt, int mouseX, int mouseY)
@@ -179,31 +177,29 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	{
 		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
 		
-		for (int i = 0; i < sizeX - 16; i += 8)
-		{
-			for (int j = 0; j < sizeY - 16; j += 8)
-			{
-				this.drawTexturedModalRect(posX + i + 8, posY + j + 8, 4, 4, 8, 8);
-			}
-		}
+		GL11.glTranslatef(posX, posY, 0F);
 		
-		for (int i = 0; i < sizeX - 16; i += 8)
-		{
-			this.drawTexturedModalRect(posX + 8 + i, posY, 4, 0, 8, 8);
-			this.drawTexturedModalRect(posX + 8 + i, posY + sizeY - 8, 4, 8, 8, 8);
-		}
+		GL11.glScalef(sizeX / 8F, sizeY / 8F, 1F); // Scale both
+		this.drawTexturedModalRect(0, 0, 4, 4, 8, 8);
+		GL11.glScalef(8F / sizeX, 1F, 1F); // Unscale X
 		
-		for (int i = 0; i < sizeY - 16; i += 8)
-		{
-			this.drawTexturedModalRect(posX, posY + 8 + i, 0, 4, 8, 8);
-			this.drawTexturedModalRect(posX + sizeX - 8, posY + 8 + i, 8, 4, 8, 8);
-		}
+		this.drawTexturedModalRect(0, 0, 0, 4, 8, 8);
+		this.drawTexturedModalRect(sizeX - 8, 0, 8, 4, 8, 8);
+		
+		GL11.glScalef(sizeX / 8F, 8F / sizeY, 1F); // Scale X, Unscale Y
+		
+		this.drawTexturedModalRect(0, 0, 4, 0, 8, 8);
+		this.drawTexturedModalRect(0, sizeY - 8, 4, 8, 8, 8);
+		
+		GL11.glScalef(8F / sizeX, 1F, 1F); // Unscale X
 		
 		// Edges
-		this.drawTexturedModalRect(posX, posY, 0, 0, 8, 8);
-		this.drawTexturedModalRect(posX + sizeX - 8, posY, 8, 0, 8, 8);
-		this.drawTexturedModalRect(posX, posY + sizeY - 8, 0, 8, 8, 8);
-		this.drawTexturedModalRect(posX + sizeX - 8, posY + sizeY - 8, 8, 8, 8, 8);
+		this.drawTexturedModalRect(0, 0, 0, 0, 8, 8);
+		this.drawTexturedModalRect(sizeX - 8, 0, 8, 0, 8, 8);
+		this.drawTexturedModalRect(0, sizeY - 8, 0, 8, 8, 8);
+		this.drawTexturedModalRect(sizeX - 8, sizeY - 8, 8, 8, 8, 8);
+		
+		GL11.glTranslatef(-posX, -posY, 0F);
 	}
 	
 	public void drawPlayerBackground(int posX, int posY)
@@ -228,12 +224,12 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		this.drawTexturedModalRect(posX - 1, posY - 1, 16, 0, 18, 18);
 	}
 	
-	public static void drawPlayerOnGui(Minecraft mc, int par1, int par2, int par3, float par4, float par5)
+	public static void drawPlayerOnGui(Minecraft mc, int x, int y, int size, float mouseX, float mouseY)
 	{
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glPushMatrix();
-		GL11.glTranslatef(par1, par2, 50.0F);
-		GL11.glScalef(-par3, par3, par3);
+		GL11.glTranslatef(x, y, 50.0F);
+		GL11.glScalef(-size, size, size);
 		GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 		float f2 = mc.thePlayer.renderYawOffset;
 		float f3 = mc.thePlayer.rotationYaw;
@@ -241,11 +237,11 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-((float) Math.atan(par5 / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glRotatef(-((float) Math.atan(mouseY / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
 		
-		mc.thePlayer.renderYawOffset = (float) Math.atan(par4 / 40.0F) * 20.0F;
-		mc.thePlayer.rotationYaw = (float) Math.atan(par4 / 40.0F) * 40.0F;
-		mc.thePlayer.rotationPitch = -((float) Math.atan(par5 / 40.0F)) * 20.0F;
+		mc.thePlayer.renderYawOffset = (float) Math.atan(mouseX / 40.0F) * 20.0F;
+		mc.thePlayer.rotationYaw = (float) Math.atan(mouseX / 40.0F) * 40.0F;
+		mc.thePlayer.rotationPitch = -((float) Math.atan(mouseY / 40.0F)) * 20.0F;
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 		{
@@ -270,8 +266,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	}
 	
 	/**
-	 * Fired when a control is clicked. This is the equivalent of
-	 * ActionListener.actionPerformed(ActionEvent e).
+	 * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
 	 */
 	@Override
 	protected void actionPerformed(GuiButton button)

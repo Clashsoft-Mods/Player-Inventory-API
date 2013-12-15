@@ -1,7 +1,5 @@
 package clashsoft.playerinventoryapi;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
@@ -68,7 +66,7 @@ public class SurvivalInventory
 	 */
 	public static void setPlayerDisplayPosition(int x, int y)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventorySurvival.setPlayerDisplayPos(x, y);
 	}
 	
@@ -80,7 +78,7 @@ public class SurvivalInventory
 	 */
 	public static void setCraftingArrowPosition(int x, int y)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventorySurvival.setCraftArrowPos(x, y);
 	}
 	
@@ -92,7 +90,7 @@ public class SurvivalInventory
 	 */
 	public static void setCraftingArrowRotation(float rotation)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventorySurvival.setCraftArrowRot(rotation);
 	}
 	
@@ -100,11 +98,13 @@ public class SurvivalInventory
 	 * Sets the window size of the survival inventory
 	 * 
 	 * @param width
+	 *            the width
 	 * @param height
+	 *            the height
 	 */
 	public static void setWindowSize(int width, int height)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventorySurvival.setWindowSize(width, height);
 	}
 	
@@ -119,7 +119,7 @@ public class SurvivalInventory
 	 */
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventorySurvival.addButton(handler, button);
 	}
 	
@@ -133,13 +133,8 @@ public class SurvivalInventory
 	 */
 	public static InventoryObject addObject(InventoryObject object)
 	{
-		if (checkSide())
+		if (Inventory.checkSide())
 			GuiCustomInventorySurvival.addObject(object);
 		return object;
-	}
-	
-	public static boolean checkSide()
-	{
-		return FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT;
 	}
 }

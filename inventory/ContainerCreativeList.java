@@ -41,7 +41,7 @@ public class ContainerCreativeList extends Container
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer player)
 	{
 		return true;
 	}

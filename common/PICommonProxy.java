@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
 
 public class PICommonProxy implements IGuiHandler
 {
@@ -52,9 +53,14 @@ public class PICommonProxy implements IGuiHandler
 			ContainerCustomInventorySurvival container = new ContainerCustomInventorySurvival(player.inventory, true, player);
 			this.replacePlayerInventoryContainer(player, container);
 			return new GuiCustomInventorySurvival(player, container);
-			
 		}
 		return null;
+	}
+	
+	public void replacePlayerInventoryContainer(EntityPlayer player)
+	{
+		Container container = player.capabilities.isCreativeMode ? new ContainerCustomInventoryCreative(player.inventory, !player.worldObj.isRemote, player) : new ContainerCustomInventorySurvival(player.inventory, !player.worldObj.isRemote, player);
+		this.replacePlayerInventoryContainer(player, container);
 	}
 	
 	public void replacePlayerInventoryContainer(EntityPlayer player, Container container)
@@ -65,5 +71,9 @@ public class PICommonProxy implements IGuiHandler
 	public void registerTickHandler()
 	{
 		TickRegistry.registerTickHandler(new PITickHandler(), Side.SERVER);
+	}
+	
+	public void onGUIOpened(GuiOpenEvent event)
+	{
 	}
 }

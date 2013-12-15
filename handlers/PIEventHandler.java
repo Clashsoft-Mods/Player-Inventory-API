@@ -2,12 +2,12 @@ package clashsoft.playerinventoryapi.handlers;
 
 import clashsoft.cslib.minecraft.update.CSUpdate;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
-import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
 import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -33,7 +33,7 @@ public class PIEventHandler
 			
 			CSUpdate.doClashsoftUpdateCheck(player, "Player Inventory API", "piapi", "");
 			
-			PlayerInventoryAPI.proxy.replacePlayerInventoryContainer(player, new ContainerCustomInventorySurvival(player.inventory, !event.world.isRemote, player));
+			PlayerInventoryAPI.proxy.replacePlayerInventoryContainer(player);
 			
 			if (!event.world.isRemote)
 			{
@@ -41,5 +41,11 @@ public class PIEventHandler
 				ei.sync(player);
 			}
 		}
+	}
+	
+	@ForgeSubscribe
+	public void onGUIOpened(GuiOpenEvent event)
+	{
+		PlayerInventoryAPI.proxy.onGUIOpened(event);
 	}
 }

@@ -103,7 +103,7 @@ public class SlotCustomCreativeInventory extends Slot
 	}
 	
 	/**
-	 * returns true if this slot is in par2 of par1
+	 * returns true if this slot is in slotID of inventory
 	 */
 	@Override
 	public boolean isSlotInInventory(IInventory inventory, int slotID)
