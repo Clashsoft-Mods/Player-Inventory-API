@@ -97,7 +97,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	public void updateScreen()
 	{
 		if (this.mc.playerController.isInCreativeMode())
-			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(player), new ContainerCustomInventoryCreative(player.inventory, false, player)));
+			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(this.player), new ContainerCustomInventoryCreative(this.player.inventory, false, this.player)));
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		}
 		
 		if (this.mc.playerController.isInCreativeMode())
-			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(player), new ContainerCustomInventoryCreative(player.inventory, false, player)));
+			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(this.player), new ContainerCustomInventoryCreative(this.player.inventory, false, this.player)));
 		else
 			super.initGui();
 	}
@@ -151,14 +151,14 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
-		int k = (this.width - 176 + (!this.mc.thePlayer.getActivePotionEffects().isEmpty() ? 120 : 0)) / 2;
+		int k = (this.width - 176) / 2;
 		int l = (this.height - 166) / 2;
-		int m = (this.width - windowSize.getWidth() + (!this.mc.thePlayer.getActivePotionEffects().isEmpty() ? 120 : 0)) / 2;
+		int m = (this.width - windowSize.getWidth()) / 2;
 		this.drawBackgroundFrame(m, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
 		GL11.glTranslatef(k, l, 0);
 		this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
 		this.drawPlayerBackground(playerDisplayPos.getX(), playerDisplayPos.getY());
-		for (GuiPos pos : slotPositions)
+		for (GuiPos pos : this.slotPositions)
 		{
 			if (pos != null)
 				this.drawSlot(pos.getX(), pos.getY());
@@ -170,7 +170,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		}
 		GL11.glTranslatef(-k, -l, 0);
 		
-		drawPlayerOnGui(this.mc, k + GuiCustomInventorySurvival.playerDisplayPos.getX() + 26, l + GuiCustomInventorySurvival.playerDisplayPos.getY() + 65, 30, k + GuiCustomInventorySurvival.playerDisplayPos.getX() + 26 - this.mouseX, l + GuiCustomInventorySurvival.playerDisplayPos.getY() + 65 - 50 - this.mouseY);
+		drawPlayerOnGui(this.mc, k + playerDisplayPos.getX() + 26, l + playerDisplayPos.getY() + 65, 30, k + playerDisplayPos.getX() + 26 - this.mouseX, l + playerDisplayPos.getY() + 65 - 50 - this.mouseY);
 	}
 	
 	public void drawBackgroundFrame(int posX, int posY, int sizeX, int sizeY)

@@ -7,7 +7,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -41,11 +40,5 @@ public class PIEventHandler
 				ei.sync(player);
 			}
 		}
-	}
-	
-	@ForgeSubscribe
-	public void onGUIOpened(GuiOpenEvent event)
-	{
-		PlayerInventoryAPI.proxy.onGUIOpened(event);
 	}
 }
