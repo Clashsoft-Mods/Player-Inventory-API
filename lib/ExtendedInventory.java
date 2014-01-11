@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import clashsoft.cslib.util.CSLog;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
@@ -214,7 +215,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			CSLog.error(ex);
 			return null;
 		}
 		
@@ -240,7 +241,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			CSLog.error(ex);
 		}
 		return this;
 	}
