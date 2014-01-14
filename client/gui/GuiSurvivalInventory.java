@@ -149,13 +149,13 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		
 		int k = (this.width - 176) / 2;
 		int l = (this.height - 166) / 2;
-		int m = (this.width - windowSize.getWidth()) / 2;
 		
 		// Background Frame
-		this.drawBackgroundFrame(m, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
-		this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
+		this.drawBackgroundFrame((this.width - windowSize.getWidth()) / 2, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
 		
 		GL11.glTranslatef(k, l, 0);
+		
+		this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
 		
 		// Player
 		this.drawPlayerBackground(playerDisplayPos.getX(), playerDisplayPos.getY());
@@ -199,11 +199,12 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 	
 	public void drawCraftArrow(int posX, int posY, float rotation)
 	{
+		this.mc.renderEngine.bindTexture(GuiBuilder.progress);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(posX + 8, posY + 7, 0F);
 		GL11.glRotatef(craftingArrowRotation, 0, 0, 1);
 		GL11.glTranslatef(-8F, -7F, 0F);
-		this.drawTexturedModalRect(0, 0, 34, 0, 16, 13);
+		this.drawTexturedModalRect(0, 0, 0, 16, 16, 14);
 		GL11.glPopMatrix();
 	}
 	

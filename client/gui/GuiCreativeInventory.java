@@ -84,8 +84,8 @@ public class GuiCreativeInventory extends InventoryEffectRenderer
 		this.player = player;
 		this.player.addStat(AchievementList.openInventory, 1);
 		
-		this.ySize = 136;
 		this.xSize = 195;
+		this.ySize = 136;
 		
 		this.guiBuilder = new GuiBuilder(this);
 	}
@@ -704,23 +704,21 @@ public class GuiCreativeInventory extends InventoryEffectRenderer
 		
 		if (this.maxPages != 0)
 		{
-			GL11.glColor3f(1F, 1F, 1F);
 			String page = String.format("%d / %d", tabPage + 1, this.maxPages + 1);
 			int width = this.fontRenderer.getStringWidth(page);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			this.zLevel = 300.0F;
-			itemRenderer.zLevel = 300.0F;
-			this.fontRenderer.drawString(page, this.guiLeft + (this.xSize / 2) - (width / 2), this.guiTop - 44, -1);
-			this.zLevel = 0.0F;
-			itemRenderer.zLevel = 0.0F;
+			GL11.glTranslatef(0F, 0F, 2F);
+			this.fontRenderer.drawStringWithShadow(page, this.guiLeft + (this.xSize / 2) - (width / 2), this.guiTop - 44, -1);
+			GL11.glTranslatef(0F, 0F, -2F);
 		}
 		
 		super.drawScreen(mouseX, mouseY, partialTickTime);
 		CreativeTabs[] acreativetabs = CreativeTabs.creativeTabArray;
 		int start = tabPage * 10;
-		int i2 = Math.min(acreativetabs.length, ((tabPage + 1) * 10) + 2);
+		int i2 = Math.min(acreativetabs.length, start + 12);
 		if (tabPage != 0)
+		{
 			start += 2;
+		}
 		boolean rendered = false;
 		
 		for (int j2 = start; j2 < i2; ++j2)
@@ -755,16 +753,15 @@ public class GuiCreativeInventory extends InventoryEffectRenderer
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int mouseX, int mouseY)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderHelper.enableGUIStandardItemLighting();
 		CreativeTabs creativetabs = CreativeTabs.creativeTabArray[tabIndex];
 		CreativeTabs[] acreativetabs = CreativeTabs.creativeTabArray;
 		int k = acreativetabs.length;
 		int l;
 		
 		int start = tabPage * 10;
-		k = Math.min(acreativetabs.length, ((tabPage + 1) * 10 + 2));
-		if (tabPage != 0)
-			start += 2;
+		k = Math.min(acreativetabs.length, start + 12);
+		if (tabPage != 0) {
+			start += 2;}
 		
 		for (l = start; l < k; ++l)
 		{
@@ -827,11 +824,10 @@ public class GuiCreativeInventory extends InventoryEffectRenderer
 	{
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		int x0 = (this.width - 195) / 2;
-		int x1 = (this.width - windowSize.getWidth()) / 2;
 		int y0 = (this.height - 136) / 2;
 		
 		// Background Frame
-		this.drawBackgroundFrame(x1, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
+		this.drawBackgroundFrame(x0, y0, windowSize.getWidth(), windowSize.getHeight());
 		
 		GL11.glTranslatef(x0, y0, 0);
 		
@@ -852,7 +848,7 @@ public class GuiCreativeInventory extends InventoryEffectRenderer
 		// Objects
 		this.drawInventoryObjects();
 		
-		GL11.glTranslatef(-x0, -y0, 0);
+		GL11.glTranslatef(-x0, -y0, 0F);
 	}
 	
 	public void drawInventoryObjects()
@@ -1052,26 +1048,24 @@ public class GuiCreativeInventory extends InventoryEffectRenderer
 			i1 += this.ySize - 4;
 		}
 		
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glColor3f(1F, 1F, 1F); // Forge: Reset color in case Items change
-									// it.
+		GL11.glColor4f(1F, 1F, 1F, 1F); // Forge: Reset color in case Items change it.
 		this.drawTexturedModalRect(l, i1, j, k, 28, b0);
-		this.zLevel = 100.0F;
-		itemRenderer.zLevel = 100.0F;
 		l += 6;
 		i1 += 8 + (flag1 ? 1 : -1);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		ItemStack itemstack = tab.getIconItemStack();
 		if (itemstack.getIconIndex() != null)
 		{
+			this.zLevel = 100.0F;
+			itemRenderer.zLevel = 100.0F;
+			RenderHelper.enableGUIStandardItemLighting();
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, itemstack, l, i1);
 			itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemstack, l, i1);
+			RenderHelper.disableStandardItemLighting();
+			itemRenderer.zLevel = 0.0F;
+			this.zLevel = 0.0F;
 		}
-		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		itemRenderer.zLevel = 0.0F;
-		this.zLevel = 0.0F;
+		GL11.glColor4f(1F, 1F, 1F, 1F);
 	}
 	
 	/**
