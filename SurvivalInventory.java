@@ -3,13 +3,13 @@ package clashsoft.playerinventoryapi;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
-import clashsoft.playerinventoryapi.client.gui.GuiCustomInventorySurvival;
-import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import clashsoft.playerinventoryapi.client.gui.GuiSurvivalInventory;
+import clashsoft.playerinventoryapi.inventory.ContainerSurvivalInventory;
 
 import net.minecraft.client.gui.GuiButton;
 
 /**
- * Survival Inventory editing class. Contains delegate methods for {@link GuiCustomInventorySurvival} and {@link ContainerCustomInventorySurvival}
+ * Survival Inventory editing class. Contains delegate methods for {@link GuiSurvivalInventory} and {@link ContainerSurvivalInventory}
  * 
  * @author Clashsoft
  */
@@ -42,7 +42,7 @@ public class SurvivalInventory
 	 */
 	public static void addSlotHandler(ISlotHandler slothandler)
 	{
-		ContainerCustomInventorySurvival.addSlotHandler(slothandler);
+		ContainerSurvivalInventory.addSlotHandler(slothandler);
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class SurvivalInventory
 	 */
 	public static void setSlotPosition(int slotid, int x, int y)
 	{
-		ContainerCustomInventorySurvival.setSlotPos(slotid, x, y);
+		ContainerSurvivalInventory.setSlotPos(slotid, x, y);
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class SurvivalInventory
 	public static void setPlayerDisplayPosition(int x, int y)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventorySurvival.setPlayerDisplayPos(x, y);
+			GuiSurvivalInventory.setPlayerDisplayPos(x, y);
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class SurvivalInventory
 	public static void setCraftingArrowPosition(int x, int y)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventorySurvival.setCraftArrowPos(x, y);
+			GuiSurvivalInventory.setCraftArrowPos(x, y);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class SurvivalInventory
 	public static void setCraftingArrowRotation(float rotation)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventorySurvival.setCraftArrowRot(rotation);
+			GuiSurvivalInventory.setCraftArrowRot(rotation);
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class SurvivalInventory
 	public static void setWindowSize(int width, int height)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventorySurvival.setWindowSize(width, height);
+			GuiSurvivalInventory.setWindowSize(width, height);
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class SurvivalInventory
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventorySurvival.addButton(handler, button);
+			GuiSurvivalInventory.addButton(handler, button);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class SurvivalInventory
 	public static InventoryObject addObject(InventoryObject object)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventorySurvival.addObject(object);
+			GuiSurvivalInventory.addObject(object);
 		return object;
 	}
 }

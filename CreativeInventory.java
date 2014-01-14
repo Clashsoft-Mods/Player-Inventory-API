@@ -3,13 +3,13 @@ package clashsoft.playerinventoryapi;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
-import clashsoft.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
-import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
+import clashsoft.playerinventoryapi.client.gui.GuiCreativeInventory;
+import clashsoft.playerinventoryapi.inventory.ContainerCreativeInventory;
 
 import net.minecraft.client.gui.GuiButton;
 
 /**
- * Creative Inventory editing class. Contains delegate methods for {@link GuiCustomInventoryCreative} and {@link ContainerCustomInventoryCreative}
+ * Creative Inventory editing class. Contains delegate methods for {@link GuiCreativeInventory} and {@link ContainerCreativeInventory}
  * 
  * @author Clashsoft
  */
@@ -24,7 +24,7 @@ public class CreativeInventory extends Inventory
 	 */
 	public static void addSlotHandler(ISlotHandler slothandler)
 	{
-		ContainerCustomInventoryCreative.addSlotHandler(slothandler);
+		ContainerCreativeInventory.addSlotHandler(slothandler);
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class CreativeInventory extends Inventory
 	 */
 	public static void setSlotPosition(int slotid, int x, int y)
 	{
-		ContainerCustomInventoryCreative.setSlotPos(slotid, x, y);
+		ContainerCreativeInventory.setSlotPos(slotid, x, y);
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class CreativeInventory extends Inventory
 	public static void setBinSlotPosition(int x, int y)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventoryCreative.setBinSlotPos(x, y);
+			GuiCreativeInventory.setBinSlotPos(x, y);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class CreativeInventory extends Inventory
 	public static void setPlayerDisplayPosition(int x, int y)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventoryCreative.setPlayerDisplayPos(x, y);
+			GuiCreativeInventory.setPlayerDisplayPos(x, y);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class CreativeInventory extends Inventory
 	public static void setWindowSize(int width)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventoryCreative.setWindowWidth(width);
+			GuiCreativeInventory.setWindowWidth(width);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class CreativeInventory extends Inventory
 	public static void addButton(IButtonHandler handler, GuiButton button)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventoryCreative.addButton(handler, button);
+			GuiCreativeInventory.addButton(handler, button);
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class CreativeInventory extends Inventory
 	public static InventoryObject addObject(InventoryObject object)
 	{
 		if (Inventory.checkSide())
-			GuiCustomInventoryCreative.addObject(object);
+			GuiCreativeInventory.addObject(object);
 		return object;
 	}
 }

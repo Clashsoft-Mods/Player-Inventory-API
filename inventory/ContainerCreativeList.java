@@ -3,7 +3,7 @@ package clashsoft.playerinventoryapi.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import clashsoft.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
+import clashsoft.playerinventoryapi.client.gui.GuiCreativeInventory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,7 +28,7 @@ public class ContainerCreativeList extends Container
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(GuiCustomInventoryCreative.getInventory(), i * 9 + j, 9 + j * 18, 18 + i * 18));
+				this.addSlotToContainer(new Slot(GuiCreativeInventory.getInventory(), i * 9 + j, 9 + j * 18, 18 + i * 18));
 			}
 		}
 		
@@ -66,9 +66,9 @@ public class ContainerCreativeList extends Container
 				int i1 = l + (k + j) * 9;
 				
 				if (i1 >= 0 && i1 < this.itemList.size())
-					GuiCustomInventoryCreative.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) this.itemList.get(i1));
+					GuiCreativeInventory.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) this.itemList.get(i1));
 				else
-					GuiCustomInventoryCreative.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) null);
+					GuiCreativeInventory.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) null);
 			}
 		}
 	}

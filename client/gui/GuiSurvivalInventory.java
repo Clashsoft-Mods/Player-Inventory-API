@@ -9,12 +9,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.common.PacketSurvivalInventorySlotClick;
+import clashsoft.playerinventoryapi.inventory.ContainerCreativeInventory;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
-import clashsoft.playerinventoryapi.inventory.ContainerCustomInventoryCreative;
-import clashsoft.playerinventoryapi.inventory.ContainerCustomInventorySurvival;
+import clashsoft.playerinventoryapi.inventory.ContainerSurvivalInventory;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
 import clashsoft.playerinventoryapi.lib.GuiHelper.GuiSize;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -30,26 +31,23 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
-public class GuiCustomInventorySurvival extends InventoryEffectRenderer
+public class GuiSurvivalInventory extends InventoryEffectRenderer
 {
-	private float									mouseX;
-	private float									mouseY;
+	protected final EntityPlayer					player;
 	
-	private final EntityPlayer						player;
+	// PLAYER INVENTORY API
 	
-	private static GuiSize							windowSize				= new GuiSize(176, 166);
-	private static GuiPos							playerDisplayPos		= new GuiPos(25, 7);
-	private static GuiPos							craftingArrowPos		= new GuiPos(125, 37);
-	private static float							craftingArrowRotation	= 0F;
-	private static boolean							drawCraftingLabel		= true;
+	protected static GuiSize						windowSize				= new GuiSize(176, 166);
+	protected static GuiPos							playerDisplayPos		= new GuiPos(25, 7);
+	protected static GuiPos							craftingArrowPos		= new GuiPos(125, 37);
+	protected static float							craftingArrowRotation	= 0F;
+	protected static GuiPos							craftingLabelPos		= new GuiPos(87, 16);
+	protected static Map<GuiButton, IButtonHandler>	buttons					= new HashMap<GuiButton, IButtonHandler>();
+	protected static List<InventoryObject>			objects					= new ArrayList<InventoryObject>();
 	
-	private final GuiPos[]							slotPositions;
+	protected final GuiBuilder						guiBuilder;
 	
-	private static Map<GuiButton, IButtonHandler>	buttons					= new HashMap<GuiButton, IButtonHandler>();
-	
-	private static List<InventoryObject>			objects					= new ArrayList<InventoryObject>();
-	
-	public GuiCustomInventorySurvival(EntityPlayer player, ContainerCustomInventorySurvival container)
+	public GuiSurvivalInventory(EntityPlayer player, ContainerSurvivalInventory container)
 	{
 		super(container);
 		
@@ -57,7 +55,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		this.player = player;
 		this.player.addStat(AchievementList.openInventory, 1);
 		
-		this.slotPositions = ContainerCustomInventorySurvival.slotPositions;
+		this.guiBuilder = new GuiBuilder(this);
 	}
 	
 	public static void setWindowSize(int width, int height)
@@ -97,7 +95,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	public void updateScreen()
 	{
 		if (this.mc.playerController.isInCreativeMode())
-			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(this.player), new ContainerCustomInventoryCreative(this.player.inventory, false, this.player)));
+			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), new ContainerCreativeInventory(this.player.inventory, false, this.player)));
 	}
 	
 	/**
@@ -113,7 +111,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		}
 		
 		if (this.mc.playerController.isInCreativeMode())
-			this.mc.displayGuiScreen(new GuiCustomInventoryCreative(this.player, new ContainerCreativeList(this.player), new ContainerCustomInventoryCreative(this.player.inventory, false, this.player)));
+			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), new ContainerCreativeInventory(this.player.inventory, false, this.player)));
 		else
 			super.initGui();
 	}
@@ -124,10 +122,10 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		if (drawCraftingLabel)
+		int x = craftingLabelPos.getX();
+		int y = craftingLabelPos.getY();
+		if (x >= 0 && y >= 0)
 		{
-			int x = this.slotPositions[1].getX();
-			int y = this.slotPositions[1].getY();
 			this.fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), x - 1, y - 10, 4210752);
 		}
 	}
@@ -139,8 +137,6 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	public void drawScreen(int mouseX, int mouseY, float fpt)
 	{
 		super.drawScreen(mouseX, mouseY, fpt);
-		this.mouseX = mouseX;
-		this.mouseY = mouseY;
 	}
 	
 	/**
@@ -150,62 +146,55 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	protected void drawGuiContainerBackgroundLayer(float fpt, int mouseX, int mouseY)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
+		
 		int k = (this.width - 176) / 2;
 		int l = (this.height - 166) / 2;
 		int m = (this.width - windowSize.getWidth()) / 2;
+		
+		// Background Frame
 		this.drawBackgroundFrame(m, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
-		GL11.glTranslatef(k, l, 0);
 		this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
+		
+		GL11.glTranslatef(k, l, 0);
+		
+		// Player
 		this.drawPlayerBackground(playerDisplayPos.getX(), playerDisplayPos.getY());
-		for (GuiPos pos : this.slotPositions)
+		drawPlayerOnGui(this.mc, playerDisplayPos.getX() + 26, playerDisplayPos.getY() + 65, 30, k + playerDisplayPos.getX() + 26 - mouseX, l + playerDisplayPos.getY() + 65 - 50 - mouseY);
+		
+		// Slots
+		for (GuiPos pos : ContainerSurvivalInventory.slotPositions)
 		{
 			if (pos != null)
+			{
 				this.drawSlot(pos.getX(), pos.getY());
+			}
 		}
+		
+		// Objects
+		this.drawInventoryObjects();
+		
+		GL11.glTranslatef(-k, -l, 0);
+	}
+	
+	public void drawInventoryObjects()
+	{
 		for (InventoryObject object : objects)
 		{
 			if (object != null)
+			{
 				object.render(this.width, this.height);
+			}
 		}
-		GL11.glTranslatef(-k, -l, 0);
-		
-		drawPlayerOnGui(this.mc, k + playerDisplayPos.getX() + 26, l + playerDisplayPos.getY() + 65, 30, k + playerDisplayPos.getX() + 26 - this.mouseX, l + playerDisplayPos.getY() + 65 - 50 - this.mouseY);
 	}
 	
-	public void drawBackgroundFrame(int posX, int posY, int sizeX, int sizeY)
+	public void drawBackgroundFrame(int posX, int posY, int width, int height)
 	{
-		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
-		
-		GL11.glTranslatef(posX, posY, 0F);
-		
-		GL11.glScalef(sizeX / 8F, sizeY / 8F, 1F); // Scale both
-		this.drawTexturedModalRect(0, 0, 4, 4, 8, 8);
-		GL11.glScalef(8F / sizeX, 1F, 1F); // Unscale X
-		
-		this.drawTexturedModalRect(0, 0, 0, 4, 8, 8);
-		this.drawTexturedModalRect(sizeX - 8, 0, 8, 4, 8, 8);
-		
-		GL11.glScalef(sizeX / 8F, 8F / sizeY, 1F); // Scale X, Unscale Y
-		
-		this.drawTexturedModalRect(0, 0, 4, 0, 8, 8);
-		this.drawTexturedModalRect(0, sizeY - 8, 4, 8, 8, 8);
-		
-		GL11.glScalef(8F / sizeX, 1F, 1F); // Unscale X
-		
-		// Edges
-		this.drawTexturedModalRect(0, 0, 0, 0, 8, 8);
-		this.drawTexturedModalRect(sizeX - 8, 0, 8, 0, 8, 8);
-		this.drawTexturedModalRect(0, sizeY - 8, 0, 8, 8, 8);
-		this.drawTexturedModalRect(sizeX - 8, sizeY - 8, 8, 8, 8, 8);
-		
-		GL11.glTranslatef(-posX, -posY, 0F);
+		this.guiBuilder.drawFrame(posX, posY, width, height);
 	}
 	
 	public void drawPlayerBackground(int posX, int posY)
 	{
-		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
-		this.drawTexturedModalRect(posX, posY, 0, 19, 54, 72);
+		this.guiBuilder.drawPlayerBackgroundL(posX, posY);
 	}
 	
 	public void drawCraftArrow(int posX, int posY, float rotation)
@@ -220,8 +209,7 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 	
 	public void drawSlot(int posX, int posY)
 	{
-		this.mc.renderEngine.bindTexture(GuiCustomInventoryCreative.custominventory);
-		this.drawTexturedModalRect(posX - 1, posY - 1, 16, 0, 18, 18);
+		this.guiBuilder.drawSlot(posX, posY);
 	}
 	
 	public static void drawPlayerOnGui(Minecraft mc, int x, int y, int size, float mouseX, float mouseY)
@@ -265,20 +253,23 @@ public class GuiCustomInventorySurvival extends InventoryEffectRenderer
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 	
-	/**
-	 * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
-	 */
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		buttons.get(button).onButtonPressed(button);
+		IButtonHandler handler = buttons.get(button);
+		if (handler != null)
+		{
+			handler.onButtonPressed(button);
+		}
 	}
 	
 	@Override
 	protected void handleMouseClick(Slot slot, int slotID, int var1, int var2)
 	{
 		if (slot != null)
+		{
 			slotID = slot.slotNumber;
+		}
 		this.inventorySlots.slotClick(slotID, var1, var2, this.player);
 		PacketDispatcher.sendPacketToServer(new PacketSurvivalInventorySlotClick(slotID, var1, var2));
 	}

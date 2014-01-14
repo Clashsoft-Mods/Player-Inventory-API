@@ -1,6 +1,6 @@
 package clashsoft.playerinventoryapi.inventory;
 
-import clashsoft.playerinventoryapi.client.gui.GuiCustomInventoryCreative;
+import clashsoft.playerinventoryapi.client.gui.GuiCreativeInventory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -11,13 +11,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
 @SideOnly(Side.CLIENT)
-public class SlotCustomCreativeInventory extends Slot
+public class SlotCreative extends Slot
 {
 	private final Slot					theSlot;
 	
-	final GuiCustomInventoryCreative	theCreativeInventory;
+	final GuiCreativeInventory	theCreativeInventory;
 	
-	public SlotCustomCreativeInventory(GuiCustomInventoryCreative creativeInventory, Slot slot, int slotIndex)
+	public SlotCreative(GuiCreativeInventory creativeInventory, Slot slot, int slotIndex)
 	{
 		super(slot.inventory, slotIndex, slot.xDisplayPosition, slot.yDisplayPosition);
 		this.theCreativeInventory = creativeInventory;

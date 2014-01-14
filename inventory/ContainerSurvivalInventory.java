@@ -15,7 +15,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-public class ContainerCustomInventorySurvival extends Container implements ICustomPlayerContainer
+public class ContainerSurvivalInventory extends Container implements ICustomPlayerContainer
 {
 	public InventoryCrafting			craftMatrix		= new InventoryCrafting(this, 2, 2);
 	public IInventory					craftResult		= new InventoryCraftResult();
@@ -26,7 +26,7 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 	public static GuiPos[]				slotPositions	= getDefaultSlotPositions();
 	public static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
 	
-	public ContainerCustomInventorySurvival(InventoryPlayer inventory, boolean localWorld, EntityPlayer player)
+	public ContainerSurvivalInventory(InventoryPlayer inventory, boolean localWorld, EntityPlayer player)
 	{
 		this.isLocalWorld = localWorld;
 		this.thePlayer = player;
@@ -38,10 +38,10 @@ public class ContainerCustomInventorySurvival extends Container implements ICust
 			@Override
 			public int size()
 			{
-				if (ContainerCustomInventorySurvival.this.isLocalWorld)
+				if (ContainerSurvivalInventory.this.isLocalWorld)
 				{
 					String clazz = CSReflection.getCallerClassName();
-					if (clazz.equals(ContainerCustomInventoryCreative.getMinecraftClassName()))
+					if (clazz.equals(ContainerCreativeInventory.getMinecraftClassName()))
 						return 50;
 				}
 				return super.size();
