@@ -63,20 +63,23 @@ public class ContainerCreativeList extends Container
 		{
 			for (int l = 0; l < 9; ++l)
 			{
-				int i1 = l + (k + j) * 9;
+				int m = l + (k + j) * 9;
+				int n = l + k * 9;
 				
-				if (i1 >= 0 && i1 < this.itemList.size())
-					GuiCreativeInventory.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) this.itemList.get(i1));
+				if (m >= 0 && m < this.itemList.size())
+				{
+					ItemStack stack = (ItemStack) this.itemList.get(m);
+					GuiCreativeInventory.getInventory().setInventorySlotContents(n, stack);
+				}
 				else
+				{
 					GuiCreativeInventory.getInventory().setInventorySlotContents(l + k * 9, (ItemStack) null);
+				}
 			}
 		}
 	}
 	
-	/**
-	 * theCreativeContainer seems to be hard coded to 9x5 items
-	 */
-	public boolean hasMoreThan1PageOfItemsInList()
+	public boolean hasMoreThanOnePage()
 	{
 		return this.itemList.size() > 45;
 	}
@@ -86,9 +89,6 @@ public class ContainerCreativeList extends Container
 	{
 	}
 	
-	/**
-	 * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
-	 */
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{

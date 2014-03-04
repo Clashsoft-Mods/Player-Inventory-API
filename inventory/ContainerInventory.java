@@ -3,12 +3,11 @@ package clashsoft.playerinventoryapi.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import clashsoft.cslib.reflect.CSReflection;
-import clashsoft.playerinventoryapi.api.ICustomPlayerContainer;
+import clashsoft.cslib.math.Point2i;
 import clashsoft.playerinventoryapi.api.ISlotHandler;
-import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
+import clashsoft.playerinventoryapi.api.ISlotList;
+import clashsoft.playerinventoryapi.lib.FakeArrayList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -16,158 +15,135 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-public class ContainerCreativeInventory extends Container implements ICustomPlayerContainer
+public class ContainerInventory extends Container implements ISlotList
 {
 	public InventoryCrafting			craftMatrix		= new InventoryCrafting(this, 2, 2);
 	public IInventory					craftResult		= new InventoryCraftResult();
 	
-	public boolean						isLocalWorld	= false;
 	public final EntityPlayer			thePlayer;
+	public boolean						isCreative;
 	
-	public static GuiPos[]				slotPositions	= getDefaultSlotPositions();
+	public List<Slot>					survivalSlots;
+	public List<Slot>					creativeSlots;
+	
 	public static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
 	
-	public ContainerCreativeInventory(InventoryPlayer inventory, boolean localWorld, EntityPlayer player)
+	public ContainerInventory(InventoryPlayer inventory, EntityPlayer player)
 	{
-		this.isLocalWorld = localWorld;
 		this.thePlayer = player;
+		this.isCreative = player.capabilities.isCreativeMode;
 		
-		this.inventorySlots = new ArrayList()
+		if (player.isClientWorld())
 		{
-			private static final long	serialVersionUID	= 5436247638996771146L;
-			
-			@Override
-			public int size()
-			{
-				if (ContainerCreativeInventory.this.isLocalWorld)
-				{
-					String clazz = CSReflection.getCallerClassName();
-					if (clazz.equals(getMinecraftClassName()))
-						return 45;
-				}
-				return super.size();
-			}
-		};
-		
-		List<Slot> slots = this.createSlots();
-		int defaultSlots = slots.size();
-		
-		for (ISlotHandler handler : slotHandlers)
-			handler.addSlots(slots, this.thePlayer, true);
-		
-		for (int i = 0; i < slots.size(); i++)
-		{
-			Slot slot = slots.get(i);
-			this.addSlotToContainer(slot);
-			
-			if (i >= defaultSlots)
-				slotPositions[slot.slotNumber] = new GuiPos(slot.xDisplayPosition, slot.yDisplayPosition);
+			this.inventorySlots = new FakeArrayList(45);
 		}
+		
+		this.survivalSlots = this.createSlots(InventorySlots.survivalSlots);
+		this.creativeSlots = this.createSlots(InventorySlots.creativeSlots);
+		
+		this.reloadSlots();
 		
 		this.onCraftMatrixChanged(this.craftMatrix);
 	}
 	
-	protected static String getMinecraftClassName()
+	@Override
+	public Slot addSlot(Slot slot)
 	{
-		try
-		{
-			return Minecraft.class.getName();
-		}
-		catch (NoClassDefFoundError error)
-		{
-			return "";
-		}
+		this.addSlotToContainer(slot);
+		return slot;
 	}
 	
 	@Override
-	public List<Slot> createSlots()
+	protected Slot addSlotToContainer(Slot slot)
 	{
-		List<Slot> slots = new ArrayList<Slot>(slotPositions.length);
-		GuiPos[] pos = slotPositions;
+		super.addSlotToContainer(slot);
+		if (this.isCreative)
+		{
+			InventorySlots.setCreativeSlot(slot.slotNumber, slot.xDisplayPosition, slot.yDisplayPosition);
+		}
+		else
+		{
+			InventorySlots.setSurvivalSlot(slot.slotNumber, slot.xDisplayPosition, slot.yDisplayPosition);
+		}
+		return slot;
+	}
+	
+	public void reloadSlots()
+	{
+		List<Slot> slots = new ArrayList(this.getSlots());
+		
+		for (ISlotHandler handler : slotHandlers)
+		{
+			handler.addSlots(this, this.thePlayer, this.isCreative);
+		}
+		
+		this.inventorySlots.clear();
+		
+		for (Slot slot : slots)
+		{
+			this.addSlotToContainer(slot);
+		}
+	}
+	
+	public List<Slot> getSlots()
+	{
+		return this.isCreative ? this.creativeSlots : this.survivalSlots;
+	}
+	
+	public List<Slot> createSlots(Point2i[] pos)
+	{
+		List<Slot> slots = new ArrayList<Slot>(pos.length);
 		slots.add(new SlotCrafting(this.thePlayer, this.craftMatrix, this.craftResult, 0, pos[0].getX(), pos[0].getY()));
+		
+		int invSize = this.thePlayer.inventory.getSizeInventory();
 		
 		int i;
 		int j;
+		int k;
 		
 		for (i = 0; i < 2; ++i)
 		{
 			for (j = 0; j < 2; ++j)
 			{
-				int index = j + i * 2;
-				slots.add(new Slot(this.craftMatrix, index, pos[1 + index].getX(), pos[1 + index].getY()));
+				k = j + i * 2;
+				slots.add(new Slot(this.craftMatrix, k, pos[k + 1].getX(), pos[k + 1].getY()));
 			}
 		}
 		
 		for (i = 0; i < 4; ++i)
 		{
-			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, this.thePlayer.inventory.getSizeInventory() - 1 - i, pos[8 - i].getX(), pos[8 - i].getY(), i));
+			k = 8 - i;
+			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, invSize - 1 - i, pos[k].getX(), pos[k].getY(), i));
 		}
 		
 		for (i = 0; i < 3; ++i)
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				int index = j + (i + 1) * 9;
-				slots.add(new Slot(this.thePlayer.inventory, index, pos[index].getX(), pos[index].getY()));
+				k = j + (i + 1) * 9;
+				slots.add(new Slot(this.thePlayer.inventory, k, pos[k].getX(), pos[k].getY()));
 			}
 		}
 		
 		for (i = 0; i < 9; ++i)
 		{
-			int index = i + 36;
-			slots.add(new Slot(this.thePlayer.inventory, i, pos[index].getX(), pos[index].getY()));
+			k = i + 36;
+			slots.add(new Slot(this.thePlayer.inventory, i, pos[k].getX(), pos[k].getY()));
 		}
 		
 		return slots;
 	}
 	
-	public static GuiPos[] getDefaultSlotPositions()
-	{
-		GuiPos[] pos = new GuiPos[128];
-		int i;
-		int j;
-		
-		// 44 = Crafting output
-		pos[0] = new GuiPos(-2000, -2000);
-		
-		// 1 - 4 = Crafting
-		for (i = 0; i < 2; ++i)
-		{
-			for (j = 0; j < 2; ++j)
-			{
-				pos[1 + j + i * 2] = new GuiPos(-2000, -2000);
-			}
-		}
-		
-		// 5 - 8 = Armor
-		for (i = 0; i < 4; ++i)
-		{
-			pos[8 - i] = new GuiPos(45 + i * 18, 6);
-		}
-		
-		// 9 - 35 = Inventory
-		for (i = 0; i < 3; ++i)
-		{
-			for (j = 0; j < 9; ++j)
-			{
-				pos[j + (i + 1) * 9] = new GuiPos(9 + j * 18, 54 + i * 18);
-			}
-		}
-		
-		// 36 - 44 = Hotbar
-		for (i = 0; i < 9; ++i)
-		{
-			pos[36 + i] = new GuiPos(9 + i * 18, 112);
-		}
-		return pos;
-	}
-	
 	public static void setSlotPos(int slotID, int x, int y)
 	{
-		if (slotID < slotPositions.length)
-			slotPositions[slotID] = new GuiPos(x, y);
+		if (slotID < InventorySlots.survivalSlots.length)
+		{
+			InventorySlots.survivalSlots[slotID] = new Point2i(x, y);
+		}
 		else
+		{
 			throw new IllegalArgumentException("Tried to set the slot position of a slot that does not exist - Add that slot first.");
+		}
 	}
 	
 	public static void addSlotHandler(ISlotHandler slothandler)
@@ -175,29 +151,23 @@ public class ContainerCreativeInventory extends Container implements ICustomPlay
 		slotHandlers.add(slothandler);
 	}
 	
-	public static void resetSlots()
-	{
-		slotPositions = getDefaultSlotPositions();
-	}
-	
-	@Override
-	public EntityPlayer getPlayer()
-	{
-		return this.thePlayer;
-	}
-	
-	/**
-	 * Callback for when the crafting matrix is changed.
-	 */
 	@Override
 	public void onCraftMatrixChanged(IInventory inventory)
 	{
 		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.worldObj));
 	}
 	
-	/**
-	 * Callback for when the crafting gui is closed.
-	 */
+	public void onContainerOpened(EntityPlayer player)
+	{
+		boolean isCreative = player.capabilities.isCreativeMode;
+		
+		if (this.isCreative != isCreative)
+		{
+			this.isCreative = isCreative;
+			this.reloadSlots();
+		}
+	}
+	
 	@Override
 	public void onContainerClosed(EntityPlayer player)
 	{
@@ -209,7 +179,7 @@ public class ContainerCreativeInventory extends Container implements ICustomPlay
 			
 			if (itemstack != null)
 			{
-				player.dropPlayerItem(itemstack);
+				player.dropPlayerItemWithRandomChoice(itemstack, false);
 			}
 		}
 		this.craftResult.setInventorySlotContents(0, (ItemStack) null);
@@ -221,9 +191,6 @@ public class ContainerCreativeInventory extends Container implements ICustomPlay
 		return true;
 	}
 	
-	/**
-	 * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
-	 */
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
@@ -234,6 +201,11 @@ public class ContainerCreativeInventory extends Container implements ICustomPlay
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
+			
+			if (itemstack.stackSize == 0)
+			{
+				return null;
+			}
 			
 			int armorSlotID = -1;
 			

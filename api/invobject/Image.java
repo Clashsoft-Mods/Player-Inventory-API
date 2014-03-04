@@ -10,10 +10,10 @@ import net.minecraft.util.ResourceLocation;
 public class Image implements InventoryObject
 {
 	@SideOnly(Side.CLIENT)
-	protected static GuiScreen gui = new GuiScreen();
+	protected static GuiScreen	gui	= new GuiScreen();
 	
-	public ResourceLocation image;
-	public int x, y, u, v, width, height;
+	public ResourceLocation		image;
+	public int					x, y, u, v, width, height;
 	
 	public Image(ResourceLocation resource, int x, int y, int width, int height)
 	{
@@ -30,11 +30,11 @@ public class Image implements InventoryObject
 		this.width = width;
 		this.height = height;
 	}
-
+	
 	@Override
 	public void render(int width, int height)
 	{
-		Minecraft.getMinecraft().renderEngine.bindTexture(image);
-		gui.drawTexturedModalRect(0, 0, u, v, this.width, this.height);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.image);
+		gui.drawTexturedModalRect(0, 0, this.u, this.v, this.width, this.height);
 	}
 }

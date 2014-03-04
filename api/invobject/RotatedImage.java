@@ -4,9 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class RotatedImage extends RotatableObject
-{	
-	public ResourceLocation image;
-	public int x, y, u, v, width, height;
+{
+	public ResourceLocation	image;
+	public int				x, y, u, v, width, height;
 	
 	public RotatedImage(ResourceLocation resource, int x, int y, int width, int height)
 	{
@@ -29,35 +29,35 @@ public class RotatedImage extends RotatableObject
 		this.rotation = rotation;
 		return this;
 	}
-
+	
 	@Override
 	public void renderRotated(int width, int height)
 	{
-		Minecraft.getMinecraft().renderEngine.bindTexture(image);
-		Image.gui.drawTexturedModalRect(0, 0, u, v, this.width, this.width);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.image);
+		Image.gui.drawTexturedModalRect(0, 0, this.u, this.v, this.width, this.width);
 	}
-
+	
 	@Override
 	public int getX()
 	{
-		return x;
+		return this.x;
 	}
-
+	
 	@Override
 	public int getY()
 	{
-		return y;
+		return this.y;
 	}
-
+	
 	@Override
 	public int getWidth()
 	{
-		return width;
+		return this.width;
 	}
-
+	
 	@Override
 	public int getHeight()
 	{
-		return height;
-	}	
+		return this.height;
+	}
 }

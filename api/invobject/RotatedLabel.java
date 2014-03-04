@@ -4,10 +4,10 @@ import net.minecraft.client.Minecraft;
 
 public class RotatedLabel extends RotatableObject
 {
-	public String text;
-	public int x;
-	public int y;
-	public int color;
+	public String	text;
+	public int		x;
+	public int		y;
+	public int		color;
 	
 	public RotatedLabel(String s, int x, int y)
 	{
@@ -27,31 +27,31 @@ public class RotatedLabel extends RotatableObject
 		this.rotation = rotation;
 		return this;
 	}
-
+	
 	@Override
 	public void renderRotated(int width, int height)
 	{
-		Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color);
+		Minecraft.getMinecraft().fontRenderer.drawString(this.text, this.x, this.y, this.color);
 	}
-
+	
 	@Override
 	public int getX()
 	{
 		return this.x;
 	}
-
+	
 	@Override
 	public int getY()
 	{
 		return this.y;
 	}
-
+	
 	@Override
 	public int getWidth()
 	{
-		return Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
+		return Minecraft.getMinecraft().fontRenderer.getStringWidth(this.text);
 	}
-
+	
 	@Override
 	public int getHeight()
 	{

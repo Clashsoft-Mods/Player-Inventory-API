@@ -9,14 +9,14 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 public class SlotCustomArmor extends Slot
 {
 	public int			armorType;
 	public EntityPlayer	player;
 	
-	public Icon			backgroundIcon;
+	public IIcon		backgroundIcon;
 	
 	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType)
 	{
@@ -32,7 +32,7 @@ public class SlotCustomArmor extends Slot
 		}
 	}
 	
-	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType, Icon backgroundIcon)
+	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType, IIcon backgroundIcon)
 	{
 		super(inventory, slotIndex, x, y);
 		this.armorType = armorType;
@@ -54,7 +54,7 @@ public class SlotCustomArmor extends Slot
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getBackgroundIconIndex()
+	public IIcon getBackgroundIconIndex()
 	{
 		return this.backgroundIcon;
 	}

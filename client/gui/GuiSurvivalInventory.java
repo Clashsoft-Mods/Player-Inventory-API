@@ -9,16 +9,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
-import clashsoft.playerinventoryapi.common.PacketSurvivalInventorySlotClick;
-import clashsoft.playerinventoryapi.inventory.ContainerCreativeInventory;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
-import clashsoft.playerinventoryapi.inventory.ContainerSurvivalInventory;
-import clashsoft.playerinventoryapi.lib.GuiHelper.GuiPos;
-import clashsoft.playerinventoryapi.lib.GuiHelper.GuiSize;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import clashsoft.playerinventoryapi.inventory.ContainerInventory;
+import clashsoft.playerinventoryapi.inventory.InventorySlots;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -27,7 +24,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
@@ -37,45 +34,35 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 	
 	// PLAYER INVENTORY API
 	
-	protected static GuiSize						windowSize				= new GuiSize(176, 166);
-	protected static GuiPos							playerDisplayPos		= new GuiPos(25, 7);
-	protected static GuiPos							craftingArrowPos		= new GuiPos(125, 37);
-	protected static float							craftingArrowRotation	= 0F;
-	protected static GuiPos							craftingLabelPos		= new GuiPos(87, 16);
+	public static int								windowWidth				= 176;
+	public static int								windowHeight			= 166;
+	
+	public static int								playerDisplayX			= 25;
+	public static int								playerDisplayY			= 7;
+	
+	public static int								craftingArrowX			= 125;
+	public static int								craftingArrowY			= 37;
+	public static float								craftingArrowRotation	= 0F;
+	
+	public static int								craftingLabelX			= 87;
+	public static int								craftingLabelY			= 16;
+	
 	protected static Map<GuiButton, IButtonHandler>	buttons					= new HashMap<GuiButton, IButtonHandler>();
 	protected static List<InventoryObject>			objects					= new ArrayList<InventoryObject>();
 	
-	protected final GuiBuilder						guiBuilder;
+	public final GuiBuilder							guiBuilder;
 	
-	public GuiSurvivalInventory(EntityPlayer player, ContainerSurvivalInventory container)
+	public GuiSurvivalInventory(EntityPlayer player, ContainerInventory container)
 	{
 		super(container);
+		
+		container.onContainerOpened(player);
 		
 		this.allowUserInput = true;
 		this.player = player;
 		this.player.addStat(AchievementList.openInventory, 1);
 		
 		this.guiBuilder = new GuiBuilder(this);
-	}
-	
-	public static void setWindowSize(int width, int height)
-	{
-		windowSize = new GuiSize(width, height);
-	}
-	
-	public static void setPlayerDisplayPos(int x, int y)
-	{
-		playerDisplayPos = new GuiPos(x, y);
-	}
-	
-	public static void setCraftArrowPos(int x, int y)
-	{
-		craftingArrowPos = new GuiPos(x, y);
-	}
-	
-	public static void setCraftArrowRot(float r)
-	{
-		craftingArrowRotation = r;
 	}
 	
 	public static void addButton(IButtonHandler handler, GuiButton button)
@@ -88,19 +75,15 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		objects.add(object);
 	}
 	
-	/**
-	 * Called from the main game loop to update the screen.
-	 */
 	@Override
 	public void updateScreen()
 	{
 		if (this.mc.playerController.isInCreativeMode())
-			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), new ContainerCreativeInventory(this.player.inventory, false, this.player)));
+		{
+			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), (ContainerInventory) this.inventorySlots));
+		}
 	}
 	
-	/**
-	 * Adds the buttons (and other controls) to the screen in question.
-	 */
 	@Override
 	public void initGui()
 	{
@@ -111,39 +94,39 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		}
 		
 		if (this.mc.playerController.isInCreativeMode())
-			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), new ContainerCreativeInventory(this.player.inventory, false, this.player)));
-		else
-			super.initGui();
-	}
-	
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-	{
-		int x = craftingLabelPos.getX();
-		int y = craftingLabelPos.getY();
-		if (x >= 0 && y >= 0)
 		{
-			this.fontRenderer.drawString(StatCollector.translateToLocal("container.crafting"), x - 1, y - 10, 4210752);
+			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), (ContainerInventory) this.inventorySlots));
+		}
+		else
+		{
+			super.initGui();
 		}
 	}
 	
-	/**
-	 * Draws the screen and all the components in it.
-	 */
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float fpt)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		super.drawScreen(mouseX, mouseY, fpt);
+		int x = craftingLabelX;
+		int y = craftingLabelY;
+		if (x >= 0 && y >= 0)
+		{
+			this.fontRendererObj.drawString(StatCollector.translateToLocal("container.crafting"), x - 1, y - 10, 4210752);
+		}
+		
+		if (this.func_146978_c(playerDisplayX, playerDisplayY, 54, 72, mouseX, mouseY))
+		{
+			this.drawHoveringText(getPlayerInfo(this.player), mouseX - this.guiLeft, mouseY - this.guiTop, this.fontRendererObj);
+		}
 	}
 	
-	/**
-	 * Draw the background layer for the GuiContainer (everything behind the items)
-	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float fpt, int mouseX, int mouseY)
+	public void drawScreen(int mouseX, int mouseY, float partialTickTime)
+	{
+		super.drawScreen(mouseX, mouseY, partialTickTime);
+	}
+	
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float patialTickTime, int mouseX, int mouseY)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
@@ -151,18 +134,18 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		int l = (this.height - 166) / 2;
 		
 		// Background Frame
-		this.drawBackgroundFrame((this.width - windowSize.getWidth()) / 2, (this.height - windowSize.getHeight()) / 2, windowSize.getWidth(), windowSize.getHeight());
+		this.drawBackgroundFrame((this.width - windowWidth) / 2, (this.height - windowHeight) / 2, windowWidth, windowHeight);
 		
 		GL11.glTranslatef(k, l, 0);
 		
-		this.drawCraftArrow(craftingArrowPos.getX(), craftingArrowPos.getY(), craftingArrowRotation);
+		this.drawCraftArrow(craftingArrowX, craftingArrowY, craftingArrowRotation);
 		
 		// Player
-		this.drawPlayerBackground(playerDisplayPos.getX(), playerDisplayPos.getY());
-		drawPlayerOnGui(this.mc, playerDisplayPos.getX() + 26, playerDisplayPos.getY() + 65, 30, k + playerDisplayPos.getX() + 26 - mouseX, l + playerDisplayPos.getY() + 65 - 50 - mouseY);
+		this.drawPlayerBackground(playerDisplayX, playerDisplayY);
+		drawPlayerOnGui(this.mc, playerDisplayX + 26, playerDisplayY + 65, 30, k + playerDisplayX + 26 - mouseX, l + playerDisplayY + 15 - mouseY);
 		
 		// Slots
-		for (GuiPos pos : ContainerSurvivalInventory.slotPositions)
+		for (Point2i pos : InventorySlots.survivalSlots)
 		{
 			if (pos != null)
 			{
@@ -171,13 +154,6 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		}
 		
 		// Objects
-		this.drawInventoryObjects();
-		
-		GL11.glTranslatef(-k, -l, 0);
-	}
-	
-	public void drawInventoryObjects()
-	{
 		for (InventoryObject object : objects)
 		{
 			if (object != null)
@@ -185,6 +161,8 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 				object.render(this.width, this.height);
 			}
 		}
+		
+		GL11.glTranslatef(-k, -l, 0);
 	}
 	
 	public void drawBackgroundFrame(int posX, int posY, int width, int height)
@@ -213,6 +191,24 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		this.guiBuilder.drawSlot(posX, posY);
 	}
 	
+	public static List<String> getPlayerInfo(EntityPlayer player)
+	{
+		List<String> list = new ArrayList();
+		Team team = player.getTeam();
+		
+		if (team != null)
+		{
+			list.add(team.formatString(player.getDisplayName()));
+			list.add(team.getRegisteredName());
+		}
+		else
+		{
+			list.add(player.getDisplayName());
+		}
+		
+		return list;
+	}
+	
 	public static void drawPlayerOnGui(Minecraft mc, int x, int y, int size, float mouseX, float mouseY)
 	{
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
@@ -226,17 +222,21 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-((float) Math.atan(mouseY / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
 		
-		mc.thePlayer.renderYawOffset = (float) Math.atan(mouseX / 40.0F) * 20.0F;
-		mc.thePlayer.rotationYaw = (float) Math.atan(mouseX / 40.0F) * 40.0F;
-		mc.thePlayer.rotationPitch = -((float) Math.atan(mouseY / 40.0F)) * 20.0F;
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+		if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
 		{
-			mc.thePlayer.rotationYaw = (mc.thePlayer.rotationYaw + 180) % 360;
-			mc.thePlayer.renderYawOffset = (mc.thePlayer.renderYawOffset + 180) % 360;
-			mc.thePlayer.rotationPitch = -mc.thePlayer.rotationPitch;
+			mc.thePlayer.rotationYaw = (System.currentTimeMillis() / 10) % 360; // (mc.thePlayer.rotationYaw
+																				// + 180) % 360;
+			mc.thePlayer.renderYawOffset = mc.thePlayer.rotationYaw;
+			mc.thePlayer.rotationPitch = 0;
+		}
+		else
+		{
+			GL11.glRotatef(-((float) Math.atan(mouseY / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
+			
+			mc.thePlayer.renderYawOffset = (float) Math.atan(mouseX / 40.0F) * 20.0F;
+			mc.thePlayer.rotationYaw = (float) Math.atan(mouseX / 40.0F) * 40.0F;
+			mc.thePlayer.rotationPitch = -((float) Math.atan(mouseY / 40.0F)) * 20.0F;
 		}
 		
 		mc.thePlayer.rotationYawHead = mc.thePlayer.rotationYaw;
@@ -262,16 +262,5 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		{
 			handler.onButtonPressed(button);
 		}
-	}
-	
-	@Override
-	protected void handleMouseClick(Slot slot, int slotID, int var1, int var2)
-	{
-		if (slot != null)
-		{
-			slotID = slot.slotNumber;
-		}
-		this.inventorySlots.slotClick(slotID, var1, var2, this.player);
-		PacketDispatcher.sendPacketToServer(new PacketSurvivalInventorySlotClick(slotID, var1, var2));
 	}
 }

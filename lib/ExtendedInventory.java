@@ -1,26 +1,14 @@
 package clashsoft.playerinventoryapi.lib;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
-import clashsoft.cslib.util.CSLog;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
-
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.common.util.Constants;
 
 /**
  * Extended Inventory class. Stores extra slot data of a custom player inventory
@@ -51,7 +39,9 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			
 			NBTTagCompound nbt = new NBTTagCompound();
 			if (is != null)
+			{
 				is.writeToNBT(nbt);
+			}
 			nbt.setInteger("Slot", slot);
 			list.appendTag(nbt);
 		}
@@ -63,12 +53,12 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	{
 		if (compound.hasKey("ItemStacks"))
 		{
-			NBTTagList list = compound.getTagList("ItemStacks");
+			NBTTagList list = compound.getTagList("ItemStacks", Constants.NBT.TAG_COMPOUND);
 			if (list.tagCount() > 0)
 			{
 				for (int i = 0; i < list.tagCount(); i++)
 				{
-					NBTTagCompound nbt = (NBTTagCompound) list.tagAt(i);
+					NBTTagCompound nbt = list.getCompoundTagAt(i);
 					ItemStack is = ItemStack.loadItemStackFromNBT(nbt);
 					int slot = nbt.getInteger("Slot");
 					this.itemStacks[slot] = is;
@@ -92,13 +82,14 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			if (stack != null && stack.getItem() != null)
 			{
 				stack.getItem().onUpdate(stack, this.entity.worldObj, this.entity, this.entity.inventory.currentItem, false);
-				stack.getItem().onArmorTickUpdate(this.entity.worldObj, this.entity, stack);
+				stack.getItem().onArmorTick(this.entity.worldObj, this.entity, stack);
 			}
 		}
 	}
 	
 	/**
-	 * Returns the Extended Inventory for a player. Use this when constructing slots or when reading slot data.
+	 * Returns the Extended Inventory for a player. Use this when constructing slots or when reading
+	 * slot data.
 	 * <p>
 	 * If the player does not have a registered Extended Inventory, one will be created.
 	 * 
@@ -114,7 +105,8 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	/**
 	 * Directly gets the Extended Inventory from get player extended inventory map.
 	 * <p>
-	 * May be null because it needs to be created and applied at least once. Always use {@link ExtendedInventory#get(EntityPlayer)}
+	 * May be null because it needs to be created and applied at least once. Always use
+	 * {@link ExtendedInventory#get(EntityPlayer)}
 	 * 
 	 * @param player
 	 * @return the extended inventory
@@ -122,20 +114,6 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	protected static ExtendedInventory getUnsafe(EntityPlayer player)
 	{
 		return (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
-	}
-	
-	/**
-	 * Sets the Extended Inventory for a player and reads the packet data. Only used by PIAPI Packet Handler.
-	 * 
-	 * @param player
-	 * @param packet
-	 * @return
-	 */
-	public static ExtendedInventory setByPacket(EntityPlayer player, Packet250CustomPayload packet)
-	{
-		ExtendedInventory ei = get(player);
-		ei.readFromPacket(packet);
-		return ei;
 	}
 	
 	/**
@@ -189,61 +167,6 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync(EntityPlayer player, int slot)
 	{
-		Packet250CustomPayload packet = this.createPacket(slot);
-		
-		if (player instanceof EntityPlayerMP) // Server
-			PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
-		else if (player instanceof EntityClientPlayerMP && player.capabilities.isCreativeMode) // Client
-			((EntityClientPlayerMP) player).sendQueue.addToSendQueue(packet);
-	}
-	
-	/**
-	 * Creates a packet containing data.
-	 * 
-	 * @param slot
-	 * @return the packet
-	 */
-	protected Packet250CustomPayload createPacket(int slot)
-	{
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(128);
-		DataOutputStream dos = new DataOutputStream(bos);
-		
-		try
-		{
-			dos.writeInt(slot);
-			Packet.writeItemStack(this.getStackInSlot(slot), dos);
-		}
-		catch (Exception ex)
-		{
-			CSLog.error(ex);
-			return null;
-		}
-		
-		Packet250CustomPayload packet = new Packet250CustomPayload(CHANNEL, bos.toByteArray());
-		
-		return packet;
-	}
-	
-	/**
-	 * Copies data from the packet.
-	 * 
-	 * @param packet
-	 *            the data packet
-	 * @return this
-	 */
-	public ExtendedInventory readFromPacket(Packet250CustomPayload packet)
-	{
-		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
-		try
-		{
-			int slot = dis.readInt();
-			this.itemStacks[slot] = Packet.readItemStack(dis);
-		}
-		catch (Exception ex)
-		{
-			CSLog.error(ex);
-		}
-		return this;
 	}
 	
 	@Override
@@ -276,9 +199,11 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 				itemstack = this.itemStacks[slotID].splitStack(amount);
 				
 				if (this.itemStacks[slotID].stackSize == 0)
+				{
 					this.setInventorySlotContents(slotID, null);
+				}
 				
-				this.onInventoryChanged();
+				this.markDirty();
 				return itemstack;
 			}
 		}
@@ -302,13 +227,13 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	@Override
-	public String getInvName()
+	public String getInventoryName()
 	{
 		return IDENTIFIER;
 	}
 	
 	@Override
-	public boolean isInvNameLocalized()
+	public boolean hasCustomInventoryName()
 	{
 		return false;
 	}
@@ -320,7 +245,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	@Override
-	public void onInventoryChanged()
+	public void markDirty()
 	{
 	}
 	
@@ -331,18 +256,18 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	@Override
-	public void openChest()
-	{
-	}
-	
-	@Override
-	public void closeChest()
-	{
-	}
-	
-	@Override
 	public boolean isItemValidForSlot(int slotID, ItemStack itemstack)
 	{
 		return true;
+	}
+	
+	@Override
+	public void openInventory()
+	{
+	}
+	
+	@Override
+	public void closeInventory()
+	{
 	}
 }

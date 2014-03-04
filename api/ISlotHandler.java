@@ -1,11 +1,10 @@
 package clashsoft.playerinventoryapi.api;
 
-import java.util.List;
+import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
 
 public interface ISlotHandler
 {
-	public void addSlots(List<Slot> list, EntityPlayer player, boolean creative);
+	public void addSlots(ContainerInventory container, EntityPlayer player, boolean creative);
 }
