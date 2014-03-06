@@ -26,7 +26,7 @@ public class ContainerInventory extends Container implements ISlotList
 	public List<Slot>					survivalSlots;
 	public List<Slot>					creativeSlots;
 	
-	public static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
+	protected static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
 	
 	public ContainerInventory(InventoryPlayer inventory, EntityPlayer player)
 	{
@@ -146,9 +146,9 @@ public class ContainerInventory extends Container implements ISlotList
 		}
 	}
 	
-	public static void addSlotHandler(ISlotHandler slothandler)
+	public static void addSlotHandler(ISlotHandler handler)
 	{
-		slotHandlers.add(slothandler);
+		slotHandlers.add(handler);
 	}
 	
 	@Override
