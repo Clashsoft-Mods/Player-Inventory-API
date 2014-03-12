@@ -19,16 +19,14 @@ import clashsoft.playerinventoryapi.inventory.InventorySlots;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
-public class GuiSurvivalInventory extends InventoryEffectRenderer
+public class GuiSurvivalInventory extends GuiBasicInventory
 {
 	protected final EntityPlayer					player;
 	
@@ -50,8 +48,6 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 	protected static Map<GuiButton, IButtonHandler>	buttons					= new HashMap<GuiButton, IButtonHandler>();
 	protected static List<InventoryObject>			objects					= new ArrayList<InventoryObject>();
 	
-	public final GuiBuilder							guiBuilder;
-	
 	public GuiSurvivalInventory(EntityPlayer player, ContainerInventory container)
 	{
 		super(container);
@@ -61,8 +57,6 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		this.allowUserInput = true;
 		this.player = player;
 		this.player.addStat(AchievementList.openInventory, 1);
-		
-		this.guiBuilder = new GuiBuilder(this);
 	}
 	
 	public static void addButton(IButtonHandler handler, GuiButton button)
@@ -115,14 +109,8 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		
 		if (this.func_146978_c(playerDisplayX, playerDisplayY, 54, 72, mouseX, mouseY))
 		{
-			this.drawHoveringText(getPlayerInfo(this.player), mouseX - this.guiLeft, mouseY - this.guiTop, this.fontRendererObj);
+			this.drawPlayerHoveringText(this.player, mouseX, mouseY, this.fontRendererObj);
 		}
-	}
-	
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTickTime)
-	{
-		super.drawScreen(mouseX, mouseY, partialTickTime);
 	}
 	
 	@Override
@@ -165,16 +153,6 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		GL11.glTranslatef(-k, -l, 0);
 	}
 	
-	public void drawBackgroundFrame(int posX, int posY, int width, int height)
-	{
-		this.guiBuilder.drawFrame(posX, posY, width, height);
-	}
-	
-	public void drawPlayerBackground(int posX, int posY)
-	{
-		this.guiBuilder.drawPlayerBackgroundL(posX, posY);
-	}
-	
 	public void drawCraftArrow(int posX, int posY, float rotation)
 	{
 		this.mc.renderEngine.bindTexture(GuiBuilder.progress);
@@ -184,29 +162,6 @@ public class GuiSurvivalInventory extends InventoryEffectRenderer
 		GL11.glTranslatef(-8F, -7F, 0F);
 		this.drawTexturedModalRect(0, 0, 0, 16, 16, 14);
 		GL11.glPopMatrix();
-	}
-	
-	public void drawSlot(int posX, int posY)
-	{
-		this.guiBuilder.drawSlot(posX, posY);
-	}
-	
-	public static List<String> getPlayerInfo(EntityPlayer player)
-	{
-		List<String> list = new ArrayList();
-		Team team = player.getTeam();
-		
-		if (team != null)
-		{
-			list.add(team.formatString(player.getDisplayName()));
-			list.add(team.getRegisteredName());
-		}
-		else
-		{
-			list.add(player.getDisplayName());
-		}
-		
-		return list;
 	}
 	
 	public static void drawPlayerOnGui(Minecraft mc, int x, int y, int size, float mouseX, float mouseY)
