@@ -1,5 +1,9 @@
 package clashsoft.playerinventoryapi.lib;
 
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
+import clashsoft.playerinventoryapi.network.EIFullPacket;
+import clashsoft.playerinventoryapi.network.EIPacket;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -155,8 +159,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync(EntityPlayer player)
 	{
-		for (int i = 0; i < this.itemStacks.length; i++)
-			this.sync(player, i);
+		PlayerInventoryAPI.netHandler.send(new EIFullPacket(this));
 	}
 	
 	/**
@@ -167,6 +170,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync(EntityPlayer player, int slot)
 	{
+		PlayerInventoryAPI.netHandler.send(new EIPacket(this, slot));
 	}
 	
 	@Override

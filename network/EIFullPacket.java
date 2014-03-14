@@ -7,40 +7,48 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
-public class EIPacket extends CSPacket
+public class EIFullPacket extends CSPacket
 {
-	public int slot;
-	public ItemStack stack;
+	public ItemStack[]	stacks;
 	
-	public EIPacket()
+	public EIFullPacket()
 	{
 	}
 	
-	public EIPacket(ExtendedInventory ei, int slot)
+	public EIFullPacket(ExtendedInventory inventory)
 	{
-		this.slot = slot;
-		this.stack = ei.getStackInSlot(slot);
+		this.stacks = inventory.itemStacks;
 	}
 	
 	@Override
 	public void write(PacketBuffer buf)
 	{
-		buf.writeInt(this.slot);
-		buf.writeItemStackToBuffer(this.stack);
+		int len = this.stacks.length;
+		buf.writeInt(len);
+		for (int i = 0; i < len; i++)
+		{
+			ItemStack stack = this.stacks[i];
+			buf.writeItemStackToBuffer(stack);
+		}
 	}
 	
 	@Override
 	public void read(PacketBuffer buf)
 	{
-		this.slot = buf.readInt();
-		this.stack = buf.readItemStackFromBuffer();
+		int len = buf.readInt();
+		this.stacks = new ItemStack[len];
+		
+		for (int i = 0; i < len; i++)
+		{
+			this.stacks[i] = buf.readItemStackFromBuffer();
+		}
 	}
 	
 	@Override
 	public void handleClient(EntityPlayer player)
 	{
 		ExtendedInventory ei = ExtendedInventory.get(player);
-		ei.itemStacks[this.slot] = this.stack;
+		ei.itemStacks = this.stacks;
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ public class PINetHandler extends CSNetHandler
 		super("PIAPI");
 		
 		this.registerPacket(EIPacket.class);
+		this.registerPacket(EIFullPacket.class);
 		this.registerPacket(PISlotPacket.class);
 	}
 }
