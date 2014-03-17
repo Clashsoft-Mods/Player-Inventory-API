@@ -11,6 +11,12 @@ public class InventorySlots
 	{
 	}
 	
+	public static void reset()
+	{
+		survivalSlots = getSurvivalSlots();
+		creativeSlots = getCreativeSlots();
+	}
+	
 	public static Point2i[] getSurvivalSlots()
 	{
 		Point2i[] pos = new Point2i[128];
@@ -40,7 +46,7 @@ public class InventorySlots
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				pos[9 + j + i * 9] = new Point2i(8 + j * 18, 84 + i * 18);
+				pos[9 + j + (i * 9)] = new Point2i(8 + j * 18, 84 + i * 18);
 			}
 		}
 		
@@ -105,10 +111,10 @@ public class InventorySlots
 		{
 			creativeSlots[slotID] = new Point2i(x, y);
 		}
-		// else if (creativeSlots[slotID].isPoint(x, y))
-		// {
-		// creativeSlots[slotID].setX(x).setY(y);
-		// }
+		else
+		{
+			creativeSlots[slotID].setX(x).setY(y);
+		}
 	}
 	
 	public static void setSurvivalSlot(int slotID, int x, int y)
@@ -117,9 +123,9 @@ public class InventorySlots
 		{
 			survivalSlots[slotID] = new Point2i(x, y);
 		}
-		// else if (survivalSlots[slotID].isPoint(x, y))
-		// {
-		// survivalSlots[slotID].setX(x).setY(y);
-		// }
+		else
+		{
+			survivalSlots[slotID].setX(x).setY(y);
+		}
 	}
 }

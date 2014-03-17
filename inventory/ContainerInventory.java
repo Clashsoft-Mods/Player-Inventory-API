@@ -23,26 +23,18 @@ public class ContainerInventory extends Container implements ISlotList
 	public final EntityPlayer			thePlayer;
 	public boolean						isCreative;
 	
-	public List<Slot>					survivalSlots;
-	public List<Slot>					creativeSlots;
-	
 	protected static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
 	
 	public ContainerInventory(InventoryPlayer inventory, EntityPlayer player)
 	{
 		this.thePlayer = player;
-		this.isCreative = player.capabilities.isCreativeMode;
 		
 		if (player.isClientWorld())
 		{
 			this.inventorySlots = new FakeArrayList(45);
 		}
 		
-		this.survivalSlots = this.createSlots(InventorySlots.survivalSlots);
-		this.creativeSlots = this.createSlots(InventorySlots.creativeSlots);
-		
-		this.reloadSlots();
-		
+		this.onContainerOpened(player);
 		this.onCraftMatrixChanged(this.craftMatrix);
 	}
 	
@@ -70,32 +62,38 @@ public class ContainerInventory extends Container implements ISlotList
 	
 	public void reloadSlots()
 	{
-		List<Slot> slots = new ArrayList(this.getSlots());
-		
 		for (ISlotHandler handler : slotHandlers)
 		{
-			handler.addSlots(this, this.thePlayer, this.isCreative);
+			handler.pre(this.thePlayer, this.isCreative);
 		}
 		
 		this.inventorySlots.clear();
+		
+		List<Slot> slots;
+		if (this.isCreative)
+		{
+			slots = this.createSlots(InventorySlots.creativeSlots);
+		}
+		else
+		{
+			slots = this.createSlots(InventorySlots.survivalSlots);
+		}
 		
 		for (Slot slot : slots)
 		{
 			this.addSlotToContainer(slot);
 		}
-	}
-	
-	public List<Slot> getSlots()
-	{
-		return this.isCreative ? this.creativeSlots : this.survivalSlots;
+		
+		for (ISlotHandler handler : slotHandlers)
+		{
+			handler.addSlots(this, this.thePlayer, this.isCreative);
+		}
 	}
 	
 	public List<Slot> createSlots(Point2i[] pos)
 	{
 		List<Slot> slots = new ArrayList<Slot>(pos.length);
 		slots.add(new SlotCrafting(this.thePlayer, this.craftMatrix, this.craftResult, 0, pos[0].getX(), pos[0].getY()));
-		
-		int invSize = this.thePlayer.inventory.getSizeInventory();
 		
 		int i;
 		int j;
@@ -113,14 +111,14 @@ public class ContainerInventory extends Container implements ISlotList
 		for (i = 0; i < 4; ++i)
 		{
 			k = 8 - i;
-			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, invSize - 1 - i, pos[k].getX(), pos[k].getY(), i));
+			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, 39 - i, pos[k].getX(), pos[k].getY(), i));
 		}
 		
 		for (i = 0; i < 3; ++i)
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				k = j + (i + 1) * 9;
+				k = 9 + j + (i * 9);
 				slots.add(new Slot(this.thePlayer.inventory, k, pos[k].getX(), pos[k].getY()));
 			}
 		}
@@ -152,6 +150,13 @@ public class ContainerInventory extends Container implements ISlotList
 	}
 	
 	@Override
+	public ItemStack slotClick(int i, int j, int k, EntityPlayer player)
+	{
+		player.openContainer = this;
+		return super.slotClick(i, j, k, player);
+	}
+	
+	@Override
 	public void onCraftMatrixChanged(IInventory inventory)
 	{
 		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.worldObj));
@@ -159,13 +164,8 @@ public class ContainerInventory extends Container implements ISlotList
 	
 	public void onContainerOpened(EntityPlayer player)
 	{
-		boolean isCreative = player.capabilities.isCreativeMode;
-		
-		if (this.isCreative != isCreative)
-		{
-			this.isCreative = isCreative;
-			this.reloadSlots();
-		}
+		this.isCreative = player.capabilities.isCreativeMode;
+		this.reloadSlots();
 	}
 	
 	@Override
@@ -218,7 +218,9 @@ public class ContainerInventory extends Container implements ISlotList
 				{
 					Slot armorSlot = (Slot) this.inventorySlots.get(5 + armorType);
 					if (!armorSlot.getHasStack())
+					{
 						armorSlotID = 5 + armorType;
+					}
 				}
 				else
 				{
@@ -314,6 +316,6 @@ public class ContainerInventory extends Container implements ISlotList
 	@Override
 	public boolean func_94530_a(ItemStack stack, Slot slot)
 	{
-		return slot.inventory != this.craftResult && super.func_94530_a(stack, slot);
+		return slot.inventory != this.craftResult;
 	}
 }

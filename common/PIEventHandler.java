@@ -36,7 +36,7 @@ public class PIEventHandler
 			if (!event.world.isRemote)
 			{
 				ExtendedInventory ei = ExtendedInventory.get(player);
-				ei.sync(player);
+				ei.sync();
 			}
 		}
 	}

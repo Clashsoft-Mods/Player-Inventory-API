@@ -47,13 +47,13 @@ public class EIFullPacket extends CSPacket
 	@Override
 	public void handleClient(EntityPlayer player)
 	{
-		ExtendedInventory ei = ExtendedInventory.get(player);
-		ei.itemStacks = this.stacks;
+		
 	}
 	
 	@Override
 	public void handleServer(EntityPlayer player)
 	{
-		this.handleClient(player);
+		ExtendedInventory ei = ExtendedInventory.get(player);
+		ei.itemStacks = this.stacks;
 	}
 }

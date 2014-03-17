@@ -2,7 +2,6 @@ package clashsoft.playerinventoryapi.lib;
 
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.network.EIFullPacket;
-import clashsoft.playerinventoryapi.network.EIPacket;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -157,7 +156,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 * 
 	 * @param player
 	 */
-	public void sync(EntityPlayer player)
+	public void sync()
 	{
 		PlayerInventoryAPI.netHandler.send(new EIFullPacket(this));
 	}
@@ -168,9 +167,10 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 * @param player
 	 * @param slot
 	 */
-	public void sync(EntityPlayer player, int slot)
+	public void sync(int slot)
 	{
-		PlayerInventoryAPI.netHandler.send(new EIPacket(this, slot));
+		this.sync();
+		//PlayerInventoryAPI.netHandler.send(new EIPacket(this, slot));
 	}
 	
 	@Override
@@ -190,29 +190,24 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	{
 		if (this.itemStacks[slotID] != null)
 		{
-			ItemStack itemstack;
-			
+			ItemStack stack;
 			if (this.itemStacks[slotID].stackSize <= amount)
 			{
-				itemstack = this.itemStacks[slotID];
-				this.setInventorySlotContents(slotID, null);
-				return itemstack;
+				stack = this.itemStacks[slotID];
+				this.itemStacks[slotID] = null;
+				this.sync(slotID);
+				return stack;
 			}
 			else
 			{
-				itemstack = this.itemStacks[slotID].splitStack(amount);
-				
+				stack = this.itemStacks[slotID].splitStack(amount);
 				if (this.itemStacks[slotID].stackSize == 0)
-				{
-					this.setInventorySlotContents(slotID, null);
-				}
-				
-				this.markDirty();
-				return itemstack;
+					this.itemStacks[slotID] = null;
+				this.sync(slotID);
+				return stack;
 			}
 		}
-		else
-			return null;
+		return null;
 	}
 	
 	@Override
@@ -227,7 +222,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		if (itemstack != null && itemstack.stackSize <= 0)
 			itemstack = null;
 		this.itemStacks[slotID] = itemstack;
-		this.sync(this.entity, slotID);
+		this.sync(slotID);
 	}
 	
 	@Override

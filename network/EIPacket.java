@@ -9,8 +9,8 @@ import net.minecraft.network.PacketBuffer;
 
 public class EIPacket extends CSPacket
 {
-	public int slot;
-	public ItemStack stack;
+	public int			slot;
+	public ItemStack	stack;
 	
 	public EIPacket()
 	{
@@ -39,13 +39,13 @@ public class EIPacket extends CSPacket
 	@Override
 	public void handleClient(EntityPlayer player)
 	{
-		ExtendedInventory ei = ExtendedInventory.get(player);
-		ei.itemStacks[this.slot] = this.stack;
+		this.handleServer(player);
 	}
 	
 	@Override
 	public void handleServer(EntityPlayer player)
 	{
-		this.handleClient(player);
+		ExtendedInventory ei = ExtendedInventory.get(player);
+		ei.itemStacks[this.slot] = this.stack;
 	}
 }

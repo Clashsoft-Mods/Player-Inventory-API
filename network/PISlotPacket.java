@@ -1,41 +1,41 @@
 package clashsoft.playerinventoryapi.network;
 
+import clashsoft.cslib.minecraft.network.CSPacket;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 
-import clashsoft.cslib.minecraft.network.CSPacket;
-
 public class PISlotPacket extends CSPacket
 {
-	public int	slotID;
-	public int	var1;
-	public int	var2;
+	public int	i;
+	public int	j;
+	public int	k;
 	
 	public PISlotPacket()
 	{
 	}
 	
-	public PISlotPacket(int slotID, int var1, int var2)
+	public PISlotPacket(int i, int j, int k)
 	{
-		this.slotID = slotID;
-		this.var1 = var1;
-		this.var2 = var2;
+		this.i = i;
+		this.j = j;
+		this.k = k;
 	}
 	
 	@Override
 	public void write(PacketBuffer buf)
 	{
-		buf.writeInt(this.slotID);
-		buf.writeInt(this.var1);
-		buf.writeInt(this.var2);
+		buf.writeInt(this.i);
+		buf.writeInt(this.j);
+		buf.writeInt(this.k);
 	}
 	
 	@Override
 	public void read(PacketBuffer buf)
 	{
-		this.slotID = buf.readInt();
-		this.var1 = buf.readInt();
-		this.var2 = buf.readInt();
+		this.i = buf.readInt();
+		this.j = buf.readInt();
+		this.k = buf.readInt();
 	}
 	
 	@Override
@@ -46,6 +46,7 @@ public class PISlotPacket extends CSPacket
 	@Override
 	public void handleServer(EntityPlayer player)
 	{
-		player.inventoryContainer.slotClick(this.slotID, this.var1, this.var2, player);
+		System.out.println("Receive Server");
+		player.inventoryContainer.slotClick(this.i, this.j, this.k, player);
 	}
 }

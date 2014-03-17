@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 
@@ -100,11 +101,13 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		
 		int x = craftingLabelX;
 		int y = craftingLabelY;
 		if (x >= 0 && y >= 0)
 		{
-			this.fontRendererObj.drawString(StatCollector.translateToLocal("container.crafting"), x - 1, y - 10, 4210752);
+			this.fontRendererObj.drawString(StatCollector.translateToLocal("container.crafting"), x, y, 4210752);
 		}
 		
 		if (this.func_146978_c(playerDisplayX, playerDisplayY, 54, 72, mouseX, mouseY))
@@ -117,14 +120,13 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	protected void drawGuiContainerBackgroundLayer(float patialTickTime, int mouseX, int mouseY)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		int k = this.guiLeft;
+		int l = this.guiTop;
 		
-		int k = (this.width - 176) / 2;
-		int l = (this.height - 166) / 2;
+		GL11.glTranslatef(k, l, 0F);
 		
 		// Background Frame
-		this.drawBackgroundFrame((this.width - windowWidth) / 2, (this.height - windowHeight) / 2, windowWidth, windowHeight);
-		
-		GL11.glTranslatef(k, l, 0);
+		this.drawBackgroundFrame(0, 0, windowWidth, windowHeight);
 		
 		this.drawCraftArrow(craftingArrowX, craftingArrowY, craftingArrowRotation);
 		
@@ -141,6 +143,8 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 			}
 		}
 		
+		GL11.glTranslatef(-k, -l, 0);
+		
 		// Objects
 		for (InventoryObject object : objects)
 		{
@@ -149,8 +153,6 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 				object.render(this.width, this.height);
 			}
 		}
-		
-		GL11.glTranslatef(-k, -l, 0);
 	}
 	
 	public void drawCraftArrow(int posX, int posY, float rotation)
@@ -180,8 +182,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
 		{
-			mc.thePlayer.rotationYaw = (System.currentTimeMillis() / 10) % 360; // (mc.thePlayer.rotationYaw
-																				// + 180) % 360;
+			mc.thePlayer.rotationYaw = (System.currentTimeMillis() / 10) % 360;
 			mc.thePlayer.renderYawOffset = mc.thePlayer.rotationYaw;
 			mc.thePlayer.rotationPitch = 0;
 		}
@@ -207,6 +208,22 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+	}
+	
+	@Override
+	protected void handleMouseClick(Slot slot, int i, int j, int k)
+	{
+		if (slot != null)
+		{
+			i = slot.slotNumber;
+		}
+		if (k == 4 && !Keyboard.isKeyDown(this.mc.gameSettings.keyBindDrop.getKeyCode()))
+		{
+			k = isShiftKeyDown() ? 1 : 0;
+		}
+		
+		this.player.openContainer = this.inventorySlots;
+		super.handleMouseClick(slot, i, j, k);
 	}
 	
 	@Override
