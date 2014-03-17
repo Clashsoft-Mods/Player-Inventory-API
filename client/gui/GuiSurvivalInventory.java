@@ -73,6 +73,8 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	@Override
 	public void updateScreen()
 	{
+		super.updateScreen();
+		
 		if (this.mc.playerController.isInCreativeMode())
 		{
 			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), (ContainerInventory) this.inventorySlots));

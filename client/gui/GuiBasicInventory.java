@@ -13,9 +13,11 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 public abstract class GuiBasicInventory extends GuiContainer
@@ -64,47 +66,60 @@ public abstract class GuiBasicInventory extends GuiContainer
 		this.drawHoveringText(list, x - this.guiLeft, y - this.guiTop, font);
 	}
 	
+	public void drawPotionEffectHoveringText(PotionEffect effect, int x, int y, FontRenderer font)
+	{
+		List<String> list = new ArrayList();
+		Potion potion = Potion.potionTypes[effect.getPotionID()];
+		String name = StatCollector.translateToLocal(effect.getEffectName());
+		
+		list.add((potion.isBadEffect() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + name);
+		list.add(Potion.getDurationString(effect));
+		list.add(CSString.convertToRoman(effect.getAmplifier()));
+		
+		this.drawHoveringText(list, x - this.guiLeft, y - this.guiTop, font);
+	}
+	
 	@Override
 	public void updateScreen()
 	{
-		super.updateScreen();
-		
 		this.effects = this.mc.thePlayer.getActivePotionEffects();
 		boolean isEmpty = this.effects.isEmpty();
-		if (isEmpty)
+		
+		if (isEmpty != this.wasEmpty)
 		{
-			if (!this.wasEmpty)
-			{
-				this.initGui();
-				return;
-			}
+			this.initGui();
+			this.wasEmpty = isEmpty;
 		}
-		else
-		{
-			if (this.wasEmpty)
-			{
-				this.initGui();
-				return;
-			}
-		}
-		this.wasEmpty = isEmpty;
+		
+		super.updateScreen();
 	}
 	
 	@Override
 	public void initGui()
 	{
 		super.initGui();
+		this.effects = this.mc.thePlayer.getActivePotionEffects();
+		if (!this.effects.isEmpty())
+		{
+			this.guiLeft += 60;
+		}
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		int i = this.guiLeft - 124;
+		ItemStack stack = this.mc.thePlayer.inventory.getItemStack();
+		if (stack != null)
+		{
+			this.renderToolTip(stack, mouseX - this.guiLeft, mouseY - this.guiTop);
+		}
+		
+		int i = this.guiLeft - 300;
 		int j = this.guiTop;
 		
 		Collection effects = this.effects;
 		
-		if (!effects.isEmpty())
+		if (effects != null && !effects.isEmpty())
 		{
 			GL11.glDisable(2896);
 			
@@ -136,10 +151,14 @@ public abstract class GuiBasicInventory extends GuiContainer
 					text += " " + CSString.convertToRoman(effect.getAmplifier() + 1);
 				}
 				
-				this.fontRendererObj.drawStringWithShadow(text, i + 10 + 18, j + 6, 16777215);
+				this.fontRendererObj.drawStringWithShadow(text, i + 28, j + 6, 16777215);
+				text = Potion.getDurationString(effect);
+				this.fontRendererObj.drawStringWithShadow(text, i + 28, j + 16, 8355711);
 				
-				String str2 = Potion.getDurationString(effect);
-				this.fontRendererObj.drawStringWithShadow(str2, i + 10 + 18, j + 6 + 10, 8355711);
+				if (this.func_146978_c(i, j, 140, 32, mouseX, mouseY))
+				{
+					this.drawPotionEffectHoveringText(effect, mouseX, mouseY, this.fontRendererObj);
+				}
 				
 				j += l;
 			}
