@@ -46,7 +46,6 @@ public class PISlotPacket extends CSPacket
 	@Override
 	public void handleServer(EntityPlayer player)
 	{
-		System.out.println("Receive Server");
 		player.inventoryContainer.slotClick(this.i, this.j, this.k, player);
 	}
 }
