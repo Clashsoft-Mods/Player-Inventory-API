@@ -73,8 +73,8 @@ public abstract class GuiBasicInventory extends GuiContainer
 		String name = StatCollector.translateToLocal(effect.getEffectName());
 		
 		list.add((potion.isBadEffect() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + name);
+		list.add("Level: " + CSString.convertToRoman(effect.getAmplifier()));
 		list.add(Potion.getDurationString(effect));
-		list.add(CSString.convertToRoman(effect.getAmplifier()));
 		
 		this.drawHoveringText(list, x - this.guiLeft, y - this.guiTop, font);
 	}
@@ -114,15 +114,17 @@ public abstract class GuiBasicInventory extends GuiContainer
 			this.renderToolTip(stack, mouseX - this.guiLeft, mouseY - this.guiTop);
 		}
 		
-		int i = this.guiLeft - 300;
-		int j = this.guiTop;
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	    GL11.glDisable(2896);
+	    GL11.glEnable(GL11.GL_BLEND);
+		
+		int i = -124;
+		int j = 0;
 		
 		Collection effects = this.effects;
 		
 		if (effects != null && !effects.isEmpty())
 		{
-			GL11.glDisable(2896);
-			
 			int l = 33;
 			if (effects.size() > 5)
 			{
@@ -135,6 +137,7 @@ public abstract class GuiBasicInventory extends GuiContainer
 				Potion localPotion = Potion.potionTypes[effect.getPotionID()];
 				
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			    GL11.glDisable(2896);
 				this.mc.getTextureManager().bindTexture(field_147001_a);
 				
 				drawTexturedModalRect(i, j, 0, 166, 140, 32);
@@ -155,7 +158,7 @@ public abstract class GuiBasicInventory extends GuiContainer
 				text = Potion.getDurationString(effect);
 				this.fontRendererObj.drawStringWithShadow(text, i + 28, j + 16, 8355711);
 				
-				if (this.func_146978_c(i, j, 140, 32, mouseX, mouseY))
+				if (this.func_146978_c(i + 6, j + 7, 18, 18, mouseX, mouseY))
 				{
 					this.drawPotionEffectHoveringText(effect, mouseX, mouseY, this.fontRendererObj);
 				}
