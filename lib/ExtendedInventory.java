@@ -142,7 +142,11 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync(int slot)
 	{
-		PlayerInventoryAPI.instance.netHandler.send(new EISlotPacket(this, slot));
+		// The survival inventory syncs the slot on its own, but the creative inventory doesn't.
+		if (this.entity.capabilities.isCreativeMode)
+		{
+			PlayerInventoryAPI.instance.netHandler.send(new EISlotPacket(this, slot));
+		}
 	}
 	
 	public void checkSize(int slot)

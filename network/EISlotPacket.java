@@ -40,8 +40,6 @@ public class EISlotPacket extends CSPacket
 	@Override
 	public void handleClient(EntityPlayer player)
 	{
-		ExtendedInventory ei = ExtendedInventory.get(player);
-		ei.itemStacks[this.slot] = this.stack;
 	}
 	
 	@Override
