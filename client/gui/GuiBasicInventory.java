@@ -74,8 +74,12 @@ public abstract class GuiBasicInventory extends GuiContainer
 		String name = StatCollector.translateToLocal(effect.getEffectName());
 		
 		list.add((potion.isBadEffect() ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + name);
-		list.add("Level: " + CSString.convertToRoman(effect.getAmplifier()));
+		list.add("Level: " + CSString.convertToRoman(effect.getAmplifier() + 1));
 		list.add(Potion.getDurationString(effect));
+		if (effect.getIsAmbient())
+		{
+			list.add("\u00a73\u00a7oAmbient");
+		}
 		
 		this.drawHoveringText(list, x - this.guiLeft, y - this.guiTop, font);
 	}
