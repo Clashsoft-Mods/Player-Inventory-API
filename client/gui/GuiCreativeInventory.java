@@ -704,11 +704,12 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	
 	private boolean needsScrollBars()
 	{
-		if (CreativeTabs.creativeTabArray[selectedTabIndex] == null)
+		CreativeTabs tab = CreativeTabs.creativeTabArray[selectedTabIndex];
+		if (tab == null || tab == CreativeTabs.tabInventory)
 		{
 			return false;
 		}
-		return selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && CreativeTabs.creativeTabArray[selectedTabIndex].shouldHidePlayerInventory() && ((ContainerCreativeList) this.inventorySlots).hasMoreThanOnePage();
+		return tab.shouldHidePlayerInventory() && ((ContainerCreativeList) this.inventorySlots).hasMoreThanOnePage();
 	}
 	
 	@Override
@@ -927,37 +928,41 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	public void handleMouseInput()
 	{
 		super.handleMouseInput();
-		int i = Mouse.getEventDWheel();
-		
-		if (i == 0 || !this.needsScrollBars())
+		if (this.needsScrollBars())
 		{
-			return;
+			int i = Mouse.getEventDWheel();
+			
+			if (i == 0)
+			{
+				return;
+			}
+			
+			float j= ((ContainerCreativeList) this.inventorySlots).itemList.size() / 9F - 4;
+			
+			if (i > 0)
+			{
+				i = 1;
+			}
+			
+			if (i < 0)
+			{
+				i = -1;
+			}
+			
+			this.currentScroll -= i / j;
+			
+			if (this.currentScroll < 0.0F)
+			{
+				this.currentScroll = 0.0F;
+			}
+			
+			if (this.currentScroll > 1.0F)
+			{
+				this.currentScroll = 1.0F;
+			}
+			
+			((ContainerCreativeList) this.inventorySlots).scrollTo(this.currentScroll);
 		}
-		int j = ((ContainerCreativeList) this.inventorySlots).itemList.size() / 9 - 4;
-		
-		if (i > 0)
-		{
-			i = 1;
-		}
-		
-		if (i < 0)
-		{
-			i = -1;
-		}
-		
-		this.currentScroll = this.currentScroll - i / j;
-		
-		if (this.currentScroll < 0.0F)
-		{
-			this.currentScroll = 0.0F;
-		}
-		
-		if (this.currentScroll > 1.0F)
-		{
-			this.currentScroll = 1.0F;
-		}
-		
-		((ContainerCreativeList) this.inventorySlots).scrollTo(this.currentScroll);
 	}
 	
 	@Override
