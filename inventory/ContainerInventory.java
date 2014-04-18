@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import clashsoft.cslib.math.Point2i;
-import clashsoft.playerinventoryapi.api.ISlotHandler;
+import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.ISlotList;
 import clashsoft.playerinventoryapi.lib.FakeArrayList;
 
@@ -23,7 +23,7 @@ public class ContainerInventory extends Container implements ISlotList
 	public final EntityPlayer			thePlayer;
 	public boolean						isCreative;
 	
-	protected static List<ISlotHandler>	slotHandlers	= new ArrayList<ISlotHandler>();
+	protected static List<IInventoryHandler>	slotHandlers	= new ArrayList<IInventoryHandler>();
 	
 	public ContainerInventory(InventoryPlayer inventory, EntityPlayer player)
 	{
@@ -62,7 +62,7 @@ public class ContainerInventory extends Container implements ISlotList
 	
 	public void reloadSlots()
 	{
-		for (ISlotHandler handler : slotHandlers)
+		for (IInventoryHandler handler : slotHandlers)
 		{
 			handler.pre(this.thePlayer, this.isCreative);
 		}
@@ -84,7 +84,7 @@ public class ContainerInventory extends Container implements ISlotList
 			this.addSlotToContainer(slot);
 		}
 		
-		for (ISlotHandler handler : slotHandlers)
+		for (IInventoryHandler handler : slotHandlers)
 		{
 			handler.addSlots(this, this.thePlayer, this.isCreative);
 		}
@@ -144,7 +144,7 @@ public class ContainerInventory extends Container implements ISlotList
 		}
 	}
 	
-	public static void addSlotHandler(ISlotHandler handler)
+	public static void addSlotHandler(IInventoryHandler handler)
 	{
 		slotHandlers.add(handler);
 	}

@@ -3,6 +3,7 @@ package clashsoft.playerinventoryapi.network;
 import clashsoft.cslib.minecraft.network.CSPacket;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 
 public class PISlotPacket extends CSPacket
@@ -44,7 +45,7 @@ public class PISlotPacket extends CSPacket
 	}
 	
 	@Override
-	public void handleServer(EntityPlayer player)
+	public void handleServer(EntityPlayerMP player)
 	{
 		player.inventoryContainer.slotClick(this.i, this.j, this.k, player);
 	}

@@ -59,7 +59,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	private static int								tabPage				= 0;
 	private int										maxPages			= 0;
 	
-	// PLAYER INVENTORY API
+	// PIAPI
 	
 	public static int								windowWidth			= 195;
 	public static int								windowHeight		= 136;
@@ -71,6 +71,8 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	public static List<InventoryObject>				objects				= new ArrayList();
 	
 	protected GuiBuilder							guiBuilder;
+	
+	// /PIAPI
 	
 	public GuiCreativeInventory(EntityPlayer player, ContainerCreativeList creativelist, ContainerInventory container)
 	{
@@ -144,7 +146,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			{
 				this.buttonList.add(new GuiButton(101, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
 				this.buttonList.add(new GuiButton(102, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
-				this.maxPages = ((tabCount - 12) / 10 + 1);
+				this.maxPages = (tabCount - 12) / 10 + 1;
 			}
 		}
 		else
@@ -158,7 +160,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	{
 		super.onGuiClosed();
 		
-		if ((this.mc.thePlayer != null) && (this.mc.thePlayer.inventory != null))
+		if (this.mc.thePlayer != null && this.mc.thePlayer.inventory != null)
 		{
 			this.mc.thePlayer.inventoryContainer.removeCraftingFromCrafters(this.creativeCrafting);
 		}
@@ -169,7 +171,9 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	private void setCurrentCreativeTab(CreativeTabs tab)
 	{
 		if (tab == null)
+		{
 			return;
+		}
 		
 		int i = selectedTabIndex;
 		selectedTabIndex = tab.getTabIndex();
@@ -242,7 +246,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		containercreative.itemList.clear();
 		
 		CreativeTabs tab = CreativeTabs.creativeTabArray[selectedTabIndex];
-		if ((tab.hasSearchBar()) && (tab != CreativeTabs.tabAllSearch))
+		if (tab.hasSearchBar() && tab != CreativeTabs.tabAllSearch)
 		{
 			tab.displayAllReleventItems(containercreative.itemList);
 			this.updateFilteredItems(containercreative);
@@ -255,7 +259,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			Item item = (Item) iterator.next();
 			
-			if ((item != null) && (item.getCreativeTab() != null))
+			if (item != null && item.getCreativeTab() != null)
 			{
 				item.getSubItems(item, (CreativeTabs) null, containercreative.itemList);
 			}
@@ -272,8 +276,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			Enchantment enchantment = aenchantment[i];
 			
-			if ((enchantment == null) || (enchantment.type == null))
+			if (enchantment == null || enchantment.type == null)
+			{
 				continue;
+			}
 			Items.enchanted_book.func_92113_a(enchantment, containercreative.itemList);
 		}
 		
@@ -288,17 +294,17 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			String s;
 			do
 			{
-				if (!(iterator1.hasNext()))
+				if (!iterator1.hasNext())
 				{
 					break;
 				}
 				s = (String) iterator1.next();
 			}
-			while (!(s.toLowerCase().contains(s1)));
+			while (!s.toLowerCase().contains(s1));
 			
 			flag = true;
 			
-			if (!(flag))
+			if (!flag)
 			{
 				iterator.remove();
 			}
@@ -320,12 +326,12 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		int k1 = i1 + 14;
 		int l1 = j1 + 112;
 		
-		if ((!(this.wasClicking)) && (flag) && (mouseX >= i1) && (mouseY >= j1) && (mouseX < k1) && (mouseY < l1))
+		if (!this.wasClicking && flag && mouseX >= i1 && mouseY >= j1 && mouseX < k1 && mouseY < l1)
 		{
 			this.isScrolling = this.needsScrollBars();
 		}
 		
-		if (!(flag))
+		if (!flag)
 		{
 			this.isScrolling = false;
 		}
@@ -334,7 +340,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		if (this.isScrolling)
 		{
-			this.currentScroll = ((mouseY - j1 - 7.5F) / (l1 - j1 - 15.0F));
+			this.currentScroll = (mouseY - j1 - 7.5F) / (l1 - j1 - 15.0F);
 			
 			if (this.currentScroll < 0.0F)
 			{
@@ -354,7 +360,9 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		int start = tabPage * 10;
 		int len1 = Math.min(acreativetabs.length, start + 12);
 		if (tabPage != 0)
+		{
 			start += 2;
+		}
 		boolean rendered = false;
 		
 		for (int i = start; i < len1; ++i)
@@ -372,12 +380,12 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 		}
 		
-		if ((!(rendered)) && (this.renderCreativeInventoryHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY)))
+		if (!rendered && this.renderCreativeInventoryHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY))
 		{
 			this.renderCreativeInventoryHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY);
 		}
 		
-		if ((this.binSlot != null) && (selectedTabIndex == CreativeTabs.tabInventory.getTabIndex()) && (this.func_146978_c(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, mouseX, mouseY)))
+		if (this.binSlot != null && selectedTabIndex == CreativeTabs.tabInventory.getTabIndex() && this.func_146978_c(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, mouseX, mouseY))
 		{
 			this.drawCreativeTabHoveringText(I18n.format("inventory.binSlot", new Object[0]), mouseX, mouseY);
 		}
@@ -431,7 +439,9 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		int start = tabPage * 10;
 		k = Math.min(k, (tabPage + 1) * 10 + 2);
 		if (tabPage != 0)
+		{
 			start += 2;
+		}
 		
 		for (int l = start; l < k; ++l)
 		{
@@ -460,10 +470,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			
 			if (tab.shouldHidePlayerInventory())
 			{
-				this.drawTexturedModalRect(i1, k + (int) ((l - k - 17) * this.currentScroll), 232 + ((this.needsScrollBars()) ? 0 : 12), 0, 12, 15);
+				this.drawTexturedModalRect(i1, k + (int) ((l - k - 17) * this.currentScroll), 232 + (this.needsScrollBars() ? 0 : 12), 0, 12, 15);
 			}
 			
-			if (((tab == null || tab.getTabPage() != tabPage)) && tab != CreativeTabs.tabAllSearch)
+			if (tab.getTabPage() != tabPage && tab != CreativeTabs.tabAllSearch)
 			{
 				return;
 			}
@@ -574,7 +584,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			List list = stack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
 			CreativeTabs creativetabs = stack.getItem().getCreativeTab();
 			
-			if ((creativetabs == null) && (stack.getItem() == Items.enchanted_book))
+			if (creativetabs == null && stack.getItem() == Items.enchanted_book)
 			{
 				Map map = EnchantmentHelper.getEnchantments(stack);
 				
@@ -588,8 +598,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 					{
 						CreativeTabs creativetabs1 = acreativetabs[l];
 						
-						if (!(creativetabs1.func_111226_a(enchantment.type)))
+						if (!creativetabs1.func_111226_a(enchantment.type))
+						{
 							continue;
+						}
 						creativetabs = creativetabs1;
 						break;
 					}
@@ -606,11 +618,11 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			{
 				if (i1 == 0)
 				{
-					list.set(i1, stack.getRarity().rarityColor + ((String) list.get(i1)));
+					list.set(i1, stack.getRarity().rarityColor + (String) list.get(i1));
 				}
 				else
 				{
-					list.set(i1, EnumChatFormatting.GRAY + ((String) list.get(i1)));
+					list.set(i1, EnumChatFormatting.GRAY + (String) list.get(i1));
 				}
 			}
 			
@@ -656,7 +668,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	
 	protected boolean isMouseHoveringTab(CreativeTabs tab, int x, int y)
 	{
-		if ((tab.getTabPage() != tabPage) && (tab != CreativeTabs.tabAllSearch) && (tab != CreativeTabs.tabInventory))
+		if (tab.getTabPage() != tabPage && tab != CreativeTabs.tabAllSearch && tab != CreativeTabs.tabInventory)
 		{
 			return false;
 		}
@@ -682,7 +694,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			y1 = this.ySize;
 		}
 		
-		return ((x >= x1) && (x <= x1 + 28) && (y >= y1) && (y <= y1 + 32));
+		return x >= x1 && x <= x1 + 28 && y >= y1 && y <= y1 + 32;
 	}
 	
 	public void drawInventoryObjects()
@@ -693,8 +705,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	private boolean needsScrollBars()
 	{
 		if (CreativeTabs.creativeTabArray[selectedTabIndex] == null)
+		{
 			return false;
-		return ((selectedTabIndex != CreativeTabs.tabInventory.getTabIndex()) && (CreativeTabs.creativeTabArray[selectedTabIndex].shouldHidePlayerInventory()) && (((ContainerCreativeList) this.inventorySlots).hasMoreThanOnePage()));
+		}
+		return selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && CreativeTabs.creativeTabArray[selectedTabIndex].shouldHidePlayerInventory() && ((ContainerCreativeList) this.inventorySlots).hasMoreThanOnePage();
 	}
 	
 	@Override
@@ -733,14 +747,16 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	{
 		this.mouseClicked = true;
 		boolean flag = var2 == 1;
-		var2 = ((slotID == -999) && (var2 == 0)) ? 4 : var2;
+		var2 = slotID == -999 && var2 == 0 ? 4 : var2;
 		
-		if ((slot == null) && (selectedTabIndex != CreativeTabs.tabInventory.getTabIndex()) && (var2 != 5))
+		if (slot == null && selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && var2 != 5)
 		{
 			InventoryPlayer inventoryplayer = this.mc.thePlayer.inventory;
 			
 			if (inventoryplayer.getItemStack() == null)
+			{
 				return;
+			}
 			if (var1 == 0)
 			{
 				this.mc.thePlayer.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack(), true);
@@ -749,23 +765,29 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 			
 			if (var1 != 1)
+			{
 				return;
+			}
 			ItemStack itemstack1 = inventoryplayer.getItemStack().splitStack(1);
 			this.mc.thePlayer.dropPlayerItemWithRandomChoice(itemstack1, true);
 			this.mc.playerController.sendPacketDropItem(itemstack1);
 			
 			if (inventoryplayer.getItemStack().stackSize != 0)
+			{
 				return;
+			}
 			inventoryplayer.setItemStack((ItemStack) null);
 		}
 		else
 		{
-			if ((slot == this.binSlot) && (flag))
+			if (slot == this.binSlot && flag)
 			{
 				for (int l = 0;; ++l)
 				{
 					if (l >= this.mc.thePlayer.inventoryContainer.getInventory().size())
+					{
 						return;
+					}
 					this.mc.playerController.sendSlotPacket((ItemStack) null, l);
 				}
 				
@@ -777,13 +799,13 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				{
 					this.mc.thePlayer.inventory.setItemStack((ItemStack) null);
 				}
-				else if ((var2 == 4) && (slot != null) && (slot.getHasStack()))
+				else if (var2 == 4 && slot != null && slot.getHasStack())
 				{
-					ItemStack itemstack = slot.decrStackSize((var1 == 0) ? 1 : slot.getStack().getMaxStackSize());
+					ItemStack itemstack = slot.decrStackSize(var1 == 0 ? 1 : slot.getStack().getMaxStackSize());
 					this.mc.thePlayer.dropPlayerItemWithRandomChoice(itemstack, true);
 					this.mc.playerController.sendPacketDropItem(itemstack);
 				}
-				else if ((var2 == 4) && (this.mc.thePlayer.inventory.getItemStack() != null))
+				else if (var2 == 4 && this.mc.thePlayer.inventory.getItemStack() != null)
 				{
 					this.mc.thePlayer.dropPlayerItemWithRandomChoice(this.mc.thePlayer.inventory.getItemStack(), true);
 					this.mc.playerController.sendPacketDropItem(this.mc.thePlayer.inventory.getItemStack());
@@ -791,11 +813,11 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				}
 				else
 				{
-					this.mc.thePlayer.inventoryContainer.slotClick((slot == null) ? slotID : ((SlotCreative) slot).getSlot().slotNumber, var1, var2, this.mc.thePlayer);
+					this.mc.thePlayer.inventoryContainer.slotClick(slot == null ? slotID : ((SlotCreative) slot).getSlot().slotNumber, var1, var2, this.mc.thePlayer);
 					this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
 				}
 			}
-			else if ((var2 != 5) && (slot.inventory == inventory))
+			else if (var2 != 5 && slot != null && slot.inventory == inventory)
 			{
 				InventoryPlayer inventoryplayer = this.mc.thePlayer.inventory;
 				ItemStack itemstack1 = inventoryplayer.getItemStack();
@@ -803,7 +825,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				
 				if (var2 == 2)
 				{
-					if ((itemstack2 != null) && (var1 >= 0) && (var1 < 9))
+					if (itemstack2 != null && var1 >= 0 && var1 < 9)
 					{
 						ItemStack itemstack3 = itemstack2.copy();
 						itemstack3.stackSize = itemstack3.getMaxStackSize();
@@ -816,7 +838,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				
 				if (var2 == 3)
 				{
-					if ((inventoryplayer.getItemStack() == null) && (slot.getHasStack()))
+					if (inventoryplayer.getItemStack() == null && slot.getHasStack())
 					{
 						ItemStack itemstack3 = slot.getStack().copy();
 						itemstack3.stackSize = itemstack3.getMaxStackSize();
@@ -831,7 +853,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 					if (itemstack2 != null)
 					{
 						ItemStack itemstack3 = itemstack2.copy();
-						itemstack3.stackSize = ((var1 == 0) ? 1 : itemstack3.getMaxStackSize());
+						itemstack3.stackSize = var1 == 0 ? 1 : itemstack3.getMaxStackSize();
 						this.mc.thePlayer.dropPlayerItemWithRandomChoice(itemstack3, true);
 						this.mc.playerController.sendPacketDropItem(itemstack3);
 					}
@@ -839,7 +861,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 					return;
 				}
 				
-				if ((itemstack1 != null) && (itemstack2 != null) && (itemstack1.isItemEqual(itemstack2)) && (ItemStack.areItemStackTagsEqual(itemstack1, itemstack2)))
+				if (itemstack1 != null && itemstack2 != null && itemstack1.isItemEqual(itemstack2) && ItemStack.areItemStackTagsEqual(itemstack1, itemstack2))
 				{
 					if (var1 == 0)
 					{
@@ -861,7 +883,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 						itemstack1.stackSize -= 1;
 					}
 				}
-				else if ((itemstack2 != null) && (itemstack1 == null))
+				else if (itemstack2 != null && itemstack1 == null)
 				{
 					inventoryplayer.setItemStack(ItemStack.copyItemStack(itemstack2));
 					itemstack1 = inventoryplayer.getItemStack();
@@ -878,19 +900,23 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 			else
 			{
-				this.inventorySlots.slotClick((slot == null) ? slotID : slot.slotNumber, var1, var2, this.mc.thePlayer);
+				this.inventorySlots.slotClick(slot == null ? slotID : slot.slotNumber, var1, var2, this.mc.thePlayer);
 				
 				if (Container.func_94532_c(var1) == 2)
 				{
 					for (int l = 0;; ++l)
 					{
 						if (l >= 9)
+						{
 							return;
+						}
 						this.mc.playerController.sendSlotPacket(this.inventorySlots.getSlot(45 + l).getStack(), 36 + l);
 					}
 				}
 				if (slot == null)
+				{
 					return;
+				}
 				ItemStack itemstack = this.inventorySlots.getSlot(slot.slotNumber).getStack();
 				this.mc.playerController.sendSlotPacket(itemstack, slot.slotNumber - this.inventorySlots.inventorySlots.size() + 45);
 			}
@@ -903,8 +929,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		super.handleMouseInput();
 		int i = Mouse.getEventDWheel();
 		
-		if ((i == 0) || (!(this.needsScrollBars())))
+		if (i == 0 || !this.needsScrollBars())
+		{
 			return;
+		}
 		int j = ((ContainerCreativeList) this.inventorySlots).itemList.size() / 9 - 4;
 		
 		if (i > 0)
@@ -917,7 +945,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			i = -1;
 		}
 		
-		this.currentScroll = this.currentScroll - (i / j);
+		this.currentScroll = this.currentScroll - i / j;
 		
 		if (this.currentScroll < 0.0F)
 		{
@@ -935,7 +963,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	protected void keyTyped(char c, int key)
 	{
-		if (!(CreativeTabs.creativeTabArray[selectedTabIndex].hasSearchBar()))
+		if (!CreativeTabs.creativeTabArray[selectedTabIndex].hasSearchBar())
 		{
 			if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindChat))
 			{
@@ -955,7 +983,9 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 			
 			if (this.checkHotbarKeys(key))
+			{
 				return;
+			}
 			if (this.searchField.textboxKeyTyped(c, key))
 			{
 				this.updateCreativeSearch();

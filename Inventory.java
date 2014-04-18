@@ -1,11 +1,11 @@
 package clashsoft.playerinventoryapi;
 
-import clashsoft.playerinventoryapi.api.ISlotHandler;
+import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 
 public final class Inventory
 {
-	public static void addSlotHandler(ISlotHandler handler)
+	public static void addSlotHandler(IInventoryHandler handler)
 	{
 		ContainerInventory.addSlotHandler(handler);
 	}

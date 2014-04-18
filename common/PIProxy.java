@@ -1,12 +1,13 @@
 package clashsoft.playerinventoryapi.common;
 
+import clashsoft.cslib.minecraft.common.BaseProxy;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
-import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-public class PICommonProxy implements IGuiHandler
+public class PIProxy extends BaseProxy
 {
 	public static int	GUI_SURVIVAL_ID	= 0;
 	public static int	GUI_CREATIVE_ID	= 1;
@@ -18,12 +19,6 @@ public class PICommonProxy implements IGuiHandler
 		{
 			return this.replaceInventory(player);
 		}
-		return null;
-	}
-	
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-	{
 		return null;
 	}
 	
@@ -39,12 +34,8 @@ public class PICommonProxy implements IGuiHandler
 		return container;
 	}
 	
-	public void registerTickHandler()
+	@Override
+	public void init(FMLInitializationEvent event)
 	{
-	}
-	
-	public boolean isClient()
-	{
-		return false;
 	}
 }

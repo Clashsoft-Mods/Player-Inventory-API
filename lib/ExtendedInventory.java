@@ -1,8 +1,8 @@
 package clashsoft.playerinventoryapi.lib;
 
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
-import clashsoft.playerinventoryapi.network.EIFullPacket;
 import clashsoft.playerinventoryapi.network.EIPacket;
+import clashsoft.playerinventoryapi.network.EISlotPacket;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.common.util.Constants;
 
 /**
  * Extended Inventory class. Stores extra slot data of a custom player inventory
@@ -49,13 +48,13 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 				list.appendTag(nbt1);
 			}
 		}
-		nbt.setTag("ItemStacks", list);
+		nbt.setTag("Slots", list);
 	}
 	
 	@Override
 	public void loadNBTData(NBTTagCompound compound)
 	{
-		NBTTagList list = compound.getTagList("ItemStacks", Constants.NBT.TAG_COMPOUND);
+		NBTTagList list = (NBTTagList) compound.getTag("Slots");
 		int len = list.tagCount();
 		
 		this.checkSize(len);
@@ -132,7 +131,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync()
 	{
-		PlayerInventoryAPI.netHandler.send(new EIFullPacket(this));
+		PlayerInventoryAPI.instance.netHandler.send(new EIPacket(this));
 	}
 	
 	/**
@@ -143,7 +142,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync(int slot)
 	{
-		PlayerInventoryAPI.netHandler.send(new EIPacket(this, slot));
+		PlayerInventoryAPI.instance.netHandler.send(new EISlotPacket(this, slot));
 	}
 	
 	public void checkSize(int slot)

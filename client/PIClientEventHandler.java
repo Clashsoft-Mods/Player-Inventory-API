@@ -1,7 +1,7 @@
 package clashsoft.playerinventoryapi.client;
 
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
-import clashsoft.playerinventoryapi.common.PICommonProxy;
+import clashsoft.playerinventoryapi.common.PIProxy;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
@@ -23,11 +23,11 @@ public class PIClientEventHandler
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (PlayerInventoryAPI.customSurvivalInventory && Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
 		{
-			player.openGui(PlayerInventoryAPI.instance, PICommonProxy.GUI_SURVIVAL_ID, player.worldObj, 0, 0, 0);
+			player.openGui(PlayerInventoryAPI.instance, PIProxy.GUI_SURVIVAL_ID, player.worldObj, 0, 0, 0);
 		}
 		else if (PlayerInventoryAPI.customCreativeInventory && Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative)
 		{
-			player.openGui(PlayerInventoryAPI.instance, PICommonProxy.GUI_CREATIVE_ID, player.worldObj, 0, 0, 0);
+			player.openGui(PlayerInventoryAPI.instance, PIProxy.GUI_CREATIVE_ID, player.worldObj, 0, 0, 0);
 		}
 	}
 }

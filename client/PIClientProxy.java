@@ -2,14 +2,15 @@ package clashsoft.playerinventoryapi.client;
 
 import clashsoft.playerinventoryapi.client.gui.GuiCreativeInventory;
 import clashsoft.playerinventoryapi.client.gui.GuiSurvivalInventory;
-import clashsoft.playerinventoryapi.common.PICommonProxy;
+import clashsoft.playerinventoryapi.common.PIProxy;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-public class PIClientProxy extends PICommonProxy
+public class PIClientProxy extends PIProxy
 {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
@@ -26,7 +27,7 @@ public class PIClientProxy extends PICommonProxy
 	}
 	
 	@Override
-	public void registerTickHandler()
+	public void init(FMLInitializationEvent event)
 	{
 		FMLCommonHandler.instance().bus().register(new PIClientEventHandler());
 	}
