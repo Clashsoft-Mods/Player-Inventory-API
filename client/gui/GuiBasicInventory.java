@@ -148,12 +148,12 @@ public abstract class GuiBasicInventory extends GuiContainer
 				GL11.glDisable(2896);
 				this.mc.getTextureManager().bindTexture(field_147001_a);
 				
-				drawTexturedModalRect(i, j, 0, 166, 140, 32);
+				this.drawTexturedModalRect(i, j, 0, 166, 140, 32);
 				
 				if (localPotion.hasStatusIcon())
 				{
 					int i1 = localPotion.getStatusIconIndex();
-					drawTexturedModalRect(i + 6, j + 7, (i1 % 8) * 18, 198 + (i1 / 8) * 18, 18, 18);
+					this.drawTexturedModalRect(i + 6, j + 7, i1 % 8 * 18, 198 + i1 / 8 * 18, 18, 18);
 				}
 				
 				String text = StatCollector.translateToLocal(localPotion.getName());

@@ -46,7 +46,7 @@ public class InventorySlots
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				pos[9 + j + (i * 9)] = new Point2i(8 + j * 18, 84 + i * 18);
+				pos[9 + j + i * 9] = new Point2i(8 + j * 18, 84 + i * 18);
 			}
 		}
 		

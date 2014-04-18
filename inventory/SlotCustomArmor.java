@@ -48,7 +48,7 @@ public class SlotCustomArmor extends Slot
 	@Override
 	public boolean isItemValid(ItemStack stack)
 	{
-		Item item = (stack == null ? null : stack.getItem());
+		Item item = stack == null ? null : stack.getItem();
 		return item != null && item.isValidArmor(stack, this.armorType, this.player);
 	}
 	

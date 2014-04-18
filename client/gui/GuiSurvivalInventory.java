@@ -185,7 +185,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
 		{
-			mc.thePlayer.rotationYaw = (System.currentTimeMillis() / 10) % 360;
+			mc.thePlayer.rotationYaw = System.currentTimeMillis() / 10 % 360;
 			mc.thePlayer.renderYawOffset = mc.thePlayer.rotationYaw;
 			mc.thePlayer.rotationPitch = 0;
 		}

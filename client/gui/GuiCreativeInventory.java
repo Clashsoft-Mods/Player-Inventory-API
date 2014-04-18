@@ -936,7 +936,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				return;
 			}
 			
-			float j= ((ContainerCreativeList) this.inventorySlots).itemList.size() / 9F - 4;
+			float j = ((ContainerCreativeList) this.inventorySlots).itemList.size() / 9F - 4;
 			
 			if (i > 0)
 			{

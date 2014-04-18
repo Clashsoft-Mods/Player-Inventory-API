@@ -17,11 +17,11 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerInventory extends Container implements ISlotList
 {
-	public InventoryCrafting			craftMatrix		= new InventoryCrafting(this, 2, 2);
-	public IInventory					craftResult		= new InventoryCraftResult();
+	public InventoryCrafting					craftMatrix		= new InventoryCrafting(this, 2, 2);
+	public IInventory							craftResult		= new InventoryCraftResult();
 	
-	public final EntityPlayer			thePlayer;
-	public boolean						isCreative;
+	public final EntityPlayer					thePlayer;
+	public boolean								isCreative;
 	
 	protected static List<IInventoryHandler>	slotHandlers	= new ArrayList<IInventoryHandler>();
 	
@@ -118,7 +118,7 @@ public class ContainerInventory extends Container implements ISlotList
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				k = 9 + j + (i * 9);
+				k = 9 + j + i * 9;
 				slots.add(new Slot(this.thePlayer.inventory, k, pos[k].getX(), pos[k].getY()));
 			}
 		}
@@ -267,7 +267,8 @@ public class ContainerInventory extends Container implements ISlotList
 					return null;
 				}
 			}
-			else if (itemstack.getItem() instanceof ItemArmor && armorSlotID != -1) // Armor items
+			else if (itemstack.getItem() instanceof ItemArmor && armorSlotID != -1) // Armor
+																					// items
 			{
 				if (!this.mergeItemStack(itemstack1, armorSlotID, armorSlotID + 1, false))
 				{

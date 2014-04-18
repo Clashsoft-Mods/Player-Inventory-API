@@ -142,7 +142,8 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public void sync(int slot)
 	{
-		// The survival inventory syncs the slot on its own, but the creative inventory doesn't.
+		// The survival inventory syncs the slot on its own, but the creative
+		// inventory doesn't.
 		if (this.entity.capabilities.isCreativeMode)
 		{
 			PlayerInventoryAPI.instance.netHandler.send(new EISlotPacket(this, slot));
@@ -192,7 +193,9 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 			{
 				ItemStack stack1 = stack.splitStack(amount);
 				if (stack.stackSize == 0)
+				{
 					this.itemStacks[slot] = null;
+				}
 				this.sync(slot);
 				return stack1;
 			}
@@ -212,7 +215,9 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		this.checkSize(slot);
 		
 		if (itemstack != null && itemstack.stackSize <= 0)
+		{
 			itemstack = null;
+		}
 		this.itemStacks[slot] = itemstack;
 		this.sync(slot);
 	}
