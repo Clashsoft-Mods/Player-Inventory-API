@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL12;
 
 import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
@@ -392,9 +393,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		if (this.maxPages != 0)
 		{
-			String page = String.format("%d / %d", new Object[] {
-					Integer.valueOf(tabPage + 1),
-					Integer.valueOf(this.maxPages + 1) });
+			String page = String.format("%d / %d", new Object[] { Integer.valueOf(tabPage + 1), Integer.valueOf(this.maxPages + 1) });
 			int width = this.fontRendererObj.getStringWidth(page);
 			GL11.glDisable(2896);
 			this.zLevel = 300.0F;
@@ -421,7 +420,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			this.fontRendererObj.drawString(I18n.format(tab.getTranslatedTabLabel(), new Object[0]), 8, 6, 4210752);
 		}
 		
-		if (selectedTabIndex == CreativeTabs.tabInventory.getTabIndex() && this.func_146978_c(playerDisplayX, playerDisplayY, 34, 45, mouseX, mouseY))
+		if (PlayerInventoryAPI.playerTooltip && tab == CreativeTabs.tabInventory && this.func_146978_c(playerDisplayX, playerDisplayY, 34, 45, mouseX, mouseY))
 		{
 			this.drawPlayerHoveringText(this.player, mouseX, mouseY, this.fontRendererObj);
 		}

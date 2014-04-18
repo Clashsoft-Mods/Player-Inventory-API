@@ -2,6 +2,7 @@ package clashsoft.playerinventoryapi;
 
 import clashsoft.cslib.minecraft.ClashsoftMod;
 import clashsoft.cslib.minecraft.update.CSUpdate;
+import clashsoft.cslib.minecraft.util.CSConfig;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
 import clashsoft.playerinventoryapi.common.PIProxy;
 import clashsoft.playerinventoryapi.network.PINetHandler;
@@ -25,14 +26,19 @@ public class PlayerInventoryAPI extends ClashsoftMod
 	public static PlayerInventoryAPI	instance;
 	
 	@SidedProxy(clientSide = "clashsoft.playerinventoryapi.client.PIClientProxy", serverSide = "clashsoft.playerinventoryapi.common.PIProxy")
-	public static PIProxy			proxy;
+	public static PIProxy				proxy;
 	
 	public static boolean				customSurvivalInventory	= true;
 	public static boolean				customCreativeInventory	= true;
 	
+	public static boolean				itemTooltip				= false;
+	public static boolean				buffTooltip				= true;
+	public static boolean				playerTooltip			= true;
+	
 	public PlayerInventoryAPI()
 	{
 		super(proxy, MODID, NAME, ACRONYM, VERSION);
+		this.hasConfig = true;
 		this.eventHandler = new PIEventHandler();
 		this.netHandlerClass = PINetHandler.class;
 		this.url = "https://github.com/Clashsoft/Player-Inventory-API/wiki/";
@@ -57,5 +63,13 @@ public class PlayerInventoryAPI extends ClashsoftMod
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		super.postInit(event);
+	}
+	
+	@Override
+	public void readConfig()
+	{
+		itemTooltip = CSConfig.getBool("tooltip", "Item Tooltip", itemTooltip);
+		buffTooltip = CSConfig.getBool("tooltip", "Buff Tooltip", buffTooltip);
+		playerTooltip = CSConfig.getBool("tooltip", "Player Tooltip", playerTooltip);
 	}
 }

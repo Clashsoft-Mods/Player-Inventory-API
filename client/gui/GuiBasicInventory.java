@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.cslib.util.CSString;
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -108,15 +109,18 @@ public abstract class GuiBasicInventory extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		ItemStack stack = this.mc.thePlayer.inventory.getItemStack();
-		if (stack != null)
+		if (PlayerInventoryAPI.itemTooltip)
 		{
-			this.renderToolTip(stack, mouseX - this.guiLeft, mouseY - this.guiTop);
+			ItemStack stack = this.mc.thePlayer.inventory.getItemStack();
+			if (stack != null)
+			{
+				this.renderToolTip(stack, mouseX - this.guiLeft, mouseY - this.guiTop);
+			}
 		}
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	    GL11.glDisable(2896);
-	    GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(2896);
+		GL11.glEnable(GL11.GL_BLEND);
 		
 		int i = -124;
 		int j = 0;
@@ -137,7 +141,7 @@ public abstract class GuiBasicInventory extends GuiContainer
 				Potion localPotion = Potion.potionTypes[effect.getPotionID()];
 				
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			    GL11.glDisable(2896);
+				GL11.glDisable(2896);
 				this.mc.getTextureManager().bindTexture(field_147001_a);
 				
 				drawTexturedModalRect(i, j, 0, 166, 140, 32);
@@ -158,7 +162,7 @@ public abstract class GuiBasicInventory extends GuiContainer
 				text = Potion.getDurationString(effect);
 				this.fontRendererObj.drawStringWithShadow(text, i + 28, j + 16, 8355711);
 				
-				if (this.func_146978_c(i + 6, j + 7, 18, 18, mouseX, mouseY))
+				if (PlayerInventoryAPI.buffTooltip && this.func_146978_c(i + 6, j + 7, 18, 18, mouseX, mouseY))
 				{
 					this.drawPotionEffectHoveringText(effect, mouseX, mouseY, this.fontRendererObj);
 				}

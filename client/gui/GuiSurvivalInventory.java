@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL12;
 
 import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
@@ -112,7 +113,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 			this.fontRendererObj.drawString(StatCollector.translateToLocal("container.crafting"), x, y, 4210752);
 		}
 		
-		if (this.func_146978_c(playerDisplayX, playerDisplayY, 54, 72, mouseX, mouseY))
+		if (PlayerInventoryAPI.playerTooltip && this.func_146978_c(playerDisplayX, playerDisplayY, 54, 72, mouseX, mouseY))
 		{
 			this.drawPlayerHoveringText(this.player, mouseX, mouseY, this.fontRendererObj);
 		}
