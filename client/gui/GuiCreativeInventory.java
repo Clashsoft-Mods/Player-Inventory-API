@@ -16,6 +16,7 @@ import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.inventory.InventorySlots;
 import clashsoft.playerinventoryapi.inventory.SlotCreative;
+import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -436,7 +437,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		int k = acreativetabs.length;
 		
 		int start = tabPage * 10;
-		k = Math.min(k, (tabPage + 1) * 10 + 2);
+		k = Math.min(k, start + 12);
 		if (tabPage != 0)
 		{
 			start += 2;
@@ -782,15 +783,12 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			if (slot == this.binSlot && flag)
 			{
-				for (int l = 0;; ++l)
+				int len = this.inventorySlots.inventorySlots.size();
+				for (int i = 0; i < len; ++i)
 				{
-					if (l >= this.mc.thePlayer.inventoryContainer.getInventory().size())
-					{
-						return;
-					}
-					this.mc.playerController.sendSlotPacket((ItemStack) null, l);
+					this.mc.playerController.sendSlotPacket((ItemStack) null, i);
 				}
-				
+				ExtendedInventory.get(this.player).clear();
 			}
 			
 			if (selectedTabIndex == CreativeTabs.tabInventory.getTabIndex())

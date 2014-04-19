@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class PIEventHandler
 {
@@ -47,6 +48,15 @@ public class PIEventHandler
 		if (event.phase == Phase.START)
 		{
 			ExtendedInventory.get(event.player).onUpdate();
+		}
+	}
+	
+	@SubscribeEvent
+	public void onDeath(LivingDeathEvent event)
+	{
+		if (event.entityLiving instanceof EntityPlayer)
+		{
+			ExtendedInventory.get((EntityPlayer) event.entityLiving).dropAllItems();
 		}
 	}
 }

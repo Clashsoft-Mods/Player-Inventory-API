@@ -1,5 +1,7 @@
 package clashsoft.playerinventoryapi.lib;
 
+import java.util.Arrays;
+
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.network.EIPacket;
 import clashsoft.playerinventoryapi.network.EISlotPacket;
@@ -216,6 +218,22 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	public int getSizeInventory()
 	{
 		return this.itemStacks.length;
+	}
+	
+	public void clear()
+	{
+		Arrays.fill(this.itemStacks, null);
+		this.sync();
+	}
+	
+	public void dropAllItems()
+	{
+		for (int i = 0; i < this.itemStacks.length; i++)
+		{
+			this.entity.func_146097_a(this.itemStacks[i], true, false);
+			this.itemStacks[i] = null;
+		}
+		this.sync();
 	}
 	
 	@Override
