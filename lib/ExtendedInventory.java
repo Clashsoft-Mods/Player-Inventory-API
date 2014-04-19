@@ -87,23 +87,66 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 		}
 	}
 	
+	/**
+	 * Returns the {@link ExtendedInventory} of the player. Note the this method
+	 * may return {@code null} if an {@link ExtendedInventory} hasn't already
+	 * been applied to the player.
+	 * 
+	 * @see Entity#getExtendedProperties(String)
+	 * @param player
+	 * @return
+	 */
 	protected static ExtendedInventory get_(EntityPlayer player)
 	{
 		return (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
 	}
 	
+	/**
+	 * Returns the {@link ExtendedInventory} of the player. If the player
+	 * doesn't already have an {@link ExtendedInventory}, a new one is created
+	 * and applied to the player.
+	 * 
+	 * @see ExtendedInventory#get_(EntityPlayer)
+	 * @see ExtendedInventory#set_(EntityPlayer, ExtendedInventory)
+	 * @param player
+	 *            the player
+	 * @return the extended inventory
+	 */
 	public static ExtendedInventory get(EntityPlayer player)
 	{
 		ExtendedInventory props = get_(player);
 		return props == null ? set_(player, new ExtendedInventory(player)) : props;
 	}
 	
+	/**
+	 * Sets the {@link ExtendedInventory} of the player and applies it.
+	 * 
+	 * @see Entity#registerExtendedProperties(String, IExtendedEntityProperties)
+	 * @param player
+	 *            the player
+	 * @param ei
+	 *            the extended inventory
+	 * @return the extended inventory
+	 */
 	protected static ExtendedInventory set_(EntityPlayer player, ExtendedInventory ei)
 	{
 		player.registerExtendedProperties(IDENTIFIER, ei);
 		return ei;
 	}
 	
+	/**
+	 * Sets the {@link ExtendedInventory} of the player and applies it. If the
+	 * player already has an {@link ExtendedInventory}, the data of the given
+	 * {@link ExtendedInventory} is copied to the existing
+	 * one using
+	 * {@link #copy(ExtendedInventory, ExtendedInventory)}. Otherwise, the given
+	 * {@link ExtendedInventory} is directly applied using
+	 * {@link #set_(EntityPlayer, ExtendedInventory)}
+	 * 
+	 * @param player
+	 * @param ei
+	 * @return
+	 */
 	public static ExtendedInventory set(EntityPlayer player, ExtendedInventory ei)
 	{
 		ExtendedInventory ei2 = (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
@@ -125,7 +168,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	/**
-	 * Syncs all slots with the player
+	 * Syncs all slots with the player.
 	 * 
 	 * @param player
 	 */
@@ -135,7 +178,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	}
 	
 	/**
-	 * Syncs slot # {@code slot} with the player
+	 * Syncs slot # {@code slot} with the player.
 	 * 
 	 * @param player
 	 * @param slot

@@ -75,6 +75,12 @@ public class PlayerInventoryAPI extends ClashsoftMod
 		playerTooltip = CSConfig.getBool("tooltip", "Player Tooltip", playerTooltip);
 	}
 	
+	/**
+	 * Registers a new {@link IInventoryHandler}.
+	 * 
+	 * @param handler
+	 *            the inventory handler
+	 */
 	public static void addInventoryHandler(IInventoryHandler handler)
 	{
 		ContainerInventory.addInventoryHandler(handler);

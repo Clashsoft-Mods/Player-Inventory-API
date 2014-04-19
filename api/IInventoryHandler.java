@@ -2,6 +2,11 @@ package clashsoft.playerinventoryapi.api;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+/**
+ * A basic inventory modification handler.
+ * 
+ * @author Clashsoft
+ */
 public interface IInventoryHandler
 {
 	/**
