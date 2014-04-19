@@ -123,7 +123,7 @@ public abstract class GuiBasicInventory extends GuiContainer
 		}
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(2896);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		
 		int i = -124;
@@ -145,7 +145,6 @@ public abstract class GuiBasicInventory extends GuiContainer
 				Potion localPotion = Potion.potionTypes[effect.getPotionID()];
 				
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDisable(2896);
 				this.mc.getTextureManager().bindTexture(field_147001_a);
 				
 				this.drawTexturedModalRect(i, j, 0, 166, 140, 32);

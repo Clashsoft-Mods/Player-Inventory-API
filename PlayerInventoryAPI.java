@@ -3,8 +3,10 @@ package clashsoft.playerinventoryapi;
 import clashsoft.cslib.minecraft.ClashsoftMod;
 import clashsoft.cslib.minecraft.update.CSUpdate;
 import clashsoft.cslib.minecraft.util.CSConfig;
+import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
 import clashsoft.playerinventoryapi.common.PIProxy;
+import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.network.PINetHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -20,7 +22,7 @@ public class PlayerInventoryAPI extends ClashsoftMod
 	public static final String			MODID					= "piapi";
 	public static final String			NAME					= "Player Inventory API";
 	public static final String			ACRONYM					= "piapi";
-	public static final String			VERSION					= CSUpdate.CURRENT_VERSION + "-1.0.0";
+	public static final String			VERSION					= CSUpdate.CURRENT_VERSION + "-1.0.0-dev";
 	
 	@Instance(MODID)
 	public static PlayerInventoryAPI	instance;
@@ -71,5 +73,10 @@ public class PlayerInventoryAPI extends ClashsoftMod
 		itemTooltip = CSConfig.getBool("tooltip", "Item Tooltip", itemTooltip);
 		buffTooltip = CSConfig.getBool("tooltip", "Buff Tooltip", buffTooltip);
 		playerTooltip = CSConfig.getBool("tooltip", "Player Tooltip", playerTooltip);
+	}
+	
+	public static void addInventoryHandler(IInventoryHandler handler)
+	{
+		ContainerInventory.addInventoryHandler(handler);
 	}
 }

@@ -23,7 +23,7 @@ public class ContainerInventory extends Container implements ISlotList
 	public final EntityPlayer					thePlayer;
 	public boolean								isCreative;
 	
-	protected static List<IInventoryHandler>	slotHandlers	= new ArrayList<IInventoryHandler>();
+	protected static List<IInventoryHandler>	handlers	= new ArrayList<IInventoryHandler>();
 	
 	public ContainerInventory(InventoryPlayer inventory, EntityPlayer player)
 	{
@@ -62,7 +62,7 @@ public class ContainerInventory extends Container implements ISlotList
 	
 	public void reloadSlots()
 	{
-		for (IInventoryHandler handler : slotHandlers)
+		for (IInventoryHandler handler : handlers)
 		{
 			handler.pre(this.thePlayer, this.isCreative);
 		}
@@ -84,7 +84,7 @@ public class ContainerInventory extends Container implements ISlotList
 			this.addSlotToContainer(slot);
 		}
 		
-		for (IInventoryHandler handler : slotHandlers)
+		for (IInventoryHandler handler : handlers)
 		{
 			handler.addSlots(this, this.thePlayer, this.isCreative);
 		}
@@ -110,7 +110,7 @@ public class ContainerInventory extends Container implements ISlotList
 		
 		for (i = 0; i < 4; ++i)
 		{
-			k = 8 - i;
+			k = 5 + i;
 			slots.add(new SlotCustomArmor(this.thePlayer, this.thePlayer.inventory, 39 - i, pos[k].getX(), pos[k].getY(), i));
 		}
 		
@@ -144,9 +144,9 @@ public class ContainerInventory extends Container implements ISlotList
 		}
 	}
 	
-	public static void addSlotHandler(IInventoryHandler handler)
+	public static void addInventoryHandler(IInventoryHandler handler)
 	{
-		slotHandlers.add(handler);
+		handlers.add(handler);
 	}
 	
 	@Override

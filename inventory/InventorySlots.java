@@ -38,7 +38,7 @@ public class InventorySlots
 		// 5 - 8 = Armor
 		for (i = 0; i < 4; ++i)
 		{
-			pos[8 - i] = new Point2i(8, 26 + i * 18 - 18);
+			pos[5 + i] = new Point2i(8, 8 + i * 18);
 		}
 		
 		// 9 - 35 = Inventory
@@ -79,7 +79,7 @@ public class InventorySlots
 		// 5 - 8 = Armor
 		for (i = 0; i < 4; ++i)
 		{
-			pos[8 - i] = new Point2i(45 + i * 18, 6);
+			pos[5 + i] = new Point2i(45 + i * 18, 6);
 		}
 		
 		// 9 - 35 = Inventory
