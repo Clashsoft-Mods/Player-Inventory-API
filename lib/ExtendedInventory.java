@@ -139,8 +139,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	/**
 	 * Sets the {@link ExtendedInventory} of the player and applies it. If the
 	 * player already has an {@link ExtendedInventory}, the data of the given
-	 * {@link ExtendedInventory} is copied to the existing
-	 * one using
+	 * {@link ExtendedInventory} is copied to the existing one using
 	 * {@link #copy(ExtendedInventory, ExtendedInventory)}. Otherwise, the given
 	 * {@link ExtendedInventory} is directly applied using
 	 * {@link #set_(EntityPlayer, ExtendedInventory)}

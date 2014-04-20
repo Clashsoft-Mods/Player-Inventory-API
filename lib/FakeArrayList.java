@@ -3,6 +3,7 @@ package clashsoft.playerinventoryapi.lib;
 import java.util.ArrayList;
 
 import clashsoft.cslib.reflect.CSReflection;
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 
 public class FakeArrayList extends ArrayList
 {
@@ -19,7 +20,7 @@ public class FakeArrayList extends ArrayList
 	public int size()
 	{
 		String clazz = CSReflection.getCallerClassName();
-		if (clazz.equals(PIConstants.MINECRAFT_CLASS))
+		if (PlayerInventoryAPI.proxy.isMinecraftClassName(clazz))
 		{
 			return this.fakeLength;
 		}

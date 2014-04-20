@@ -38,4 +38,9 @@ public class PIProxy extends BaseProxy
 	public void init(FMLInitializationEvent event)
 	{
 	}
+	
+	public boolean isMinecraftClassName(String className)
+	{
+		return false;
+	}
 }

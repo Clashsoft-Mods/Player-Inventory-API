@@ -7,6 +7,7 @@ import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
@@ -36,5 +37,11 @@ public class PIClientProxy extends PIProxy
 	public boolean isClient()
 	{
 		return true;
+	}
+	
+	@Override
+	public boolean isMinecraftClassName(String className)
+	{
+		return className.equals(Minecraft.class.getName());
 	}
 }

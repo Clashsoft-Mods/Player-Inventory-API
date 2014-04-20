@@ -17,8 +17,8 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerInventory extends Container implements ISlotList
 {
-	public InventoryCrafting					craftMatrix		= new InventoryCrafting(this, 2, 2);
-	public IInventory							craftResult		= new InventoryCraftResult();
+	public InventoryCrafting					craftMatrix	= new InventoryCrafting(this, 2, 2);
+	public IInventory							craftResult	= new InventoryCraftResult();
 	
 	public final EntityPlayer					thePlayer;
 	public boolean								isCreative;
