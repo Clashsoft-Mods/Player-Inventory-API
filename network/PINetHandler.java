@@ -10,6 +10,5 @@ public class PINetHandler extends CSNetHandler
 		
 		this.registerPacket(EISlotPacket.class);
 		this.registerPacket(EIPacket.class);
-		this.registerPacket(PISlotPacket.class);
 	}
 }
