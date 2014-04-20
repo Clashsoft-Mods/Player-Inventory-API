@@ -85,20 +85,14 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	@Override
 	public void initGui()
 	{
-		this.buttonList.clear();
-		for (GuiButton button : buttons.keySet())
-		{
-			this.buttonList.add(button);
-		}
-		
 		if (this.mc.playerController.isInCreativeMode())
 		{
 			this.mc.displayGuiScreen(new GuiCreativeInventory(this.player, new ContainerCreativeList(this.player), (ContainerInventory) this.inventorySlots));
+			return;
 		}
-		else
-		{
-			super.initGui();
-		}
+		
+		super.initGui();
+		this.buttonList.addAll(buttons.keySet());
 	}
 	
 	@Override

@@ -128,19 +128,24 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	public void initGui()
 	{
+		
 		if (this.mc.playerController.isInCreativeMode())
 		{
 			super.initGui();
-			this.buttonList.clear();
+			this.buttonList.add(buttons.keySet());
+			
 			Keyboard.enableRepeatEvents(true);
+			
 			this.searchField = new GuiTextField(this.fontRendererObj, this.guiLeft + 82, this.guiTop + 6, 89, this.fontRendererObj.FONT_HEIGHT);
 			this.searchField.setMaxStringLength(15);
 			this.searchField.setEnableBackgroundDrawing(false);
 			this.searchField.setVisible(false);
 			this.searchField.setTextColor(16777215);
+			
 			int i = selectedTabIndex;
 			selectedTabIndex = -1;
 			this.setCurrentCreativeTab(CreativeTabs.creativeTabArray[i]);
+			
 			this.creativeCrafting = new CreativeCrafting(this.mc);
 			this.mc.thePlayer.inventoryContainer.addCraftingToCrafters(this.creativeCrafting);
 			int tabCount = CreativeTabs.creativeTabArray.length;
