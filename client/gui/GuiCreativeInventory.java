@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL12;
 
 import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
+import clashsoft.cslib.minecraft.lang.I18n;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IButtonHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
@@ -25,7 +26,6 @@ import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.gui.inventory.CreativeCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -177,7 +177,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			return;
 		}
 		
-		int i = selectedTabIndex;
+		int prevTabIndex = selectedTabIndex;
 		selectedTabIndex = tab.getTabIndex();
 		ContainerCreativeList containercreative = (ContainerCreativeList) this.inventorySlots;
 		this.field_147008_s.clear();
@@ -211,7 +211,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			this.xSize = 195;
 			this.ySize = 136;
-			if (i == CreativeTabs.tabInventory.getTabIndex())
+			if (prevTabIndex == CreativeTabs.tabInventory.getTabIndex())
 			{
 				ContainerInventory container = (ContainerInventory) this.mc.thePlayer.inventoryContainer;
 				
@@ -248,12 +248,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		containercreative.itemList.clear();
 		
 		CreativeTabs tab = CreativeTabs.creativeTabArray[selectedTabIndex];
-		if (tab.hasSearchBar() && tab != CreativeTabs.tabAllSearch)
-		{
-			tab.displayAllReleventItems(containercreative.itemList);
-			this.updateFilteredItems(containercreative);
-			return;
-		}
 		
 		Iterator iterator = Item.itemRegistry.iterator();
 		
@@ -263,7 +257,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			
 			if (item != null && item.getCreativeTab() != null)
 			{
-				item.getSubItems(item, (CreativeTabs) null, containercreative.itemList);
+				item.getSubItems(item, null, containercreative.itemList);
 			}
 		}
 		this.updateFilteredItems(containercreative);
@@ -288,29 +282,20 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		Iterator iterator = containercreative.itemList.iterator();
 		String s1 = this.searchField.getText().toLowerCase();
 		
+		label0:
 		while (iterator.hasNext())
 		{
 			ItemStack itemstack = (ItemStack) iterator.next();
-			boolean flag = false;
-			Iterator iterator1 = itemstack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips).iterator();
-			String s;
-			do
+			List<String> tooltip = itemstack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
+			
+			for (String s : tooltip)
 			{
-				if (!iterator1.hasNext())
+				if (s.toLowerCase().contains(s1))
 				{
-					break;
+					continue label0;
 				}
-				s = (String) iterator1.next();
 			}
-			while (!s.toLowerCase().contains(s1));
-			
-			flag = true;
-			
-			if (!flag)
-			{
-				iterator.remove();
-			}
-			
+			iterator.remove();
 		}
 		
 		this.currentScroll = 0.0F;
@@ -374,7 +359,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			int width;
 			if (tab != null)
 			{
-				if (this.renderCreativeInventoryHoveringText(tab, mouseX, mouseY))
+				if (this.renderTabHoveringText(tab, mouseX, mouseY))
 				{
 					rendered = true;
 					break;
@@ -382,14 +367,14 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 		}
 		
-		if (!rendered && this.renderCreativeInventoryHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY))
+		if (!rendered && this.renderTabHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY))
 		{
-			this.renderCreativeInventoryHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY);
+			this.renderTabHoveringText(CreativeTabs.tabAllSearch, mouseX, mouseY);
 		}
 		
 		if (this.binSlot != null && selectedTabIndex == CreativeTabs.tabInventory.getTabIndex() && this.func_146978_c(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, mouseX, mouseY))
 		{
-			this.drawCreativeTabHoveringText(I18n.format("inventory.binSlot", new Object[0]), mouseX, mouseY);
+			this.drawCreativeTabHoveringText(I18n.getString("inventory.binSlot"), mouseX, mouseY);
 		}
 		
 		if (this.maxPages != 0)
@@ -418,7 +403,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		if (tab != null && tab.drawInForegroundOfTab())
 		{
 			GL11.glDisable(3042);
-			this.fontRendererObj.drawString(I18n.format(tab.getTranslatedTabLabel(), new Object[0]), 8, 6, 4210752);
+			this.fontRendererObj.drawString(I18n.getString(tab.getTranslatedTabLabel()), 8, 6, 4210752);
 		}
 		
 		if (PlayerInventoryAPI.playerTooltip && tab == CreativeTabs.tabInventory && this.func_146978_c(playerDisplayX, playerDisplayY, 34, 45, mouseX, mouseY))
@@ -572,7 +557,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), itemstack, x, y);
 			itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), itemstack, x, y);
 			itemRender.zLevel = 0.0F;
-			;
 		}
 	}
 	
@@ -582,36 +566,35 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		if (selectedTabIndex == CreativeTabs.tabAllSearch.getTabIndex())
 		{
 			List list = stack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
-			CreativeTabs creativetabs = stack.getItem().getCreativeTab();
+			CreativeTabs tab = stack.getItem().getCreativeTab();
 			
-			if (creativetabs == null && stack.getItem() == Items.enchanted_book)
+			if (tab == null && stack.getItem() == Items.enchanted_book)
 			{
 				Map map = EnchantmentHelper.getEnchantments(stack);
 				
 				if (map.size() == 1)
 				{
 					Enchantment enchantment = Enchantment.enchantmentsList[((Integer) map.keySet().iterator().next()).intValue()];
-					CreativeTabs[] acreativetabs = CreativeTabs.creativeTabArray;
-					int k = acreativetabs.length;
+					CreativeTabs[] tabs = CreativeTabs.creativeTabArray;
+					int len = tabs.length;
 					
-					for (int l = 0; l < k; ++l)
+					for (int i = 0; i < len; ++i)
 					{
-						CreativeTabs creativetabs1 = acreativetabs[l];
+						CreativeTabs creativetabs1 = tabs[i];
 						
-						if (!creativetabs1.func_111226_a(enchantment.type))
+						if (creativetabs1.func_111226_a(enchantment.type))
 						{
-							continue;
+							tab = creativetabs1;
+							break;
 						}
-						creativetabs = creativetabs1;
-						break;
 					}
 				}
 				
 			}
 			
-			if (creativetabs != null)
+			if (tab != null)
 			{
-				list.add(1, "" + EnumChatFormatting.BOLD + EnumChatFormatting.BLUE + I18n.format(creativetabs.getTranslatedTabLabel(), new Object[0]));
+				list.add(1, "\u00a79\u00a7n" + I18n.getString(tab.getTranslatedTabLabel()));
 			}
 			
 			for (int i1 = 0; i1 < list.size(); ++i1)
@@ -634,7 +617,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		}
 	}
 	
-	protected boolean renderCreativeInventoryHoveringText(CreativeTabs tab, int x, int y)
+	protected boolean renderTabHoveringText(CreativeTabs tab, int x, int y)
 	{
 		int k = tab.getTabColumn();
 		int l = 28 * k;
@@ -659,7 +642,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		if (this.func_146978_c(l + 3, i1 + 3, 23, 27, x, y))
 		{
-			this.drawCreativeTabHoveringText(I18n.format(tab.getTranslatedTabLabel(), new Object[0]), x, y);
+			this.drawCreativeTabHoveringText(I18n.getString(tab.getTranslatedTabLabel()), x, y);
 			return true;
 		}
 		
@@ -695,11 +678,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		}
 		
 		return x >= x1 && x <= x1 + 28 && y >= y1 && y <= y1 + 32;
-	}
-	
-	public void drawInventoryObjects()
-	{
-		
 	}
 	
 	private boolean needsScrollBars()
