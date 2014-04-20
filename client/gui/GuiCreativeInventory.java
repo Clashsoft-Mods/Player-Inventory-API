@@ -11,7 +11,7 @@ import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.cslib.minecraft.lang.I18n;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
-import clashsoft.playerinventoryapi.api.IButtonHandler;
+import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
@@ -69,7 +69,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	public static int								playerDisplayY		= 5;
 	public static int								binSlotX			= 173;
 	public static int								binSlotY			= 112;
-	public static Map<GuiButton, IButtonHandler>	buttons				= new HashMap();
+	public static Map<GuiButton, IInventoryHandler>	buttons				= new HashMap();
 	public static List<InventoryObject>				objects				= new ArrayList();
 	
 	protected GuiBuilder							guiBuilder;
@@ -104,7 +104,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		objects = new ArrayList();
 	}
 	
-	public static void addButton(IButtonHandler handler, GuiButton button)
+	public static void addButton(IInventoryHandler handler, GuiButton button)
 	{
 		buttons.put(button, handler);
 	}
@@ -985,10 +985,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	public void actionPerformed(GuiButton button)
 	{
-		IButtonHandler handler = buttons.get(button);
+		IInventoryHandler handler = buttons.get(button);
 		if (handler != null)
 		{
-			handler.onButtonPressed(button);
+			handler.buttonPressed(button, this.player, true);
 		}
 		
 		if (button.id == 0)

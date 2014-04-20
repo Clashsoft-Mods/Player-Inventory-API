@@ -1,5 +1,6 @@
 package clashsoft.playerinventoryapi.api;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -35,4 +36,17 @@ public interface IInventoryHandler
 	 *            true, if the player is in creative mode
 	 */
 	public void addSlots(ISlotList container, EntityPlayer player, boolean creative);
+	
+	/**
+	 * This method is called when a button is pressed on the creative or
+	 * survival inventory
+	 * 
+	 * @param button
+	 *            the button
+	 * @param player
+	 *            the player
+	 * @param creative
+	 *            true, if the player is in creative mode
+	 */
+	public void buttonPressed(GuiButton button, EntityPlayer player, boolean creative);
 }

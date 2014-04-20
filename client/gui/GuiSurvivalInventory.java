@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL12;
 import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
-import clashsoft.playerinventoryapi.api.IButtonHandler;
+import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
@@ -30,25 +30,25 @@ import net.minecraft.util.StatCollector;
 
 public class GuiSurvivalInventory extends GuiBasicInventory
 {
-	protected final EntityPlayer					player;
+	protected final EntityPlayer						player;
 	
 	// PLAYER INVENTORY API
 	
-	public static int								windowWidth				= 176;
-	public static int								windowHeight			= 166;
+	public static int									windowWidth				= 176;
+	public static int									windowHeight			= 166;
 	
-	public static int								playerDisplayX			= 25;
-	public static int								playerDisplayY			= 7;
+	public static int									playerDisplayX			= 25;
+	public static int									playerDisplayY			= 7;
 	
-	public static int								craftingArrowX			= 125;
-	public static int								craftingArrowY			= 37;
-	public static float								craftingArrowRotation	= 0F;
+	public static int									craftingArrowX			= 125;
+	public static int									craftingArrowY			= 37;
+	public static float									craftingArrowRotation	= 0F;
 	
-	public static int								craftingLabelX			= 87;
-	public static int								craftingLabelY			= 16;
+	public static int									craftingLabelX			= 87;
+	public static int									craftingLabelY			= 16;
 	
-	protected static Map<GuiButton, IButtonHandler>	buttons					= new HashMap<GuiButton, IButtonHandler>();
-	protected static List<InventoryObject>			objects					= new ArrayList<InventoryObject>();
+	protected static Map<GuiButton, IInventoryHandler>	buttons					= new HashMap();
+	protected static List<InventoryObject>				objects					= new ArrayList<InventoryObject>();
 	
 	public GuiSurvivalInventory(EntityPlayer player, ContainerInventory container)
 	{
@@ -61,7 +61,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		this.player.addStat(AchievementList.openInventory, 1);
 	}
 	
-	public static void addButton(IButtonHandler handler, GuiButton button)
+	public static void addButton(IInventoryHandler handler, GuiButton button)
 	{
 		buttons.put(button, handler);
 	}
@@ -226,10 +226,10 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		IButtonHandler handler = buttons.get(button);
+		IInventoryHandler handler = buttons.get(button);
 		if (handler != null)
 		{
-			handler.onButtonPressed(button);
+			handler.buttonPressed(button, this.player, false);
 		}
 	}
 }

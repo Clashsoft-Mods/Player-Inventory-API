@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import clashsoft.cslib.math.Point2i;
+import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.ISlotList;
 import clashsoft.playerinventoryapi.lib.FakeArrayList;
@@ -29,7 +30,7 @@ public class ContainerInventory extends Container implements ISlotList
 	{
 		this.thePlayer = player;
 		
-		if (player.isClientWorld())
+		if (PlayerInventoryAPI.proxy.isClient())
 		{
 			this.inventorySlots = new FakeArrayList(45);
 		}
