@@ -2,6 +2,7 @@ package clashsoft.playerinventoryapi.lib;
 
 import java.util.Arrays;
 
+import clashsoft.cslib.minecraft.item.CSStacks;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.network.EIPacket;
 import clashsoft.playerinventoryapi.network.EISlotPacket;
@@ -267,6 +268,13 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	public ItemStack getStackInSlotOnClosing(int slot)
 	{
 		return this.getStackInSlot(slot);
+	}
+	
+	public boolean addItemStack(ItemStack stack)
+	{
+		CSStacks.mergeItemStack(this.itemStacks, 0, stack);
+		this.sync();
+		return stack.stackSize > 0;
 	}
 	
 	@Override
