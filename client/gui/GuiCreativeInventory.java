@@ -128,11 +128,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	public void initGui()
 	{
-		
 		if (this.mc.playerController.isInCreativeMode())
 		{
 			super.initGui();
-			this.buttonList.add(buttons.keySet());
+			this.buttonList.addAll(buttons.keySet());
 			
 			Keyboard.enableRepeatEvents(true);
 			

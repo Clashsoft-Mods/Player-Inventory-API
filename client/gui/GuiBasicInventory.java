@@ -92,6 +92,7 @@ public abstract class GuiBasicInventory extends GuiContainer
 		
 		if (isEmpty != this.wasEmpty)
 		{
+			this.buttonList.clear();
 			this.initGui();
 			this.wasEmpty = isEmpty;
 		}
