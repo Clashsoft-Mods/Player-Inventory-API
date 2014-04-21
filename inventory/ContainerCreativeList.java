@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 @SideOnly(Side.CLIENT)
 public class ContainerCreativeList extends Container
 {
-	/** the list of items in this container */
 	public List	itemList	= new ArrayList();
 	
 	public ContainerCreativeList(EntityPlayer player)
@@ -51,7 +50,7 @@ public class ContainerCreativeList extends Container
 	 */
 	public void scrollTo(float pos)
 	{
-		int i = this.itemList.size() / 9 - 5 + 1;
+		int i = this.itemList.size() / 9 - 4;
 		int j = (int) (pos * i + 0.5D);
 		
 		if (j < 0)

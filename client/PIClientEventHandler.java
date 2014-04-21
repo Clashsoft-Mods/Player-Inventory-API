@@ -15,11 +15,6 @@ public class PIClientEventHandler
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event)
 	{
-		this.updateInventory();
-	}
-	
-	public void updateInventory()
-	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (PlayerInventoryAPI.customSurvivalInventory && Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
 		{

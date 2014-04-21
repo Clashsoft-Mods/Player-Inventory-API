@@ -151,7 +151,7 @@ public class ExtendedInventory implements IExtendedEntityProperties, IInventory
 	 */
 	public static ExtendedInventory set(EntityPlayer player, ExtendedInventory ei)
 	{
-		ExtendedInventory ei2 = (ExtendedInventory) player.getExtendedProperties(IDENTIFIER);
+		ExtendedInventory ei2 = get_(player);
 		if (ei2 == null)
 		{
 			return set_(player, ei);

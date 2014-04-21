@@ -4,8 +4,13 @@ import clashsoft.cslib.math.Point2i;
 
 public class InventorySlots
 {
-	public static Point2i[]	survivalSlots	= getSurvivalSlots();
-	public static Point2i[]	creativeSlots	= getCreativeSlots();
+	public static Point2i[]	survivalSlots	= new Point2i[128];
+	public static Point2i[]	creativeSlots	= new Point2i[128];
+	
+	static
+	{
+		reset();
+	}
 	
 	private InventorySlots()
 	{
@@ -13,13 +18,12 @@ public class InventorySlots
 	
 	public static void reset()
 	{
-		survivalSlots = getSurvivalSlots();
-		creativeSlots = getCreativeSlots();
+		getSurvivalSlots(survivalSlots);
+		getCreativeSlots(creativeSlots);
 	}
 	
-	public static Point2i[] getSurvivalSlots()
+	public static void getSurvivalSlots(Point2i[] pos)
 	{
-		Point2i[] pos = new Point2i[128];
 		int i;
 		int j;
 		
@@ -55,12 +59,10 @@ public class InventorySlots
 		{
 			pos[36 + i] = new Point2i(8 + i * 18, 142);
 		}
-		return pos;
 	}
 	
-	public static Point2i[] getCreativeSlots()
+	public static void getCreativeSlots(Point2i[] pos)
 	{
-		Point2i[] pos = new Point2i[128];
 		int i;
 		int j;
 		
@@ -96,7 +98,6 @@ public class InventorySlots
 		{
 			pos[36 + i] = new Point2i(9 + i * 18, 112);
 		}
-		return pos;
 	}
 	
 	public static void setSlot(int slotID, int x, int y)
