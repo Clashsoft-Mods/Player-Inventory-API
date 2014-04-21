@@ -202,6 +202,7 @@ public class ContainerInventory extends Container implements ISlotList
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
+			int size = this.inventorySlots.size();
 			
 			if (itemstack.stackSize == 0)
 			{
@@ -225,7 +226,7 @@ public class ContainerInventory extends Container implements ISlotList
 				}
 				else
 				{
-					for (int i = 45; i < this.inventorySlots.size(); i++)
+					for (int i = 45; i < size; i++)
 					{
 						Slot armorSlot = (Slot) this.inventorySlots.get(i);
 						
@@ -269,14 +270,13 @@ public class ContainerInventory extends Container implements ISlotList
 				}
 			}
 			else if (itemstack.getItem() instanceof ItemArmor && armorSlotID != -1) // Armor
-																					// items
 			{
 				if (!this.mergeItemStack(itemstack1, armorSlotID, armorSlotID + 1, false))
 				{
 					return null;
 				}
 			}
-			else if (slotID >= 9 && slotID < 36) // Normal inventory
+			else if ((slotID >= 9 && slotID < 36)) // Normal inventory
 			{
 				if (!this.mergeItemStack(itemstack1, 36, 45, false))
 				{
@@ -285,7 +285,7 @@ public class ContainerInventory extends Container implements ISlotList
 			}
 			else if (slotID >= 36 && slotID < 45) // Hotbar
 			{
-				if (!this.mergeItemStack(itemstack1, 9, 36, false))
+				if (!this.mergeItemStack(itemstack1, 9, 36, false) && !this.mergeItemStack(itemstack1, 45, size, false))
 				{
 					return null;
 				}
