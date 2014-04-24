@@ -133,18 +133,6 @@ public class ContainerInventory extends Container implements ISlotList
 		return slots;
 	}
 	
-	public static void setSlotPos(int slotID, int x, int y)
-	{
-		if (slotID < InventorySlots.survivalSlots.length)
-		{
-			InventorySlots.survivalSlots[slotID] = new Point2i(x, y);
-		}
-		else
-		{
-			throw new IllegalArgumentException("Tried to set the slot position of a slot that does not exist - Add that slot first.");
-		}
-	}
-	
 	public static void addInventoryHandler(IInventoryHandler handler)
 	{
 		handlers.add(handler);

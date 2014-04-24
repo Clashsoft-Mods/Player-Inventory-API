@@ -21,6 +21,7 @@ public class SlotCustomArmor extends Slot
 	public SlotCustomArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType)
 	{
 		super(inventory, slotIndex, x, y);
+		this.player = player;
 		this.armorType = armorType;
 		
 		try

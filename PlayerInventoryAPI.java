@@ -7,6 +7,7 @@ import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
 import clashsoft.playerinventoryapi.common.PIProxy;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
+import clashsoft.playerinventoryapi.inventory.InventorySlots;
 import clashsoft.playerinventoryapi.network.PINetHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -73,6 +74,56 @@ public class PlayerInventoryAPI extends ClashsoftMod
 		itemTooltip = CSConfig.getBool("tooltip", "Item Tooltip", itemTooltip);
 		buffTooltip = CSConfig.getBool("tooltip", "Buff Tooltip", buffTooltip);
 		playerTooltip = CSConfig.getBool("tooltip", "Player Tooltip", playerTooltip);
+	}
+	
+	/**
+	 * Sets the position of a slot in the both the survival and the creative
+	 * player inventory.
+	 * 
+	 * @see PlayerInventoryAPI#setSurvivalSlot(int, int, int)
+	 * @see PlayerInventoryAPI#setCreativeSlot(int, int, int)
+	 * 
+	 * @param slotID
+	 *            the ID of the slot
+	 * @param x
+	 *            the x position
+	 * @param y
+	 *            the y position
+	 */
+	public static void setSlot(int slotID, int x, int y)
+	{
+		InventorySlots.setSurvivalSlot(slotID, x, y);
+		InventorySlots.setCreativeSlot(slotID, x, y);
+	}
+	
+	/**
+	 * Sets the position of a slot in the creative player inventory.
+	 * 
+	 * @param slotID
+	 *            the ID of the slot
+	 * @param x
+	 *            the x position
+	 * @param y
+	 *            the y position
+	 */
+	public static void setCreativeSlot(int slotID, int x, int y)
+	{
+		InventorySlots.setCreativeSlot(slotID, x, y);
+	}
+	
+	/**
+	 * Sets the position of a slot in the survival player inventory.
+	 * 
+	 * @param slotID
+	 *            the ID of the slot
+	 * @param x
+	 *            the x position
+	 * @param y
+	 *            the y position
+	 */
+	public static void setSurvivalSlot(int slotID, int x, int y)
+	{
+		InventorySlots.setSurvivalSlot(slotID, x, y);
 	}
 	
 	/**
