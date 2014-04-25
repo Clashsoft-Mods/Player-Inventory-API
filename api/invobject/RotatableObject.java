@@ -2,7 +2,7 @@ package clashsoft.playerinventoryapi.api.invobject;
 
 import org.lwjgl.opengl.GL11;
 
-public abstract class RotatableObject implements InventoryObject
+public abstract class RotatableObject implements IInventoryObject
 {
 	public float	rotation;
 	

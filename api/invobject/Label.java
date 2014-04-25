@@ -2,7 +2,7 @@ package clashsoft.playerinventoryapi.api.invobject;
 
 import net.minecraft.client.Minecraft;
 
-public class Label implements InventoryObject
+public class Label implements IInventoryObject
 {
 	public String	text;
 	public int		x;

@@ -12,7 +12,7 @@ import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.cslib.minecraft.lang.I18n;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
-import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
+import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.inventory.InventorySlots;
@@ -24,7 +24,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.gui.inventory.CreativeCrafting;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
@@ -70,7 +69,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	public static int								binSlotX			= 173;
 	public static int								binSlotY			= 112;
 	public static Map<GuiButton, IInventoryHandler>	buttons				= new HashMap();
-	public static List<InventoryObject>				objects				= new ArrayList();
+	public static List<IInventoryObject>			objects				= new ArrayList();
 	
 	protected GuiBuilder							guiBuilder;
 	
@@ -109,7 +108,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		buttons.put(button, handler);
 	}
 	
-	public static void addObject(InventoryObject object)
+	public static void addObject(IInventoryObject object)
 	{
 		objects.add(object);
 	}
@@ -128,36 +127,34 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	public void initGui()
 	{
-		if (this.mc.playerController.isInCreativeMode())
+		if (!this.mc.playerController.isInCreativeMode())
 		{
-			super.initGui();
-			this.buttonList.addAll(buttons.keySet());
-			
-			Keyboard.enableRepeatEvents(true);
-			
-			this.searchField = new GuiTextField(this.fontRendererObj, this.guiLeft + 82, this.guiTop + 6, 89, this.fontRendererObj.FONT_HEIGHT);
-			this.searchField.setMaxStringLength(15);
-			this.searchField.setEnableBackgroundDrawing(false);
-			this.searchField.setVisible(false);
-			this.searchField.setTextColor(16777215);
-			
-			int i = selectedTabIndex;
-			selectedTabIndex = -1;
-			this.setCurrentCreativeTab(CreativeTabs.creativeTabArray[i]);
-			
-			this.creativeCrafting = new CreativeCrafting(this.mc);
-			this.mc.thePlayer.inventoryContainer.addCraftingToCrafters(this.creativeCrafting);
-			int tabCount = CreativeTabs.creativeTabArray.length;
-			if (tabCount > 12)
-			{
-				this.buttonList.add(new GuiButton(101, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
-				this.buttonList.add(new GuiButton(102, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
-				this.maxPages = (tabCount - 12) / 10 + 1;
-			}
+			this.mc.displayGuiScreen(new GuiSurvivalInventory(this.player, (ContainerInventory) this.player.inventoryContainer));
 		}
-		else
+		
+		super.initGui();
+		this.buttonList.addAll(buttons.keySet());
+		
+		Keyboard.enableRepeatEvents(true);
+		
+		this.searchField = new GuiTextField(this.fontRendererObj, this.guiLeft + 82, this.guiTop + 6, 89, this.fontRendererObj.FONT_HEIGHT);
+		this.searchField.setMaxStringLength(15);
+		this.searchField.setEnableBackgroundDrawing(false);
+		this.searchField.setVisible(false);
+		this.searchField.setTextColor(16777215);
+		
+		int i = selectedTabIndex;
+		selectedTabIndex = -1;
+		this.setCurrentCreativeTab(CreativeTabs.creativeTabArray[i]);
+		
+		this.creativeCrafting = new CreativeCrafting(this.mc);
+		this.mc.thePlayer.inventoryContainer.addCraftingToCrafters(this.creativeCrafting);
+		int tabCount = CreativeTabs.creativeTabArray.length;
+		if (tabCount > 12)
 		{
-			this.mc.displayGuiScreen(new GuiInventory(this.mc.thePlayer));
+			this.buttonList.add(new GuiButton(101, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
+			this.buttonList.add(new GuiButton(102, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
+			this.maxPages = (tabCount - 12) / 10 + 1;
 		}
 	}
 	
@@ -497,7 +494,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		GL11.glTranslatef(-this.guiLeft, -this.guiTop, 0F);
 		
 		// Objects
-		for (InventoryObject object : objects)
+		for (IInventoryObject object : objects)
 		{
 			if (object != null)
 			{

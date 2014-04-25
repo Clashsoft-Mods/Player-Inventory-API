@@ -13,7 +13,7 @@ import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
-import clashsoft.playerinventoryapi.api.invobject.InventoryObject;
+import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.inventory.InventorySlots;
@@ -40,15 +40,15 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	public static int									playerDisplayX			= 25;
 	public static int									playerDisplayY			= 7;
 	
-	public static int									craftingArrowX			= 125;
-	public static int									craftingArrowY			= 37;
-	public static float									craftingArrowRotation	= 0F;
+	public static int									craftArrowX			= 125;
+	public static int									craftArrowY			= 37;
+	public static float									craftArrowRot	= 0F;
 	
-	public static int									craftingLabelX			= 87;
-	public static int									craftingLabelY			= 16;
+	public static int									craftLabelX			= 87;
+	public static int									craftLabelY			= 16;
 	
 	protected static Map<GuiButton, IInventoryHandler>	buttons					= new HashMap();
-	protected static List<InventoryObject>				objects					= new ArrayList<InventoryObject>();
+	protected static List<IInventoryObject>				objects					= new ArrayList<IInventoryObject>();
 	
 	public GuiSurvivalInventory(EntityPlayer player, ContainerInventory container)
 	{
@@ -66,7 +66,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		buttons.put(button, handler);
 	}
 	
-	public static void addObject(InventoryObject object)
+	public static void addObject(IInventoryObject object)
 	{
 		objects.add(object);
 	}
@@ -100,8 +100,8 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	{
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		
-		int x = craftingLabelX;
-		int y = craftingLabelY;
+		int x = craftLabelX;
+		int y = craftLabelY;
 		if (x >= 0 && y >= 0)
 		{
 			this.fontRendererObj.drawString(StatCollector.translateToLocal("container.crafting"), x, y, 4210752);
@@ -125,7 +125,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		// Background Frame
 		this.drawBackgroundFrame(0, 0, windowWidth, windowHeight);
 		
-		this.drawCraftArrow(craftingArrowX, craftingArrowY, craftingArrowRotation);
+		this.drawCraftArrow(craftArrowX, craftArrowY, craftArrowRot);
 		
 		// Player
 		this.drawPlayerBackground(playerDisplayX, playerDisplayY);
@@ -143,7 +143,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		GL11.glTranslatef(-k, -l, 0);
 		
 		// Objects
-		for (InventoryObject object : objects)
+		for (IInventoryObject object : objects)
 		{
 			if (object != null)
 			{
@@ -157,7 +157,7 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 		this.mc.renderEngine.bindTexture(GuiBuilder.progress);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(posX + 8, posY + 7, 0F);
-		GL11.glRotatef(craftingArrowRotation, 0, 0, 1);
+		GL11.glRotatef(rotation, 0F, 0F, 1F);
 		GL11.glTranslatef(-8F, -7F, 0F);
 		this.drawTexturedModalRect(0, 0, 0, 16, 16, 14);
 		GL11.glPopMatrix();

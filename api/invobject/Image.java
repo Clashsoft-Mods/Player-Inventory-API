@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
-public class Image implements InventoryObject
+public class Image implements IInventoryObject
 {
 	@SideOnly(Side.CLIENT)
 	protected static GuiScreen	gui	= new GuiScreen();

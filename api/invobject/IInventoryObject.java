@@ -1,6 +1,6 @@
 package clashsoft.playerinventoryapi.api.invobject;
 
-public interface InventoryObject
+public interface IInventoryObject
 {
 	public void render(int width, int height);
 }
