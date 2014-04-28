@@ -65,6 +65,9 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	private static int								tabPage				= 0;
 	private int										maxPages			= 0;
 	
+	protected GuiButton buttonPrevPage;
+	protected GuiButton buttonNextPage;
+	
 	// PIAPI
 	
 	public static int								windowWidth			= 195;
@@ -127,6 +130,9 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			this.mc.displayGuiScreen(new GuiSurvivalInventory(this.player, (ContainerInventory) this.player.inventoryContainer));
 		}
+		
+		this.buttonPrevPage.enabled = tabPage > 0;
+		this.buttonNextPage.enabled = tabPage < this.maxPages;
 	}
 	
 	@Override
@@ -157,8 +163,8 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		int tabCount = CreativeTabs.creativeTabArray.length;
 		if (tabCount > 12)
 		{
-			this.buttonList.add(new GuiButton(101, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
-			this.buttonList.add(new GuiButton(102, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
+			this.buttonList.add(this.buttonPrevPage = new GuiButton(0, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
+			this.buttonList.add(this.buttonNextPage = new GuiButton(1, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
 			this.maxPages = (tabCount - 12) / 10 + 1;
 		}
 	}
@@ -397,7 +403,8 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			{
 				s = "Clear Inventory";
 			}
-			else {
+			else
+			{
 				s = I18n.getString("inventory.binSlot");
 			}
 			this.drawCreativeTabHoveringText(s, mouseX, mouseY);
@@ -645,7 +652,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			list.set(0, stack.getRarity().rarityColor + list.get(0));
 			for (int k = 1; k < list.size(); ++k)
 			{
-					list.set(k, EnumChatFormatting.GRAY + list.get(k));
+				list.set(k, EnumChatFormatting.GRAY + list.get(k));
 			}
 			
 			FontRenderer font = stack.getItem().getFontRenderer(stack);
@@ -1024,24 +1031,13 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		if (button.id == 0)
 		{
-			this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.thePlayer.getStatFileWriter()));
+			if (tabPage > 0)
+				tabPage--;
 		}
-		
-		if (button.id == 1)
+		else if (button.id == 1)
 		{
-			this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
-		}
-		
-		if (button.id == 101)
-		{
-			tabPage = Math.max(tabPage - 1, 0);
-		}
-		else
-		{
-			if (button.id == 102)
-			{
-				tabPage = Math.min(tabPage + 1, this.maxPages);
-			}
+			if (tabPage < this.maxPages)
+				tabPage++;
 		}
 	}
 	
