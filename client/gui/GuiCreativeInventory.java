@@ -1,5 +1,7 @@
 package clashsoft.playerinventoryapi.client.gui;
 
+import gnu.trove.map.hash.TCustomHashMap;
+
 import java.util.*;
 
 import org.lwjgl.input.Keyboard;
@@ -17,6 +19,7 @@ import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.inventory.InventorySlots;
 import clashsoft.playerinventoryapi.inventory.SlotCreative;
+import clashsoft.playerinventoryapi.lib.ButtonHashingStrategy;
 import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 
 import net.minecraft.client.gui.GuiButton;
@@ -68,7 +71,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	public static int								playerDisplayY		= 5;
 	public static int								binSlotX			= 173;
 	public static int								binSlotY			= 112;
-	public static Map<GuiButton, IInventoryHandler>	buttons				= new HashMap();
+	public static Map<GuiButton, IInventoryHandler>	buttons				= new TCustomHashMap(ButtonHashingStrategy.instance);
 	public static List<IInventoryObject>			objects				= new ArrayList();
 	
 	protected GuiBuilder							guiBuilder;

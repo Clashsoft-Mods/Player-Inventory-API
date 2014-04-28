@@ -1,5 +1,7 @@
 package clashsoft.playerinventoryapi.client.gui;
 
+import gnu.trove.map.hash.TCustomHashMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.inventory.InventorySlots;
+import clashsoft.playerinventoryapi.lib.ButtonHashingStrategy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -34,21 +37,21 @@ public class GuiSurvivalInventory extends GuiBasicInventory
 	
 	// PLAYER INVENTORY API
 	
-	public static int									windowWidth				= 176;
-	public static int									windowHeight			= 166;
+	public static int									windowWidth		= 176;
+	public static int									windowHeight	= 166;
 	
-	public static int									playerDisplayX			= 25;
-	public static int									playerDisplayY			= 7;
+	public static int									playerDisplayX	= 25;
+	public static int									playerDisplayY	= 7;
 	
-	public static int									craftArrowX			= 125;
-	public static int									craftArrowY			= 37;
+	public static int									craftArrowX		= 125;
+	public static int									craftArrowY		= 37;
 	public static float									craftArrowRot	= 0F;
 	
-	public static int									craftLabelX			= 87;
-	public static int									craftLabelY			= 16;
+	public static int									craftLabelX		= 87;
+	public static int									craftLabelY		= 16;
 	
-	protected static Map<GuiButton, IInventoryHandler>	buttons					= new HashMap();
-	protected static List<IInventoryObject>				objects					= new ArrayList<IInventoryObject>();
+	protected static Map<GuiButton, IInventoryHandler>	buttons			= new TCustomHashMap(ButtonHashingStrategy.instance);
+	protected static List<IInventoryObject>				objects			= new ArrayList<IInventoryObject>();
 	
 	public GuiSurvivalInventory(EntityPlayer player, ContainerInventory container)
 	{
