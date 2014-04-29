@@ -1,7 +1,9 @@
 1.7.2-1.0.0
 
++ Added the ability to add slots
 + Added the ability to move slots
 + Added the ability to add buttons
 + Added the ability to move special parts of the inventory screens
 + Added IInventoryObjects
 + Added IInventoryHandlers
+* Made the inventory rendering dynamic
