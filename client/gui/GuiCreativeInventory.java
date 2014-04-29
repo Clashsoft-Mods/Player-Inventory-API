@@ -1,8 +1,11 @@
 package clashsoft.playerinventoryapi.client.gui;
 
-import gnu.trove.map.hash.TCustomHashMap;
+import static clashsoft.playerinventoryapi.CreativeInventory.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -12,23 +15,19 @@ import org.lwjgl.opengl.GL12;
 import clashsoft.cslib.math.Point2i;
 import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.cslib.minecraft.lang.I18n;
+import clashsoft.playerinventoryapi.CreativeInventory;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.inventory.ContainerCreativeList;
 import clashsoft.playerinventoryapi.inventory.ContainerInventory;
-import clashsoft.playerinventoryapi.inventory.InventorySlots;
 import clashsoft.playerinventoryapi.inventory.SlotCreative;
-import clashsoft.playerinventoryapi.lib.ButtonHashingStrategy;
 import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.achievement.GuiAchievements;
-import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.gui.inventory.CreativeCrafting;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
@@ -65,23 +64,10 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	private static int								tabPage				= 0;
 	private int										maxPages			= 0;
 	
-	protected GuiButton buttonPrevPage;
-	protected GuiButton buttonNextPage;
-	
-	// PIAPI
-	
-	public static int								windowWidth			= 195;
-	public static int								windowHeight		= 136;
-	public static int								playerDisplayX		= 8;
-	public static int								playerDisplayY		= 5;
-	public static int								binSlotX			= 173;
-	public static int								binSlotY			= 112;
-	public static Map<GuiButton, IInventoryHandler>	buttons				= new TCustomHashMap(ButtonHashingStrategy.instance);
-	public static List<IInventoryObject>			objects				= new ArrayList();
+	protected GuiButton								buttonPrevPage;
+	protected GuiButton								buttonNextPage;
 	
 	protected GuiBuilder							guiBuilder;
-	
-	// /PIAPI
 	
 	public GuiCreativeInventory(EntityPlayer player, ContainerCreativeList creativelist, ContainerInventory container)
 	{
@@ -97,28 +83,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		this.ySize = windowHeight;
 		
 		this.guiBuilder = new GuiBuilder(this);
-	}
-	
-	public static void resetGui()
-	{
-		windowWidth = 195;
-		windowHeight = 136;
-		playerDisplayX = 8;
-		playerDisplayY = 5;
-		binSlotX = 173;
-		binSlotY = 112;
-		buttons = new HashMap();
-		objects = new ArrayList();
-	}
-	
-	public static void addButton(IInventoryHandler handler, GuiButton button)
-	{
-		buttons.put(button, handler);
-	}
-	
-	public static void addObject(IInventoryObject object)
-	{
-		objects.add(object);
 	}
 	
 	@Override
@@ -144,7 +108,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		}
 		
 		super.initGui();
-		this.buttonList.addAll(buttons.keySet());
+		this.buttonList.addAll(buttons);
 		
 		Keyboard.enableRepeatEvents(true);
 		
@@ -516,7 +480,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		GuiSurvivalInventory.drawPlayerOnGui(this.mc, playerDisplayX + 16, playerDisplayY + 41, 20, this.guiLeft + playerDisplayX + 16 - mouseX, this.guiTop + playerDisplayY + 10 - mouseY);
 		
 		// Slots
-		for (Point2i pos : InventorySlots.creativeSlots)
+		for (Point2i pos : CreativeInventory.getSlots())
 		{
 			if (pos != null)
 			{
@@ -524,8 +488,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 		}
 		this.guiBuilder.drawSlot(binSlotX, binSlotY, 1);
-		
-		GL11.glTranslatef(-this.guiLeft, -this.guiTop, 0F);
 		
 		// Objects
 		for (IInventoryObject object : objects)
@@ -535,6 +497,8 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				object.render(this.width, this.height);
 			}
 		}
+		
+		GL11.glTranslatef(-this.guiLeft, -this.guiTop, 0F);
 	}
 	
 	protected void drawCreativeTab(CreativeTabs tab)
@@ -1023,8 +987,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	public void actionPerformed(GuiButton button)
 	{
-		IInventoryHandler handler = buttons.get(button);
-		if (handler != null)
+		for (IInventoryHandler handler : CreativeInventory.handlers)
 		{
 			handler.buttonPressed(button, this.player, true);
 		}

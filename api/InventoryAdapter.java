@@ -1,5 +1,7 @@
 package clashsoft.playerinventoryapi.api;
 
+import clashsoft.cslib.math.Point2i;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -9,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class InventoryAdapter implements IInventoryHandler
 {
 	@Override
-	public void pre(EntityPlayer player, boolean creative)
+	public void pre(Point2i[] slots, EntityPlayer player, boolean creative)
 	{
 	}
 	

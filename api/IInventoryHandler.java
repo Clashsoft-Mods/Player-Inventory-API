@@ -1,5 +1,7 @@
 package clashsoft.playerinventoryapi.api;
 
+import clashsoft.cslib.math.Point2i;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -14,12 +16,14 @@ public interface IInventoryHandler
 	 * This method is called before vanilla slots are added. Use it to adjust
 	 * modify slot positions and other properties like window size.
 	 * 
+	 * @param slots
+	 *            the slots
 	 * @param player
 	 *            the player
 	 * @param creative
 	 *            true, if the player is in creative mode
 	 */
-	public void pre(EntityPlayer player, boolean creative);
+	public void pre(Point2i[] slots, EntityPlayer player, boolean creative);
 	
 	/**
 	 * Override this method to add new inventory slots. This method is called

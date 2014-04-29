@@ -12,7 +12,7 @@ public abstract class RotatableObject implements IInventoryObject
 		GL11.glPushMatrix();
 		
 		GL11.glTranslatef(this.getX(), this.getY(), 0F);
-		GL11.glRotatef(this.rotation, 0F, 0F, 1F);
+		GL11.glRotatef(this.rotation, 1F, 1F, 1F);
 		GL11.glTranslatef(this.getWidth() / -2, this.getHeight() / -2, 0F);
 		
 		this.renderRotated(width, height);

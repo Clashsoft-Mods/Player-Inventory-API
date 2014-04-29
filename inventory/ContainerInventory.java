@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import clashsoft.cslib.math.Point2i;
+import clashsoft.playerinventoryapi.CreativeInventory;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
+import clashsoft.playerinventoryapi.SurvivalInventory;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.ISlotList;
 import clashsoft.playerinventoryapi.lib.FakeArrayList;
@@ -18,13 +20,11 @@ import net.minecraft.item.crafting.CraftingManager;
 
 public class ContainerInventory extends Container implements ISlotList
 {
-	public InventoryCrafting					craftMatrix	= new InventoryCrafting(this, 2, 2);
-	public IInventory							craftResult	= new InventoryCraftResult();
+	public InventoryCrafting	craftMatrix	= new InventoryCrafting(this, 2, 2);
+	public IInventory			craftResult	= new InventoryCraftResult();
 	
-	public final EntityPlayer					thePlayer;
-	public boolean								isCreative;
-	
-	protected static List<IInventoryHandler>	handlers	= new ArrayList<IInventoryHandler>();
+	public final EntityPlayer	thePlayer;
+	public boolean				isCreative;
 	
 	public ContainerInventory(InventoryPlayer inventory, EntityPlayer player)
 	{
@@ -52,33 +52,40 @@ public class ContainerInventory extends Container implements ISlotList
 		super.addSlotToContainer(slot);
 		if (this.isCreative)
 		{
-			InventorySlots.setCreativeSlot(slot.slotNumber, slot.xDisplayPosition, slot.yDisplayPosition);
+			CreativeInventory.setSlot(slot.slotNumber, slot.xDisplayPosition, slot.yDisplayPosition);
 		}
 		else
 		{
-			InventorySlots.setSurvivalSlot(slot.slotNumber, slot.xDisplayPosition, slot.yDisplayPosition);
+			SurvivalInventory.setSlot(slot.slotNumber, slot.xDisplayPosition, slot.yDisplayPosition);
 		}
 		return slot;
 	}
 	
 	public void reloadSlots()
 	{
+		boolean creative = this.isCreative;
+		List<IInventoryHandler> handlers;
+		Point2i[] slotPositions;
+		
+		if (creative)
+		{
+			handlers = CreativeInventory.handlers;
+			slotPositions = CreativeInventory.getSlots();
+		}
+		else
+		{
+			handlers = SurvivalInventory.handlers;
+			slotPositions = SurvivalInventory.getSlots();
+		}
+		
 		for (IInventoryHandler handler : handlers)
 		{
-			handler.pre(this.thePlayer, this.isCreative);
+			handler.pre(slotPositions, this.thePlayer, creative);
 		}
 		
 		this.inventorySlots.clear();
 		
-		List<Slot> slots;
-		if (this.isCreative)
-		{
-			slots = this.createSlots(InventorySlots.creativeSlots);
-		}
-		else
-		{
-			slots = this.createSlots(InventorySlots.survivalSlots);
-		}
+		List<Slot> slots = this.createSlots(slotPositions);
 		
 		for (Slot slot : slots)
 		{
@@ -131,11 +138,6 @@ public class ContainerInventory extends Container implements ISlotList
 		}
 		
 		return slots;
-	}
-	
-	public static void addInventoryHandler(IInventoryHandler handler)
-	{
-		handlers.add(handler);
 	}
 	
 	@Override
