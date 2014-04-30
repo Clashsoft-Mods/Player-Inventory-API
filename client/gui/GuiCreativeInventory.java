@@ -129,7 +129,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			this.buttonList.add(this.buttonPrevPage = new GuiButton(0, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
 			this.buttonList.add(this.buttonNextPage = new GuiButton(1, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
-			this.maxPages = (tabCount - 12) / 10 + 1;
+			this.maxPages = (tabCount - 12) / 10;
 		}
 	}
 	
@@ -189,8 +189,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			this.ySize = 136;
 			if (prevTabIndex == CreativeTabs.tabInventory.getTabIndex())
 			{
-				ContainerInventory container = (ContainerInventory) this.mc.thePlayer.inventoryContainer;
-				
 				containercreative.inventorySlots = this.backupSlots;
 				this.backupSlots = null;
 			}
@@ -222,8 +220,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	{
 		ContainerCreativeList containercreative = (ContainerCreativeList) this.inventorySlots;
 		containercreative.itemList.clear();
-		
-		CreativeTabs tab = CreativeTabs.creativeTabArray[selectedTabIndex];
 		
 		Iterator iterator = Item.itemRegistry.iterator();
 		
@@ -340,8 +336,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		for (int i = start; i < end; ++i)
 		{
 			CreativeTabs tab = tabs[i];
-			String page;
-			int width;
 			if (tab != null)
 			{
 				if (this.renderTabHoveringText(tab, mouseX, mouseY))

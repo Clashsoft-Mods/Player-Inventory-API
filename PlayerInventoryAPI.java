@@ -7,7 +7,6 @@ import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
 import clashsoft.playerinventoryapi.common.PIProxy;
-import clashsoft.playerinventoryapi.inventory.ContainerInventory;
 import clashsoft.playerinventoryapi.network.PINetHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
