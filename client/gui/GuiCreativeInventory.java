@@ -124,12 +124,13 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		this.creativeCrafting = new CreativeCrafting(this.mc);
 		this.mc.thePlayer.inventoryContainer.addCraftingToCrafters(this.creativeCrafting);
+		
 		int tabCount = CreativeTabs.creativeTabArray.length;
 		if (tabCount > 12)
 		{
 			this.buttonList.add(this.buttonPrevPage = new GuiButton(0, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
 			this.buttonList.add(this.buttonNextPage = new GuiButton(1, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
-			this.maxPages = (tabCount - 12) / 10;
+			this.maxPages = (tabCount - 12) / 10 + 1;
 		}
 	}
 	
