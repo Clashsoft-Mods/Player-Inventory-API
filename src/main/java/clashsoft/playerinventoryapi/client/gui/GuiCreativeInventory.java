@@ -47,27 +47,27 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiCreativeInventory extends GuiBasicInventory
 {
-	private static final ResourceLocation			background			= new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
-	private static InventoryBasic					inventory			= new InventoryBasic("tmp", true, 45);
+	private static final ResourceLocation	background			= new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+	private static InventoryBasic			inventory			= new InventoryBasic("tmp", true, 45);
 	
-	private EntityPlayer							player;
+	private EntityPlayer					player;
 	
-	private static int								selectedTabIndex	= CreativeTabs.tabBlock.getTabIndex();
-	private float									currentScroll;
-	private boolean									isScrolling;
-	private boolean									wasClicking;
-	private GuiTextField							searchField;
-	private List									backupSlots;
-	private Slot									binSlot;
-	private boolean									mouseClicked;
-	private CreativeCrafting						creativeCrafting;
-	private static int								tabPage				= 0;
-	private int										maxPages			= 0;
+	private static int						selectedTabIndex	= CreativeTabs.tabBlock.getTabIndex();
+	private float							currentScroll;
+	private boolean							isScrolling;
+	private boolean							wasClicking;
+	private GuiTextField					searchField;
+	private List							backupSlots;
+	private Slot							binSlot;
+	private boolean							mouseClicked;
+	private CreativeCrafting				creativeCrafting;
+	private static int						tabPage				= 0;
+	private int								maxPages			= 0;
 	
-	protected GuiButton								buttonPrevPage;
-	protected GuiButton								buttonNextPage;
+	protected GuiButton						buttonPrevPage;
+	protected GuiButton						buttonNextPage;
 	
-	protected GuiBuilder							guiBuilder;
+	protected GuiBuilder					guiBuilder;
 	
 	public GuiCreativeInventory(EntityPlayer player, ContainerCreativeList creativelist, ContainerInventory container)
 	{
@@ -95,8 +95,11 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			this.mc.displayGuiScreen(new GuiSurvivalInventory(this.player, (ContainerInventory) this.player.inventoryContainer));
 		}
 		
-		this.buttonPrevPage.enabled = tabPage > 0;
-		this.buttonNextPage.enabled = tabPage < this.maxPages;
+		if (CreativeTabs.creativeTabArray.length > 12)
+		{
+			this.buttonPrevPage.enabled = tabPage > 0;
+			this.buttonNextPage.enabled = tabPage < this.maxPages;
+		}
 	}
 	
 	@Override
@@ -130,7 +133,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			this.buttonList.add(this.buttonPrevPage = new GuiButton(0, this.guiLeft, this.guiTop - 50, 20, 20, "<"));
 			this.buttonList.add(this.buttonNextPage = new GuiButton(1, this.guiLeft + this.xSize - 20, this.guiTop - 50, 20, 20, ">"));
-			this.maxPages = (tabCount - 12) / 10 + 1;
+			this.maxPages = (tabCount - 2) / 10;
 		}
 	}
 	
