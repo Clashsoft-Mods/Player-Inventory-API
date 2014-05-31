@@ -1,8 +1,8 @@
 package clashsoft.playerinventoryapi;
 
+import clashsoft.cslib.config.CSConfig;
 import clashsoft.cslib.minecraft.init.ClashsoftMod;
 import clashsoft.cslib.minecraft.update.CSUpdate;
-import clashsoft.cslib.minecraft.util.CSConfig;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
