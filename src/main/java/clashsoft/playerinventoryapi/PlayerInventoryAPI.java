@@ -11,7 +11,6 @@ import clashsoft.playerinventoryapi.network.PINetHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -27,8 +26,7 @@ public class PlayerInventoryAPI extends ClashsoftMod
 	@Instance(MODID)
 	public static PlayerInventoryAPI	instance;
 	
-	@SidedProxy(clientSide = "clashsoft.playerinventoryapi.client.PIClientProxy", serverSide = "clashsoft.playerinventoryapi.common.PIProxy")
-	public static PIProxy				proxy;
+	public static PIProxy				proxy					= createProxy("clashsoft.playerinventoryapi.client.PIClientProxy", "clashsoft.playerinventoryapi.common.PIProxy");
 	
 	public static boolean				customSurvivalInventory	= true;
 	public static boolean				customCreativeInventory	= true;
