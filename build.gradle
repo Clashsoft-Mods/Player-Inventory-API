@@ -21,7 +21,7 @@ buildscript
 }
 
 apply plugin: 'forge'
-version = "1.7.2"
+version = "1.7.2-1.0.1"
 group = "clashsoft.playerinventoryapi"
 archivesBaseName = "Player Inventory API"
 
@@ -30,7 +30,7 @@ targetCompatibility = 1.7
 
 minecraft
 {
-    version = "1.7.2-10.12.1.1103"
+    version = "1.7.2-10.12.2.1126"
 
     if(file('../run').exists())
     {
