@@ -2,7 +2,7 @@ package clashsoft.playerinventoryapi.lib;
 
 import java.util.Arrays;
 
-import clashsoft.cslib.minecraft.item.CSStacks;
+import clashsoft.cslib.minecraft.stack.CSStacks;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.network.EIPacket;
 import clashsoft.playerinventoryapi.network.EISlotPacket;
