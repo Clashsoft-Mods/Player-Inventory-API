@@ -3,6 +3,8 @@ package clashsoft.playerinventoryapi;
 import clashsoft.cslib.config.CSConfig;
 import clashsoft.cslib.minecraft.init.ClashsoftMod;
 import clashsoft.cslib.minecraft.update.CSUpdate;
+import clashsoft.cslib.minecraft.update.reader.SimpleUpdateReader;
+import clashsoft.cslib.minecraft.update.updater.ModUpdater;
 import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
@@ -71,6 +73,13 @@ public class PlayerInventoryAPI extends ClashsoftMod
 		itemTooltip = CSConfig.getBool("tooltip", "Item Tooltip", itemTooltip);
 		buffTooltip = CSConfig.getBool("tooltip", "Buff Tooltip", buffTooltip);
 		playerTooltip = CSConfig.getBool("tooltip", "Player Tooltip", playerTooltip);
+	}
+	
+	@Override
+	public void updateCheck()
+	{
+		String url = "https://raw.githubusercontent.com/Clashsoft/Player-Inventory-API/master/version.txt";
+		CSUpdate.updateCheck(new ModUpdater(NAME, ACRONYM, VERSION, url, SimpleUpdateReader.instance));
 	}
 	
 	// ---------- API ---------- \\
