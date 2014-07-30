@@ -29,7 +29,7 @@ public class EIPacket extends CSPacket
 		for (int i = 0; i < len; i++)
 		{
 			ItemStack stack = this.stacks[i];
-			buf.writeItemStackToBuffer(stack);
+			writeItemStack(buf, stack);
 		}
 	}
 	
@@ -41,7 +41,7 @@ public class EIPacket extends CSPacket
 		
 		for (int i = 0; i < len; i++)
 		{
-			this.stacks[i] = buf.readItemStackFromBuffer();
+			this.stacks[i] = readItemStack(buf);
 		}
 	}
 	

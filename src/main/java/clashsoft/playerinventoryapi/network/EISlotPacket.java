@@ -27,14 +27,14 @@ public class EISlotPacket extends CSPacket
 	public void write(PacketBuffer buf)
 	{
 		buf.writeInt(this.slot);
-		buf.writeItemStackToBuffer(this.stack);
+		writeItemStack(buf, this.stack);
 	}
 	
 	@Override
 	public void read(PacketBuffer buf)
 	{
 		this.slot = buf.readInt();
-		this.stack = buf.readItemStackFromBuffer();
+		this.stack = readItemStack(buf);
 	}
 	
 	@Override
