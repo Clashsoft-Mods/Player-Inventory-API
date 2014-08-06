@@ -23,7 +23,7 @@ public class PlayerInventoryAPI extends ClashsoftMod
 	public static final String			MODID					= "piapi";
 	public static final String			NAME					= "Player Inventory API";
 	public static final String			ACRONYM					= "piapi";
-	public static final String			VERSION					= CSUpdate.CURRENT_VERSION + "-1.0.1";
+	public static final String			VERSION					= "1.7.10-1.0.2";
 	
 	@Instance(MODID)
 	public static PlayerInventoryAPI	instance;

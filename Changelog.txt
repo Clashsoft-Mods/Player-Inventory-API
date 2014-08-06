@@ -1,15 +1,21 @@
+1.7.10-1.0.2
+
+> Update to Minecraft 1.7.10.
+> Update to Clashsoft Lib 1.7.10-2.4.2.
+* Fixed UpdateChecker not working
+
 1.7.2-1.0.1
 
-! Update to Clashsoft Lib 1.7.2-2.1.2
-* Fixed second tab page not showing up
-* Bugfixes
+> Update to Clashsoft Lib 1.7.2-2.1.2.
+* Fixed second tab page not showing up.
+* Bugfixes.
 
 1.7.2-1.0.0
 
-+ Added the ability to add slots
-+ Added the ability to move slots
-+ Added the ability to add buttons
-+ Added the ability to move special parts of the inventory screens
-+ Added IInventoryObjects
-+ Added IInventoryHandlers
-* Made the inventory rendering dynamic
++ Added the ability to add slots.
++ Added the ability to move slots.
++ Added the ability to add buttons.
++ Added the ability to move special parts of the inventory screens.
++ Added IInventoryObjects.
++ Added IInventoryHandlers.
+* Made the inventory rendering dynamic.

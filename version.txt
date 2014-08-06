@@ -1,6 +1,6 @@
-version=1.7.2-1.0.1
-url=https://github.com/Clashsoft/Player-Inventory-API/releases/download/1.7.2-1.0.1/Player.Inventory.API.1.7.2-1.0.1.jar
+version=1.7.10-1.0.2
+url=https://github.com/Clashsoft/Player-Inventory-API/releases/download/1.7.10-1.0.2/PlayerInventoryAPI-1.7.10-1.0.2.jar
 
-! Update to Clashsoft Lib 1.7.2-2.1.2
-* Fixed second tab page not showing up
-* Bugfixes
+! Update to Minecraft 1.7.10.
+! Update to Clashsoft Lib 1.7.10-2.4.2.
+* Fixed UpdateChecker not working
