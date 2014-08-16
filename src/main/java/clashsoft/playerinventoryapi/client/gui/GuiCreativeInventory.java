@@ -508,13 +508,11 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		int k = 0;
 		int x = this.guiLeft + 28 * i;
 		int y = this.guiTop;
-		byte b0 = 32;
-		
 		this.mc.getTextureManager().bindTexture(background);
 		
 		if (flag)
 		{
-			k += 32;
+			k = 32;
 		}
 		
 		if (i == 5)
@@ -538,7 +536,8 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.drawTexturedModalRect(x, y, j, k, 28, b0);
+		GL11.glEnable(GL11.GL_BLEND);
+		this.drawTexturedModalRect(x, y, j, k, 28, 32);
 		
 		x += 6;
 		y += 8 + (flag1 ? 1 : -1);
