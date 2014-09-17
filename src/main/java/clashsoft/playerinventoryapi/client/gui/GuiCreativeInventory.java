@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import clashsoft.cslib.math.Point2i;
-import clashsoft.cslib.minecraft.client.gui.GuiBuilder;
 import clashsoft.cslib.minecraft.lang.I18n;
 import clashsoft.playerinventoryapi.CreativeInventory;
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
@@ -29,7 +28,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.CreativeCrafting;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -47,12 +45,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiCreativeInventory extends GuiBasicInventory
 {
-	private static final ResourceLocation	background			= new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
-	private static InventoryBasic			inventory			= new InventoryBasic("tmp", true, 45);
+	private static final ResourceLocation	background	= new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+	private static InventoryBasic			inventory	= new InventoryBasic("tmp", true, 45);
 	
 	private EntityPlayer					player;
 	
-	private static int						selectedTabIndex	= CreativeTabs.tabBlock.getTabIndex();
+	private static CreativeTabs				selectedTab;
+	
 	private float							currentScroll;
 	private boolean							isScrolling;
 	private boolean							wasClicking;
@@ -61,13 +60,12 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	private Slot							binSlot;
 	private boolean							mouseClicked;
 	private CreativeCrafting				creativeCrafting;
-	private static int						tabPage				= 0;
-	private int								maxPages			= 0;
+	
+	private static int						tabPage		= 0;
+	private int								maxPages	= 0;
 	
 	protected GuiButton						buttonPrevPage;
 	protected GuiButton						buttonNextPage;
-	
-	protected GuiBuilder					guiBuilder;
 	
 	public GuiCreativeInventory(EntityPlayer player, ContainerCreativeList creativelist, ContainerInventory container)
 	{
@@ -81,8 +79,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		this.xSize = windowWidth;
 		this.ySize = windowHeight;
-		
-		this.guiBuilder = new GuiBuilder(this);
 	}
 	
 	@Override
@@ -121,9 +117,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		this.searchField.setVisible(false);
 		this.searchField.setTextColor(16777215);
 		
-		int i = selectedTabIndex;
-		selectedTabIndex = -1;
-		this.setCurrentCreativeTab(CreativeTabs.creativeTabArray[i]);
+		this.setCurrentCreativeTab(CreativeTabs.tabBlock);
 		
 		this.creativeCrafting = new CreativeCrafting(this.mc);
 		this.mc.thePlayer.inventoryContainer.addCraftingToCrafters(this.creativeCrafting);
@@ -157,8 +151,11 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			return;
 		}
 		
-		int prevTabIndex = selectedTabIndex;
-		selectedTabIndex = tab.getTabIndex();
+		CreativeTabs prevTab = selectedTab;
+		selectedTab = tab;
+		int index = tab.getTabIndex();
+		tabPage = (index - 2) / 10;
+		
 		ContainerCreativeList containercreative = (ContainerCreativeList) this.inventorySlots;
 		this.field_147008_s.clear();
 		containercreative.itemList.clear();
@@ -191,7 +188,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			this.xSize = 195;
 			this.ySize = 136;
-			if (prevTabIndex == CreativeTabs.tabInventory.getTabIndex())
+			if (prevTab == CreativeTabs.tabInventory)
 			{
 				containercreative.inventorySlots = this.backupSlots;
 				this.backupSlots = null;
@@ -322,7 +319,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		
 		if (this.maxPages != 0)
 		{
-			String page = String.format("%d / %d", new Object[] { Integer.valueOf(tabPage + 1), Integer.valueOf(this.maxPages + 1) });
+			String page = String.format("%d / %d", new Object[] { tabPage + 1, this.maxPages + 1 });
 			int width = this.fontRendererObj.getStringWidth(page);
 			GL11.glDisable(2896);
 			this.fontRendererObj.drawString(page, this.guiLeft + (this.xSize - width) / 2, this.guiTop - 44, -1);
@@ -358,7 +355,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 		}
 		
-		if (this.binSlot != null && selectedTabIndex == CreativeTabs.tabInventory.getTabIndex() && this.func_146978_c(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, mouseX, mouseY))
+		if (this.binSlot != null && selectedTab == CreativeTabs.tabInventory && this.func_146978_c(this.binSlot.xDisplayPosition, this.binSlot.yDisplayPosition, 16, 16, mouseX, mouseY))
 		{
 			String s;
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
@@ -381,7 +378,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	{
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		
-		CreativeTabs tab = CreativeTabs.creativeTabArray[selectedTabIndex];
+		CreativeTabs tab = selectedTab;
 		
 		if (tab != null && tab.drawInForegroundOfTab())
 		{
@@ -401,7 +398,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderHelper.enableGUIStandardItemLighting();
 		CreativeTabs[] tabs = CreativeTabs.creativeTabArray;
-		CreativeTabs tab = tabs[selectedTabIndex];
+		CreativeTabs tab = selectedTab;
 		
 		int start = tabPage * 10;
 		int end = Math.min(tabs.length, start + 12);
@@ -414,7 +411,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			CreativeTabs tab1 = tabs[i];
 			this.mc.getTextureManager().bindTexture(background);
 			
-			if (tab1 != null && tab1.getTabIndex() != selectedTabIndex)
+			if (tab1 != null && tab1 != tab)
 			{
 				drawCreativeTab(tab1);
 			}
@@ -453,7 +450,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			}
 		}
 		
-		if ((tab == CreativeTabs.tabInventory))
+		if (tab == CreativeTabs.tabInventory)
 		{
 			this.renderInventoryTab(mouseX, mouseY, partialTickTime);
 			this.drawCreativeTab(tab);
@@ -501,20 +498,12 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	
 	protected void drawCreativeTab(CreativeTabs tab)
 	{
-		boolean flag = tab.getTabIndex() == selectedTabIndex;
-		boolean flag1 = tab.isTabInFirstRow();
 		int i = tab.getTabColumn();
 		int j = i * 28;
 		int k = 0;
 		int x = this.guiLeft + 28 * i;
 		int y = this.guiTop;
 		this.mc.getTextureManager().bindTexture(background);
-		
-		if (flag)
-		{
-			k = 32;
-		}
-		
 		if (i == 5)
 		{
 			x = this.guiLeft + this.xSize - 28;
@@ -523,8 +512,16 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		{
 			x += i;
 		}
+				
+		boolean selected = tab == selectedTab;
+		boolean firstRow = tab.isTabInFirstRow();
 		
-		if (flag1)
+		if (selected)
+		{
+			k = 32;
+		}
+		
+		if (firstRow)
 		{
 			y -= 28;
 		}
@@ -540,7 +537,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		this.drawTexturedModalRect(x, y, j, k, 28, 32);
 		
 		x += 6;
-		y += 8 + (flag1 ? 1 : -1);
+		y += 8 + (firstRow ? 1 : -1);
 		ItemStack itemstack = tab.getIconItemStack();
 		
 		if (itemstack != null && itemstack.getItem() != null)
@@ -559,7 +556,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	protected void renderToolTip(ItemStack stack, int x, int y)
 	{
-		if (selectedTabIndex == CreativeTabs.tabAllSearch.getTabIndex())
+		if (selectedTab == CreativeTabs.tabAllSearch)
 		{
 			List list = stack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
 			CreativeTabs tab = stack.getItem().getCreativeTab();
@@ -570,7 +567,8 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				
 				if (map.size() == 1)
 				{
-					Enchantment enchantment = Enchantment.enchantmentsList[((Integer) map.keySet().iterator().next()).intValue()];
+					int id = ((Integer) map.keySet().iterator().next()).intValue();
+					Enchantment enchantment = Enchantment.enchantmentsList[id];
 					CreativeTabs[] tabs = CreativeTabs.creativeTabArray;
 					int len = tabs.length;
 					
@@ -686,7 +684,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	
 	private boolean needsScrollBars()
 	{
-		CreativeTabs tab = CreativeTabs.creativeTabArray[selectedTabIndex];
+		CreativeTabs tab = selectedTab;
 		if (tab == null || tab == CreativeTabs.tabInventory)
 		{
 			return false;
@@ -732,7 +730,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 		boolean flag = var2 == 1;
 		var2 = slotID == -999 && var2 == 0 ? 4 : var2;
 		
-		if (slot == null && selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && var2 != 5)
+		if (slot == null && selectedTab != CreativeTabs.tabInventory && var2 != 5)
 		{
 			InventoryPlayer inventoryplayer = this.mc.thePlayer.inventory;
 			
@@ -773,7 +771,7 @@ public class GuiCreativeInventory extends GuiBasicInventory
 				ExtendedInventory.get(this.player).clear();
 			}
 			
-			if (selectedTabIndex == CreativeTabs.tabInventory.getTabIndex())
+			if (selectedTab == CreativeTabs.tabInventory)
 			{
 				if (slot == this.binSlot)
 				{
@@ -947,9 +945,15 @@ public class GuiCreativeInventory extends GuiBasicInventory
 	@Override
 	protected void keyTyped(char c, int key)
 	{
-		if (!CreativeTabs.creativeTabArray[selectedTabIndex].hasSearchBar())
+		if (key == Keyboard.KEY_TAB)
 		{
-			if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindChat))
+			int i = selectedTab.getTabIndex() + 1;
+			CreativeTabs tab = CreativeTabs.creativeTabArray[i % CreativeTabs.creativeTabArray.length];
+			this.setCurrentCreativeTab(tab);
+		}
+		else if (!selectedTab.hasSearchBar())
+		{
+			if (key == this.mc.gameSettings.keyBindChat.getKeyCode())
 			{
 				this.setCurrentCreativeTab(CreativeTabs.tabAllSearch);
 			}
@@ -999,11 +1003,6 @@ public class GuiCreativeInventory extends GuiBasicInventory
 			if (tabPage < this.maxPages)
 				tabPage++;
 		}
-	}
-	
-	public int func_147056_g()
-	{
-		return selectedTabIndex;
 	}
 	
 	public static InventoryBasic getInventory()
