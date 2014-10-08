@@ -1,5 +1,7 @@
 package clashsoft.playerinventoryapi.network;
 
+import java.io.IOException;
+
 import clashsoft.cslib.minecraft.network.CSPacket;
 import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 
@@ -22,7 +24,7 @@ public class EIPacket extends CSPacket
 	}
 	
 	@Override
-	public void write(PacketBuffer buf)
+	public void write(PacketBuffer buf) throws IOException
 	{
 		int len = this.stacks.length;
 		buf.writeInt(len);
@@ -34,7 +36,7 @@ public class EIPacket extends CSPacket
 	}
 	
 	@Override
-	public void read(PacketBuffer buf)
+	public void read(PacketBuffer buf) throws IOException
 	{
 		int len = buf.readInt();
 		this.stacks = new ItemStack[len];

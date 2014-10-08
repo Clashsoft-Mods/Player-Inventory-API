@@ -1,6 +1,8 @@
 package clashsoft.playerinventoryapi;
 
 import clashsoft.cslib.config.CSConfig;
+import clashsoft.cslib.minecraft.entity.CSEntities;
+import clashsoft.cslib.minecraft.entity.CSEntities.EntityProperties;
 import clashsoft.cslib.minecraft.init.ClashsoftMod;
 import clashsoft.cslib.minecraft.update.CSUpdate;
 import clashsoft.cslib.minecraft.update.reader.SimpleUpdateReader;
@@ -9,6 +11,7 @@ import clashsoft.playerinventoryapi.api.IInventoryHandler;
 import clashsoft.playerinventoryapi.api.invobject.IInventoryObject;
 import clashsoft.playerinventoryapi.common.PIEventHandler;
 import clashsoft.playerinventoryapi.common.PIProxy;
+import clashsoft.playerinventoryapi.lib.ExtendedInventory;
 import clashsoft.playerinventoryapi.network.PINetHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -16,6 +19,10 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.IExtendedEntityProperties;
 
 @Mod(modid = PlayerInventoryAPI.MODID, name = PlayerInventoryAPI.NAME, version = PlayerInventoryAPI.VERSION)
 public class PlayerInventoryAPI extends ClashsoftMod
@@ -51,6 +58,21 @@ public class PlayerInventoryAPI extends ClashsoftMod
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
+		
+		CSEntities.registerProperties(new EntityProperties(ExtendedInventory.IDENTIFIER, ExtendedInventory.class)
+		{
+			@Override
+			public boolean canApply(Entity entity)
+			{
+				return entity instanceof EntityPlayer;
+			}
+			
+			@Override
+			public IExtendedEntityProperties createProperties(Entity entity)
+			{
+				return new ExtendedInventory((EntityPlayer) entity);
+			}
+		});
 	}
 	
 	@Override

@@ -2,32 +2,19 @@ package clashsoft.playerinventoryapi.common;
 
 import clashsoft.playerinventoryapi.PlayerInventoryAPI;
 import clashsoft.playerinventoryapi.lib.ExtendedInventory;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
 public class PIEventHandler
 {
-	@SubscribeEvent
-	public void entityConstructing(EntityConstructing event)
-	{
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.entity instanceof EntityPlayer)
-		{
-			ExtendedInventory props = new ExtendedInventory((EntityPlayer) event.entity);
-			ExtendedInventory.set((EntityPlayer) event.entity, props);
-		}
-	}
-	
 	@SubscribeEvent
 	public void entityJoinWorld(EntityJoinWorldEvent event)
 	{
